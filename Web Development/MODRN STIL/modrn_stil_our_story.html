@@ -1,0 +1,576 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--cream:#F7F3EE;--warm:#EDE5D8;--clay:#C4A882;--dark:#1C1916;--mid:#6B6057;--accent:#8B6F47;--border:rgba(100,80,60,0.12)}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2.5rem;background:var(--cream);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.brand{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;letter-spacing:0.25em}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mid);text-decoration:none;transition:color 0.3s}
+.nav-links a:hover{color:var(--dark)}
+.nav-links a.active{color:var(--dark);border-bottom:1px solid var(--clay);padding-bottom:2px}
+.nav-icons{display:flex;gap:1.2rem}
+  .nav-icons span,
+  .nav-icons a{font-size:0.72rem;letter-spacing:0.1em;color:var(--mid);cursor:pointer;transition:color 0.2s;text-decoration:none}
+  .nav-icons span:hover,
+  .nav-icons a:hover{color:var(--dark)}
+/* CINEMATIC HERO */
+.c-hero{position:relative;height:480px;overflow:hidden;opacity:0;animation:fadeIn 1s 0.2s forwards}
+.c-hero canvas{width:100%;height:100%;display:block}
+.c-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(28,25,22,0.35) 0%,rgba(28,25,22,0.55) 60%,rgba(28,25,22,0.85) 100%)}
+.c-hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:3.5rem;text-align:center}
+.hero-eyebrow{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--clay);margin-bottom:1rem;opacity:0;animation:fadeUp 0.7s 0.6s forwards}
+.hero-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3.4rem);font-weight:300;color:#fff;line-height:1.15;max-width:680px;opacity:0;animation:fadeUp 0.8s 0.8s forwards}
+.hero-quote em{font-style:italic;color:var(--clay)}
+.hero-byline{font-size:0.75rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;margin-top:1rem;font-weight:300;opacity:0;animation:fadeUp 0.6s 1s forwards}
+.scroll-hint{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.4rem;opacity:0;animation:fadeIn 0.6s 1.3s forwards}
+.scroll-hint span{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.3)}
+.scroll-arrow{width:1px;height:30px;background:linear-gradient(to bottom,rgba(255,255,255,0.3),transparent);animation:scrollAnim 2s ease-in-out infinite}
+@keyframes scrollAnim{0%,100%{transform:scaleY(1);opacity:0.5}50%{transform:scaleY(1.3);opacity:1}}
+
+/* ORIGIN SECTION */
+.origin{display:grid;grid-template-columns:1fr 1fr;gap:0;opacity:0;animation:fadeUp 0.8s 0.4s forwards}
+.origin-left{padding:5rem 3rem 5rem 2.5rem;display:flex;flex-direction:column;justify-content:center}
+.section-label{font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--clay);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem}
+.label-line{width:30px;height:1px;background:var(--clay)}
+.origin-title{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;line-height:1.1;margin-bottom:1.8rem}
+.origin-title em{font-style:italic}
+.origin-body p{font-size:0.88rem;color:var(--mid);line-height:1.85;font-weight:300;margin-bottom:1rem}
+.origin-body p:last-child{margin-bottom:0}
+.origin-right{position:relative;overflow:hidden;background:var(--warm)}
+.origin-right canvas{width:100%;height:100%;display:block}
+.origin-caption{position:absolute;bottom:1.2rem;left:1.2rem;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5)}
+
+/* PULL QUOTE */
+.pull-quote{background:var(--dark);padding:5rem 2.5rem;text-align:center;opacity:0;animation:fadeUp 0.8s 0.5s forwards}
+.pq-mark{font-family:'Cormorant Garamond',serif;font-size:5rem;color:var(--clay);line-height:0.5;margin-bottom:1.5rem;opacity:0.5}
+.pq-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:300;font-style:italic;color:#fff;max-width:700px;margin:0 auto;line-height:1.4}
+.pq-author{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--clay);margin-top:2rem}
+
+/* VALUES */
+.values{padding:5rem 2.5rem;opacity:0;animation:fadeUp 0.7s 0.5s forwards}
+.values-header{text-align:center;margin-bottom:4rem}
+.values-header .section-label{justify-content:center}
+.values-header h2{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;margin-top:0.5rem}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.value-card{padding:2.5rem 2rem;border:1px solid var(--border);position:relative;overflow:hidden;transition:border-color 0.4s,background 0.4s;cursor:default}
+.value-card::before{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:linear-gradient(to right,var(--clay),var(--accent));transform:scaleX(0);transform-origin:left;transition:transform 0.4s}
+.value-card:hover{border-color:var(--clay);background:var(--warm)}
+.value-card:hover::before{transform:scaleX(1)}
+.value-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:rgba(196,168,130,0.2);line-height:1;margin-bottom:0.8rem}
+.value-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:0.8rem}
+.value-desc{font-size:0.8rem;color:var(--mid);line-height:1.75;font-weight:300}
+
+/* TIMELINE */
+.timeline-section{background:var(--warm);padding:5rem 2.5rem;opacity:0;animation:fadeUp 0.7s 0.5s forwards}
+.timeline-header{margin-bottom:3.5rem}
+.timeline-header h2{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;margin-top:0.5rem}
+.timeline{position:relative;padding-left:2rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--border)}
+.tl-item{position:relative;padding:0 0 3rem 2.5rem;display:grid;grid-template-columns:120px 1fr;gap:2rem;align-items:start}
+.tl-item:last-child{padding-bottom:0}
+.tl-dot{position:absolute;left:-4px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--clay);border:2px solid var(--warm)}
+.tl-year{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--clay)}
+.tl-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;margin-bottom:0.4rem}
+.tl-desc{font-size:0.8rem;color:var(--mid);line-height:1.75;font-weight:300}
+
+/* CRAFT SECTION */
+.craft{display:grid;grid-template-columns:1fr 1fr;gap:0;opacity:0;animation:fadeUp 0.8s 0.5s forwards}
+.craft-left{position:relative;overflow:hidden;background:var(--dark);min-height:420px}
+.craft-left canvas{width:100%;height:100%;display:block}
+.craft-grid-overlay{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px;background:rgba(255,255,255,0.05)}
+.craft-grid-overlay div{background:transparent}
+.craft-right{padding:5rem 3rem 5rem 3.5rem;display:flex;flex-direction:column;justify-content:center;background:var(--cream)}
+.craft-right h2{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;line-height:1.1;margin-bottom:1.5rem}
+.craft-right h2 em{font-style:italic;color:var(--accent)}
+.craft-right p{font-size:0.85rem;color:var(--mid);line-height:1.85;font-weight:300;margin-bottom:1rem}
+.craft-stats{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border)}
+.cs-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--dark)}
+.cs-label{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mid);margin-top:0.2rem}
+
+/* TEAM */
+.team{padding:5rem 2.5rem;opacity:0;animation:fadeUp 0.7s 0.5s forwards}
+.team-header{text-align:center;margin-bottom:3.5rem}
+.team-header h2{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;margin-top:0.5rem}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.team-card{cursor:default}
+.team-portrait{aspect-ratio:3/4;overflow:hidden;background:var(--warm);position:relative;margin-bottom:1rem}
+.team-portrait canvas{width:100%;height:100%;display:block;transition:transform 0.5s}
+.team-card:hover .team-portrait canvas{transform:scale(1.03)}
+.team-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;margin-bottom:0.15rem}
+.team-role{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--clay)}
+.team-bio{font-size:0.75rem;color:var(--mid);line-height:1.65;font-weight:300;margin-top:0.5rem}
+
+/* PRESS */
+.press{background:var(--warm);padding:3.5rem 2.5rem;opacity:0;animation:fadeUp 0.7s 0.5s forwards}
+.press-header{text-align:center;margin-bottom:2.5rem}
+.press-label{font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--clay);margin-bottom:0.5rem}
+.press-sub{font-size:0.8rem;color:var(--mid);font-weight:300}
+.press-logos{display:flex;justify-content:center;align-items:center;gap:3rem;flex-wrap:wrap}
+.press-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;letter-spacing:0.15em;color:rgba(107,96,87,0.45);text-transform:uppercase;transition:color 0.3s;cursor:default}
+.press-logo:hover{color:var(--mid)}
+
+/* CTA FINAL */
+.final-cta{padding:5rem 2.5rem;text-align:center;opacity:0;animation:fadeUp 0.7s 0.5s forwards}
+.final-cta h2{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;line-height:1.1;margin-bottom:1rem}
+.final-cta h2 em{font-style:italic;color:var(--accent)}
+.final-cta p{font-size:0.85rem;color:var(--mid);font-weight:300;max-width:400px;margin:0 auto 2rem;line-height:1.8}
+.final-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+.btn-dark{padding:0.8rem 2.2rem;background:var(--dark);color:var(--cream);font-family:'Jost',sans-serif;font-size:0.75rem;letter-spacing:0.18em;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.3s}
+.btn-dark:hover{background:var(--accent)}
+.btn-outline{padding:0.8rem 2.2rem;background:transparent;border:1px solid var(--border);color:var(--mid);font-family:'Jost',sans-serif;font-size:0.75rem;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;transition:all 0.3s}
+.btn-outline:hover{border-color:var(--dark);color:var(--dark)}
+
+/* FOOTER */
+footer{background:var(--dark);color:var(--cream);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
+.foot-brand{font-family:'Cormorant Garamond',serif;font-size:1.1rem;letter-spacing:0.25em;font-weight:300}
+.foot-links{display:flex;gap:1.5rem}
+.foot-links a{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(247,243,238,0.4);text-decoration:none;transition:color 0.3s}
+.foot-links a:hover{color:var(--cream)}
+.foot-copy{font-size:0.68rem;color:rgba(247,243,238,0.25)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+</style>
+
+<nav>
+  <div class="brand">MODRN STIL</div>
+  <ul class="nav-links">
+    <li><a href="modrn_stil_homepage.html">Home</a></li>
+    <li><a href="modrn_stil_collections.html">Collections</a></li>
+    <li><a href="modrn_stil_rooms.html">Rooms</a></li>
+    <li><a href="modrn_stil_new_in.html">New In</a></li>
+    <li><a href="modrn_stil_our_story.html" class="active">Our Story</a></li>
+  </ul>
+  <div class="nav-icons">
+    <a href="modrn_stil_search.html">Search</a><span>Wishlist</span><span>Cart (0)</span>
+  </div>
+</nav>
+
+<!-- CINEMATIC HERO -->
+<div class="c-hero">
+  <canvas id="heroC"></canvas>
+  <div class="c-hero-overlay"></div>
+  <div class="c-hero-content">
+    <div class="hero-eyebrow">Our Story</div>
+    <div class="hero-quote">A home is not a place —<br>it's a <em>feeling</em> you curate.</div>
+    <div class="hero-byline">Founded 2019 · Manila, Philippines</div>
+  </div>
+  <div class="scroll-hint"><span>Scroll</span><div class="scroll-arrow"></div></div>
+</div>
+
+<!-- ORIGIN -->
+<div class="origin">
+  <div class="origin-left">
+    <div class="section-label"><div class="label-line"></div>How It Began</div>
+    <h2 class="origin-title">Born from a belief<br>that <em>beauty</em><br>belongs in everyday life.</h2>
+    <div class="origin-body">
+      <p>MODRN STIL began in 2019 in a small apartment in Quezon City, where our founder Ana Reyes found herself frustrated by a simple problem: she wanted her home to feel intentional — calm, curated, and deeply personal — but could not find pieces that balanced honest craftsmanship with modern restraint.</p>
+      <p>So she started sourcing them herself. First from local artisans in Pampanga and Cebu. Then from small studios in Japan and Scandinavia. Every piece chosen not for trend, but for how it would feel to live with it for ten years.</p>
+      <p>What began as a personal obsession became a small online shop, then a community, then MODRN STIL — a brand built entirely on the philosophy that your home should tell your story, not someone else's.</p>
+    </div>
+  </div>
+  <div class="origin-right">
+    <canvas id="originC"></canvas>
+    <div class="origin-caption">The original studio, Quezon City · 2019</div>
+  </div>
+</div>
+
+<!-- PULL QUOTE -->
+<div class="pull-quote">
+  <div class="pq-mark">"</div>
+  <div class="pq-text">We don't sell furniture. We sell the feeling of walking into a room and exhaling — because everything in it was chosen with love.</div>
+  <div class="pq-author">— Ana Reyes, Founder & Creative Director</div>
+</div>
+
+<!-- VALUES -->
+<div class="values">
+  <div class="values-header">
+    <div class="section-label"><div class="label-line"></div>What We Stand For</div>
+    <h2>Our guiding principles</h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-card">
+      <div class="value-num">01</div>
+      <div class="value-title">Intentional Curation</div>
+      <div class="value-desc">Every single piece in our collection is hand-selected. We say no to hundreds of products for every one we say yes to. If we wouldn't put it in our own homes, it doesn't belong in yours.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">02</div>
+      <div class="value-title">Honest Craftsmanship</div>
+      <div class="value-desc">We partner only with makers who share our commitment to slow, careful work. Natural materials, traditional methods, and the kind of quality that gets better with age — not worse.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">03</div>
+      <div class="value-title">Quiet Sustainability</div>
+      <div class="value-desc">We don't shout about sustainability because we think it should be the baseline, not the headline. Responsible sourcing, minimal packaging, and pieces made to last decades — not seasons.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">04</div>
+      <div class="value-title">Community First</div>
+      <div class="value-desc">Over 60% of our pieces come from Filipino artisans. We believe the most beautiful things come from people who pour their heritage into their work — and we exist to help them reach the world.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">05</div>
+      <div class="value-title">Timelessness Over Trend</div>
+      <div class="value-desc">We release new collections slowly and deliberately. We'd rather you love something for twenty years than need to replace it in two. Beauty that endures is the only beauty worth designing for.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-num">06</div>
+      <div class="value-title">Radical Honesty</div>
+      <div class="value-desc">We tell you where things are made, how long they take, and what they're worth. No inflated markups, no mystery. We believe trust is the most valuable thing a brand can earn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline-section">
+  <div class="timeline-header">
+    <div class="section-label"><div class="label-line"></div>Our Journey</div>
+    <h2>Six years of slow, steady growth</h2>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2019</div>
+      <div class="tl-body">
+        <div class="tl-title">The Beginning</div>
+        <div class="tl-desc">Ana Reyes launches MODRN STIL from her apartment with 12 hand-sourced pieces. The first collection sells out in 72 hours, entirely through word of mouth and a single Instagram post.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2020</div>
+      <div class="tl-body">
+        <div class="tl-title">The Studio Opens</div>
+        <div class="tl-desc">We open a small studio showroom in Quezon City. During the pandemic, we pivot to virtual home consultations — and discover our community is hungry for guidance, not just products.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2021</div>
+      <div class="tl-body">
+        <div class="tl-title">The Artisan Program</div>
+        <div class="tl-desc">We launch our Artisan Partnership Program, formalizing relationships with 18 Filipino craftspeople across Pampanga, Cebu, and Ilocos. Their names appear on every piece they make.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2023</div>
+      <div class="tl-body">
+        <div class="tl-title">International Expansion</div>
+        <div class="tl-desc">MODRN STIL ships its first international orders to Singapore, Japan, and Australia. We're featured in Architectural Digest Philippines and Wallpaper* Magazine's Southeast Asia edition.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2025</div>
+      <div class="tl-body">
+        <div class="tl-title">8,000 Homes & Counting</div>
+        <div class="tl-desc">We celebrate our pieces living in over 8,000 homes across 14 countries. We open a flagship studio in BGC with a permanent gallery, workshop space, and weekly styling consultations.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2026</div>
+      <div class="tl-body">
+        <div class="tl-title">Today</div>
+        <div class="tl-desc">350+ curated pieces. 40+ artisan partners. One unwavering belief: that the most beautiful home is the one that feels most like you. We're just getting started.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CRAFT SECTION -->
+<div class="craft">
+  <div class="craft-left">
+    <canvas id="craftC"></canvas>
+    <div class="craft-grid-overlay"><div></div><div></div><div></div><div></div></div>
+  </div>
+  <div class="craft-right">
+    <div class="section-label"><div class="label-line"></div>The Making Of</div>
+    <h2>Crafted by hands.<br>Chosen with <em>intention.</em></h2>
+    <p>Each piece in the MODRN STIL collection begins with a conversation — with a maker, a material, a place. We visit studios. We feel the wood grain. We ask hard questions about process, provenance, and permanence.</p>
+    <p>Our team travels to source new pieces no more than twice a year. We take our time. We turn things down. The result is a collection where every single object has earned its place.</p>
+    <div class="craft-stats">
+      <div class="cs-item"><div class="cs-num">40+</div><div class="cs-label">Artisan Partners</div></div>
+      <div class="cs-item"><div class="cs-num">14</div><div class="cs-label">Countries We Source From</div></div>
+      <div class="cs-item"><div class="cs-num">350+</div><div class="cs-label">Curated Pieces</div></div>
+      <div class="cs-item"><div class="cs-num">6 yrs</div><div class="cs-label">Of Slow Curation</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div class="team">
+  <div class="team-header">
+    <div class="section-label"><div class="label-line"></div>The People Behind It</div>
+    <h2>Meet the team</h2>
+  </div>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-portrait"><canvas id="t1" width="300" height="400"></canvas></div>
+      <div class="team-name">Ana Reyes</div>
+      <div class="team-role">Founder & Creative Director</div>
+      <div class="team-bio">An architect by training, storyteller by nature. Ana has spent a decade studying how spaces shape the way we feel.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-portrait"><canvas id="t2" width="300" height="400"></canvas></div>
+      <div class="team-name">Marco Santos</div>
+      <div class="team-role">Head of Sourcing</div>
+      <div class="team-bio">Fluent in three languages and the universal language of beautiful craftsmanship. Visits every maker before we commit.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-portrait"><canvas id="t3" width="300" height="400"></canvas></div>
+      <div class="team-name">Leia Corpus</div>
+      <div class="team-role">Lead Stylist & Art Director</div>
+      <div class="team-bio">The eye behind every campaign, room scene, and collection story. Leia believes every home deserves an edit.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-portrait"><canvas id="t4" width="300" height="400"></canvas></div>
+      <div class="team-name">Diego Villanueva</div>
+      <div class="team-role">Artisan Relations</div>
+      <div class="team-bio">Grew up watching his lola weave in Pampanga. Now he bridges the gap between our makers and the world.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRESS -->
+<div class="press">
+  <div class="press-header">
+    <div class="press-label">As Seen In</div>
+    <div class="press-sub">Featured in the publications that shape design culture</div>
+  </div>
+  <div class="press-logos">
+    <div class="press-logo">Wallpaper*</div>
+    <div class="press-logo">Architectural Digest</div>
+    <div class="press-logo">Elle Decor</div>
+    <div class="press-logo">Vogue Living</div>
+    <div class="press-logo">Monocle</div>
+    <div class="press-logo">Frame Magazine</div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="final-cta">
+  <div class="section-label" style="justify-content:center"><div class="label-line"></div>Ready to Begin?</div>
+  <h2>Find pieces that feel<br>like <em>you.</em></h2>
+  <p>Every collection is curated to help you build a home that's calm, considered, and completely your own.</p>
+  <div class="final-btns">
+    <button class="btn-dark">Shop Collections</button>
+    <button class="btn-outline">Explore Rooms</button>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-brand">MODRN STIL</div>
+  <div class="foot-links">
+    <a href="#">Instagram</a><a href="#">Pinterest</a><a href="#">FAQ</a><a href="#">Contact</a>
+  </div>
+  <div class="foot-copy">© 2026 Modrn Stil. All rights reserved.</div>
+</footer>
+
+<script>
+function ic(el){const w=el.offsetWidth||el.width||400,h=el.offsetHeight||el.height||400;el.width=w;el.height=h;return el.getContext('2d')}
+function lh(hex,a){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`rgb(${Math.min(255,r+(255-r)*a)},${Math.min(255,g+(255-g)*a)},${Math.min(255,b+(255-b)*a)})`}
+
+function drawHero(el){
+  const ctx=ic(el),w=el.width,h=el.height;
+  // deep interior scene - warm evening light
+  ctx.fillStyle='#2A2018';ctx.fillRect(0,0,w,h);
+  // large warm window right side
+  ctx.fillStyle='rgba(255,220,160,0.12)';ctx.fillRect(w*0.55,0,w*0.45,h);
+  const wl=ctx.createLinearGradient(w*0.55,0,w*0.1,h);
+  wl.addColorStop(0,'rgba(255,210,140,0.18)');wl.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=wl;ctx.fillRect(0,0,w,h);
+  // window frame
+  ctx.strokeStyle='rgba(200,170,110,0.2)';ctx.lineWidth=3;
+  ctx.strokeRect(w*0.57,h*0.05,w*0.38,h*0.75);
+  ctx.beginPath();ctx.moveTo(w*0.76,h*0.05);ctx.lineTo(w*0.76,h*0.8);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(w*0.57,h*0.42);ctx.lineTo(w*0.95,h*0.42);ctx.stroke();
+  // wide sofa
+  ctx.fillStyle='#3C3028';ctx.beginPath();ctx.roundRect(w*0.04,h*0.62,w*0.5,h*0.2,8);ctx.fill();
+  ctx.fillStyle='#4C4038';ctx.beginPath();ctx.roundRect(w*0.04,h*0.52,w*0.1,h*0.2,5);ctx.fill();
+  ctx.fillStyle='#4C4038';ctx.beginPath();ctx.roundRect(w*0.44,h*0.52,w*0.1,h*0.2,5);ctx.fill();
+  ctx.fillStyle='#D8C8A8';ctx.beginPath();ctx.roundRect(w*0.12,h*0.56,w*0.1,h*0.13,6);ctx.fill();
+  ctx.fillStyle='#A89878';ctx.beginPath();ctx.roundRect(w*0.27,h*0.58,w*0.12,h*0.12,6);ctx.fill();
+  // coffee table dark wood
+  ctx.fillStyle='#2C2018';ctx.beginPath();ctx.roundRect(w*0.08,h*0.82,w*0.28,h*0.08,3);ctx.fill();
+  ctx.fillStyle='#1C1410';ctx.fillRect(w*0.1,h*0.9,w*0.03,h*0.06);ctx.fillRect(w*0.31,h*0.9,w*0.03,h*0.06);
+  // floor lamp warm glow
+  const fl=ctx.createRadialGradient(w*0.5,h*0.4,5,w*0.5,h*0.4,w*0.4);
+  fl.addColorStop(0,'rgba(255,200,100,0.3)');fl.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=fl;ctx.fillRect(0,0,w,h);
+  ctx.fillStyle='#D8C8A0';ctx.beginPath();ctx.moveTo(w*0.43,h*0.42);ctx.lineTo(w*0.57,h*0.42);ctx.lineTo(w*0.54,h*0.28);ctx.lineTo(w*0.46,h*0.28);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#6B5840';ctx.lineWidth=3;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(w*0.5,h*0.42);ctx.bezierCurveTo(w*0.53,h*0.6,w*0.48,h*0.72,w*0.5,h*0.86);ctx.stroke();
+  // tall plants left
+  ctx.fillStyle='#2A3820';
+  for(let i=0;i<7;i++){ctx.beginPath();ctx.ellipse(w*(0.02+i*0.012),h*(0.52-i*0.06),w*0.02,h*0.08,(i-3)*0.4,0,Math.PI*2);ctx.fill()}
+  ctx.fillStyle='#1C2818';ctx.fillRect(0,h*0.78,w*0.06,h*0.16);
+  // art on wall
+  ctx.strokeStyle='rgba(200,180,140,0.12)';ctx.lineWidth=1;
+  ctx.strokeRect(w*0.14,h*0.12,w*0.2,h*0.28);
+  ctx.fillStyle='rgba(200,180,140,0.06)';ctx.fillRect(w*0.14,h*0.12,w*0.2,h*0.28);
+  // floor
+  ctx.fillStyle='#1A1410';ctx.fillRect(0,h*0.88,w,h*0.12);
+  const floor=ctx.createLinearGradient(0,h*0.88,0,h);
+  floor.addColorStop(0,'rgba(255,180,80,0.08)');floor.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=floor;ctx.fillRect(0,h*0.88,w,h*0.12);
+}
+
+function drawOrigin(el){
+  const ctx=ic(el),w=el.width,h=el.height;
+  ctx.fillStyle='#D8D0C4';ctx.fillRect(0,0,w,h);
+  // warm light from top
+  const tg=ctx.createLinearGradient(0,0,0,h*0.5);
+  tg.addColorStop(0,'rgba(255,235,200,0.3)');tg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=tg;ctx.fillRect(0,0,w,h);
+  // studio desk scene
+  ctx.fillStyle='#7B6040';ctx.fillRect(w*0.08,h*0.52,w*0.84,h*0.06);
+  ctx.fillStyle='#5C4030';ctx.fillRect(w*0.12,h*0.58,w*0.03,h*0.22);ctx.fillRect(w*0.85,h*0.58,w*0.03,h*0.22);
+  // notebooks & items on desk
+  ctx.fillStyle='#E8E0D0';ctx.beginPath();ctx.roundRect(w*0.14,h*0.38,w*0.18,h*0.14,2);ctx.fill();
+  ctx.fillStyle='#C4B8A0';ctx.beginPath();ctx.roundRect(w*0.16,h*0.36,w*0.18,h*0.14,2);ctx.fill();
+  ctx.fillStyle='#A89078';ctx.beginPath();ctx.roundRect(w*0.18,h*0.34,w*0.18,h*0.14,2);ctx.fill();
+  // pen
+  ctx.strokeStyle='#4A3828';ctx.lineWidth=2;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(w*0.4,h*0.38);ctx.lineTo(w*0.55,h*0.52);ctx.stroke();
+  // ceramic mug
+  ctx.fillStyle='#C4A882';ctx.beginPath();ctx.ellipse(w*0.62,h*0.44,w*0.05,h*0.08,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#B89870';ctx.beginPath();ctx.ellipse(w*0.62,h*0.37,w*0.04,h*0.02,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#A88860';ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(w*0.67,h*0.43,w*0.03,Math.PI*0.2,Math.PI*0.8);ctx.stroke();
+  // mood board on wall
+  ctx.fillStyle='#F0EAE0';ctx.fillRect(w*0.58,h*0.08,w*0.32,h*0.38);
+  [[0.6,0.1,0.12,0.1,'#C4B8A5'],[0.74,0.1,0.14,0.15,'#8B9B78'],[0.6,0.22,0.16,0.12,'#C4A882'],[0.78,0.26,0.1,0.08,'#D4915A'],[0.62,0.35,0.1,0.09,'#A89070'],[0.74,0.35,0.14,0.09,'#B8A888']].forEach(([x,y,rw,rh,c])=>{
+    ctx.fillStyle=c;ctx.fillRect(w*x,h*y,w*rw,h*rh);
+  });
+  ctx.strokeStyle='rgba(100,85,65,0.15)';ctx.lineWidth=0.5;ctx.strokeRect(w*0.58,h*0.08,w*0.32,h*0.38);
+  // small plant
+  ctx.fillStyle='#7B6858';ctx.fillRect(w*0.08,h*0.42,w*0.06,h*0.1);
+  for(let i=0;i<5;i++){ctx.fillStyle='#6B8B5A';ctx.beginPath();ctx.ellipse(w*(0.07+i*0.025),h*(0.38-i*0.03),w*0.025,h*0.05,(i-2)*0.5,0,Math.PI*2);ctx.fill()}
+  // chair at desk
+  ctx.fillStyle='#9B8870';ctx.beginPath();ctx.roundRect(w*0.3,h*0.58,w*0.22,h*0.18,4);ctx.fill();
+  ctx.fillStyle='#8B7860';ctx.beginPath();ctx.roundRect(w*0.3,h*0.46,w*0.04,h*0.22,3);ctx.fill();
+  ctx.fillStyle='#8B7860';ctx.beginPath();ctx.roundRect(w*0.48,h*0.46,w*0.04,h*0.22,3);ctx.fill();
+  // floor
+  ctx.fillStyle='#C8BFB0';ctx.fillRect(0,h*0.8,w,h*0.2);
+}
+
+function drawCraft(el){
+  const ctx=ic(el),w=el.width,h=el.height;
+  ctx.fillStyle='#1A1610';ctx.fillRect(0,0,w,h);
+  // grid of 4 craft scenes
+  const scenes=[
+    {x:0,y:0,w:w/2,h:h/2,draw:()=>{
+      // hands at pottery wheel
+      ctx.fillStyle='#2A2018';ctx.fillRect(0,0,w/2,h/2);
+      const cg=ctx.createRadialGradient(w*0.25,h*0.22,5,w*0.25,h*0.25,w*0.25);
+      cg.addColorStop(0,'rgba(180,140,80,0.35)');cg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=cg;ctx.fillRect(0,0,w/2,h/2);
+      ctx.fillStyle='#8B7058';ctx.beginPath();ctx.ellipse(w*0.25,h*0.3,w*0.15,h*0.08,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#C4A882';ctx.beginPath();ctx.ellipse(w*0.25,h*0.24,w*0.1,h*0.12,0,0,Math.PI*2);ctx.fill();
+      // hands shape
+      ctx.fillStyle='#D4A878';ctx.beginPath();ctx.roundRect(w*0.16,h*0.2,w*0.08,h*0.15,20);ctx.fill();
+      ctx.fillStyle='#D4A878';ctx.beginPath();ctx.roundRect(w*0.31,h*0.2,w*0.08,h*0.15,20);ctx.fill();
+    }},
+    {x:w/2,y:0,w:w/2,h:h/2,draw:()=>{
+      // weaving/textile close up
+      ctx.save();ctx.translate(w/2,0);
+      ctx.fillStyle='#2C2416';ctx.fillRect(0,0,w/2,h/2);
+      const tg2=ctx.createLinearGradient(0,0,w/2,0);
+      tg2.addColorStop(0,'rgba(180,140,80,0.2)');tg2.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=tg2;ctx.fillRect(0,0,w/2,h/2);
+      const cols=['#C4A882','#A89070','#D4B890','#B89870','#E8C8A0'];
+      for(let x2=0;x2<w/2;x2+=8){
+        ctx.fillStyle=cols[Math.floor(x2/8)%cols.length];
+        ctx.fillRect(x2,0,4,h/2);
+      }
+      for(let y2=0;y2<h/2;y2+=12){
+        ctx.fillStyle='rgba(0,0,0,0.2)';
+        for(let x2=y2%8;x2<w/2;x2+=16){ctx.fillRect(x2,y2,8,6)}
+      }
+      ctx.restore();
+    }},
+    {x:0,y:h/2,w:w/2,h:h/2,draw:()=>{
+      // wood working tools
+      ctx.save();ctx.translate(0,h/2);
+      ctx.fillStyle='#1E1A14';ctx.fillRect(0,0,w/2,h/2);
+      ctx.fillStyle='#3A2E1E';ctx.fillRect(0,h*0.15,w/2,h*0.1);
+      const wg2=ctx.createRadialGradient(w*0.15,h*0.2,3,w*0.15,h*0.2,w*0.3);
+      wg2.addColorStop(0,'rgba(160,120,60,0.3)');wg2.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=wg2;ctx.fillRect(0,0,w/2,h/2);
+      // chisel
+      ctx.fillStyle='#8B7858';ctx.fillRect(w*0.2,h*0.05,w*0.05,h*0.22);
+      ctx.fillStyle='#6B5838';ctx.beginPath();ctx.moveTo(w*0.2,h*0.27);ctx.lineTo(w*0.25,h*0.27);ctx.lineTo(w*0.225,h*0.3);ctx.closePath();ctx.fill();
+      // shavings
+      ctx.strokeStyle='rgba(180,140,80,0.4)';ctx.lineWidth=1.5;
+      for(let i=0;i<5;i++){ctx.beginPath();ctx.arc(w*(0.05+i*0.06),h*0.35,w*0.03,0,Math.PI);ctx.stroke()}
+      ctx.restore();
+    }},
+    {x:w/2,y:h/2,w:w/2,h:h/2,draw:()=>{
+      // finished product glow
+      ctx.save();ctx.translate(w/2,h/2);
+      ctx.fillStyle='#282018';ctx.fillRect(0,0,w/2,h/2);
+      const fg2=ctx.createRadialGradient(w*0.12,h*0.2,3,w*0.12,h*0.2,w*0.25);
+      fg2.addColorStop(0,'rgba(255,210,120,0.4)');fg2.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=fg2;ctx.fillRect(0,0,w/2,h/2);
+      ctx.fillStyle='#C4B8A5';ctx.beginPath();ctx.ellipse(w*0.15,h*0.22,w*0.08,h*0.14,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#B8A890';ctx.beginPath();ctx.ellipse(w*0.15,h*0.09,w*0.06,h*0.02,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#8B9B78';ctx.fillRect(w*0.13,h*0.04,w*0.04,h*0.05);
+      ctx.fillStyle='#8B7058';ctx.beginPath();ctx.ellipse(w*0.28,h*0.3,w*0.06,h*0.1,0.3,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }}
+  ];
+  scenes.forEach(s=>s.draw());
+  // subtle grid lines
+  ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(w/2,0);ctx.lineTo(w/2,h);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();
+}
+
+function drawPortrait(el,palette){
+  const ctx=el.getContext('2d'),w=el.width,h=el.height;
+  ctx.fillStyle=palette.bg;ctx.fillRect(0,0,w,h);
+  // soft gradient
+  const g=ctx.createLinearGradient(0,0,w*0.5,h*0.5);
+  g.addColorStop(0,'rgba(255,245,230,0.2)');g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  // abstract figure - shoulders
+  ctx.fillStyle=palette.body;ctx.beginPath();ctx.ellipse(w*0.5,h*0.95,w*0.45,h*0.35,0,0,Math.PI*2);ctx.fill();
+  // neck
+  ctx.fillStyle=palette.skin;ctx.fillRect(w*0.44,h*0.55,w*0.12,h*0.18);
+  // head
+  ctx.fillStyle=palette.skin;ctx.beginPath();ctx.ellipse(w*0.5,h*0.44,w*0.17,h*0.19,0,0,Math.PI*2);ctx.fill();
+  // hair
+  ctx.fillStyle=palette.hair;ctx.beginPath();ctx.ellipse(w*0.5,h*0.3,w*0.17,h*0.12,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=palette.hair;ctx.beginPath();ctx.ellipse(w*0.5,h*0.44,w*0.18,h*0.1,-0.1,Math.PI,Math.PI*2);ctx.fill();
+  // face — minimal dots
+  ctx.fillStyle='rgba(0,0,0,0.15)';ctx.beginPath();ctx.arc(w*0.44,h*0.43,2,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(w*0.56,h*0.43,2,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(0,0,0,0.1)';ctx.lineWidth=1.5;ctx.lineCap='round';
+  ctx.beginPath();ctx.arc(w*0.5,h*0.48,w*0.05,0.1,Math.PI-0.1);ctx.stroke();
+  // floor shadow
+  const sh=ctx.createRadialGradient(w*0.5,h,5,w*0.5,h,w*0.4);
+  sh.addColorStop(0,'rgba(0,0,0,0.15)');sh.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=sh;ctx.fillRect(0,h*0.85,w,h*0.15);
+}
+
+const portraits=[
+  {bg:'#E8E0D5',body:'#7B6040',skin:'#D4A878',hair:'#3C2818'},
+  {bg:'#DDD5C5',body:'#4A3828',skin:'#C8A060',hair:'#1C1410'},
+  {bg:'#E0D8CC',body:'#8B7058',skin:'#E8C898',hair:'#5A3818'},
+  {bg:'#D8D0C0',body:'#6B5040',skin:'#D4A870',hair:'#2C1C0C'}
+];
+
+window.addEventListener('load',()=>{
+  drawHero(document.getElementById('heroC'));
+  drawOrigin(document.getElementById('originC'));
+  drawCraft(document.getElementById('craftC'));
+  portraits.forEach((p,i)=>drawPortrait(document.getElementById('t'+(i+1)),p));
+});
+</script>
