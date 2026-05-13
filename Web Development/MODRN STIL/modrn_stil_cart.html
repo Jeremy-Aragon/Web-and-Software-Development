@@ -1,0 +1,592 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--cream:#F7F3EE;--warm:#EDE5D8;--clay:#C4A882;--dark:#1C1916;--mid:#6B6057;--accent:#8B6F47;--border:rgba(100,80,60,0.12);--red:#C4614A;--green:#4A6741}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2.5rem;background:var(--cream);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.brand{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;letter-spacing:0.25em}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mid);text-decoration:none;transition:color 0.3s}
+.nav-links a:hover{color:var(--dark)}
+.nav-right{display:flex;gap:1.5rem;align-items:center}
+.nav-icons{display:flex;gap:1.2rem;align-items:center}
+.nav-icons a,.nav-icons span{font-size:0.72rem;letter-spacing:0.1em;color:var(--mid);cursor:pointer;transition:color 0.2s;text-decoration:none}
+.nav-icons a:hover,.nav-icons span:hover{color:var(--dark)}
+.nav-icons a.active{color:var(--dark)}
+.cart-icon{position:relative;color:var(--dark)!important;font-weight:500}
+.cart-bubble{position:absolute;top:-7px;right:-10px;width:17px;height:17px;border-radius:50%;background:var(--clay);color:#fff;font-size:0.55rem;display:flex;align-items:center;justify-content:center}
+
+/* PROGRESS BAR */
+.progress-bar{background:var(--warm);border-bottom:1px solid var(--border);padding:0.9rem 2.5rem;opacity:0;animation:fadeIn 0.5s 0.1s forwards}
+.progress-inner{display:flex;align-items:center;justify-content:center;gap:0;max-width:500px;margin:0 auto}
+.step{display:flex;align-items:center;gap:0.5rem;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mid)}
+.step.active{color:var(--dark)}
+.step-num{width:22px;height:22px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--mid)}
+.step.active .step-num{background:var(--dark);border-color:var(--dark);color:#fff}
+.step.done .step-num{background:var(--green);border-color:var(--green);color:#fff}
+.step-line{width:60px;height:1px;background:var(--border);margin:0 0.5rem}
+.step-line.done{background:var(--green)}
+
+/* PAGE HEADER */
+.page-header{padding:2.5rem 2.5rem 1.8rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;opacity:0;animation:fadeUp 0.6s 0.2s forwards}
+.ph-left .breadcrumb{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--clay);margin-bottom:0.5rem}
+.ph-left h1{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300}
+.ph-left h1 em{font-style:italic;color:var(--accent)}
+.ph-right{font-size:0.78rem;color:var(--mid);font-weight:300}
+.ph-right a{color:var(--clay);cursor:pointer;text-decoration:none;border-bottom:1px solid var(--clay)}
+
+/* FREE SHIPPING BANNER */
+.shipping-banner{margin:0;padding:0.7rem 2.5rem;background:var(--dark);display:flex;align-items:center;justify-content:center;gap:1rem;opacity:0;animation:fadeIn 0.5s 0.3s forwards}
+.sb-text{font-size:0.72rem;letter-spacing:0.1em;color:rgba(247,243,238,0.7);text-align:center}
+.sb-text strong{color:var(--clay)}
+.sb-progress{width:180px;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;position:relative;overflow:hidden}
+.sb-fill{height:100%;background:var(--clay);border-radius:2px;transition:width 0.5s ease}
+
+/* MAIN LAYOUT */
+.main{display:grid;grid-template-columns:1fr 360px;gap:0;align-items:start}
+
+/* CART ITEMS */
+.cart-section{border-right:1px solid var(--border)}
+.cart-items{padding:0 2.5rem}
+
+/* CART ITEM ROW */
+.cart-item{display:grid;grid-template-columns:90px 1fr auto;gap:1.2rem;align-items:start;padding:1.8rem 0;border-bottom:1px solid var(--border);opacity:0;animation:fadeUp 0.6s forwards}
+.cart-item:last-child{border-bottom:none}
+.ci-thumb{width:90px;height:115px;background:var(--warm);overflow:hidden;flex-shrink:0;cursor:pointer;position:relative}
+.ci-thumb canvas{width:100%;height:100%;display:block;transition:transform 0.5s}
+.ci-thumb:hover canvas{transform:scale(1.05)}
+.ci-badge{position:absolute;top:0.4rem;left:0.4rem;font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.2rem 0.45rem;background:var(--dark);color:var(--cream)}
+.ci-badge.sale{background:var(--red)}
+.ci-info{flex:1}
+.ci-cat{font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--clay);margin-bottom:0.2rem}
+.ci-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--dark);margin-bottom:0.25rem;cursor:pointer}
+.ci-name:hover{text-decoration:underline;text-underline-offset:3px}
+.ci-variant{font-size:0.72rem;color:var(--mid);font-weight:300;margin-bottom:0.6rem}
+.ci-actions{display:flex;align-items:center;gap:1.2rem;margin-top:0.2rem}
+.ci-remove{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);cursor:pointer;background:none;border:none;font-family:'Jost',sans-serif;transition:color 0.2s;padding:0}
+.ci-remove:hover{color:var(--red)}
+.ci-save{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);cursor:pointer;background:none;border:none;font-family:'Jost',sans-serif;transition:color 0.2s;padding:0}
+.ci-save:hover{color:var(--clay)}
+.ci-stock{font-size:0.62rem;letter-spacing:0.08em;color:var(--red)}
+.ci-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.8rem}
+.ci-price{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--dark);white-space:nowrap}
+.ci-price.sale{color:var(--red)}
+.ci-original{font-size:0.72rem;color:var(--mid);text-decoration:line-through}
+.qty-control{display:flex;align-items:center;border:1px solid var(--border)}
+.qty-btn{width:30px;height:30px;background:none;border:none;cursor:pointer;font-size:1rem;color:var(--mid);display:flex;align-items:center;justify-content:center;transition:background 0.2s;font-family:'Jost',sans-serif}
+.qty-btn:hover{background:var(--warm);color:var(--dark)}
+.qty-num{width:34px;height:30px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:400;border-left:1px solid var(--border);border-right:1px solid var(--border)}
+
+/* CART FOOTER */
+.cart-footer{padding:1.5rem 2.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
+.continue-btn{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mid);cursor:pointer;background:none;border:none;font-family:'Jost',sans-serif;display:flex;align-items:center;gap:0.5rem;transition:color 0.2s}
+.continue-btn:hover{color:var(--dark)}
+.clear-btn{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mid);cursor:pointer;background:none;border:none;font-family:'Jost',sans-serif;transition:color 0.2s}
+.clear-btn:hover{color:var(--red)}
+
+/* EMPTY STATE */
+.empty-state{display:none;flex-direction:column;align-items:center;justify-content:center;padding:5rem 2rem;text-align:center;gap:1.2rem}
+.empty-state.show{display:flex}
+.empty-icon{font-size:2.5rem;opacity:0.25}
+.empty-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300}
+.empty-sub{font-size:0.82rem;color:var(--mid);font-weight:300;max-width:260px;line-height:1.7}
+.btn-shop-now{padding:0.75rem 2rem;background:var(--dark);color:var(--cream);font-family:'Jost',sans-serif;font-size:0.75rem;letter-spacing:0.18em;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.3s}
+.btn-shop-now:hover{background:var(--accent)}
+
+/* ORDER SUMMARY SIDEBAR */
+.summary-sidebar{padding:2rem 2rem;position:sticky;top:72px}
+.ss-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+
+/* PROMO CODE */
+.promo-wrap{margin-bottom:1.5rem}
+.promo-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--clay);margin-bottom:0.6rem}
+.promo-row{display:flex;gap:0.5rem}
+.promo-input{flex:1;padding:0.6rem 0.8rem;border:1px solid var(--border);background:transparent;font-family:'Jost',sans-serif;font-size:0.78rem;color:var(--dark);outline:none;transition:border-color 0.3s;letter-spacing:0.05em}
+.promo-input:focus{border-color:var(--clay)}
+.promo-input::placeholder{color:rgba(107,96,87,0.4);font-size:0.72rem}
+.btn-apply{padding:0.6rem 1rem;background:var(--dark);color:var(--cream);font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;white-space:nowrap;transition:background 0.3s}
+.btn-apply:hover{background:var(--accent)}
+.promo-success{font-size:0.7rem;color:var(--green);margin-top:0.4rem;display:none}
+.promo-error{font-size:0.7rem;color:var(--red);margin-top:0.4rem;display:none}
+
+/* SHIPPING OPTIONS */
+.shipping-wrap{margin-bottom:1.5rem}
+.ship-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--clay);margin-bottom:0.6rem}
+.ship-option{display:flex;justify-content:space-between;align-items:center;padding:0.65rem 0.8rem;border:1px solid var(--border);margin-bottom:0.5rem;cursor:pointer;transition:all 0.25s}
+.ship-option:last-child{margin-bottom:0}
+.ship-option.selected{border-color:var(--clay);background:rgba(196,168,130,0.06)}
+.ship-option:hover{border-color:var(--clay)}
+.ship-left{display:flex;align-items:center;gap:0.7rem}
+.ship-radio{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;transition:border-color 0.2s;flex-shrink:0}
+.ship-option.selected .ship-radio{border-color:var(--clay)}
+.ship-dot{width:7px;height:7px;border-radius:50%;background:var(--clay);display:none}
+.ship-option.selected .ship-dot{display:block}
+.ship-name{font-size:0.75rem;color:var(--dark);font-weight:400}
+.ship-eta{font-size:0.62rem;color:var(--mid);font-weight:300}
+.ship-price{font-size:0.78rem;color:var(--dark);font-weight:400}
+.ship-free{font-size:0.78rem;color:var(--green);font-weight:400}
+
+/* SUMMARY ROWS */
+.sum-rows{border-top:1px solid var(--border);padding-top:1.2rem;margin-bottom:1.2rem}
+.sum-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.65rem}
+.sum-key{font-size:0.78rem;color:var(--mid);font-weight:300}
+.sum-val{font-size:0.82rem;color:var(--dark)}
+.sum-discount{color:var(--green)}
+.sum-total-row{display:flex;justify-content:space-between;align-items:baseline;padding-top:1rem;border-top:1px solid var(--border);margin-top:0.8rem}
+.sum-total-label{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mid)}
+.sum-total-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300}
+
+/* CHECKOUT BTN */
+.btn-checkout{width:100%;padding:1rem;background:var(--dark);color:var(--cream);font-family:'Jost',sans-serif;font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.3s;margin-top:1.2rem;position:relative;overflow:hidden}
+.btn-checkout::after{content:'→';position:absolute;right:1.2rem;top:50%;transform:translateY(-50%);transition:right 0.3s}
+.btn-checkout:hover{background:var(--accent)}
+.btn-checkout:hover::after{right:0.8rem}
+.btn-paypal{width:100%;padding:0.75rem;background:transparent;border:1px solid var(--border);color:var(--mid);font-family:'Jost',sans-serif;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;margin-top:0.6rem}
+.btn-paypal:hover{border-color:var(--clay);color:var(--dark)}
+
+/* TRUST BADGES */
+.trust-badges{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.trust-item{display:flex;align-items:flex-start;gap:0.5rem}
+.trust-icon{font-size:0.95rem;flex-shrink:0;margin-top:1px}
+.trust-text{font-size:0.65rem;color:var(--mid);line-height:1.4;font-weight:300}
+.trust-text strong{color:var(--dark);font-weight:500;display:block}
+
+/* UPSELL */
+.upsell{padding:2.5rem 2.5rem;border-top:1px solid var(--border);opacity:0;animation:fadeUp 0.7s 1s forwards}
+.ups-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.8rem}
+.ups-eyebrow{font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--clay);margin-bottom:0.3rem}
+.ups-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300}
+.ups-link{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mid);cursor:pointer;border-bottom:1px solid var(--clay);padding-bottom:2px}
+.ups-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
+.ups-card{cursor:pointer}
+.ups-img{aspect-ratio:1;background:var(--warm);overflow:hidden;position:relative;margin-bottom:0.7rem}
+.ups-img canvas{width:100%;height:100%;display:block;transition:transform 0.5s}
+.ups-card:hover .ups-img canvas{transform:scale(1.05)}
+.ups-add-btn{position:absolute;bottom:0;left:0;right:0;padding:0.5rem;background:rgba(28,25,22,0.8);color:#fff;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;text-align:center;transform:translateY(100%);transition:transform 0.3s;cursor:pointer;border:none;font-family:'Jost',sans-serif}
+.ups-card:hover .ups-add-btn{transform:translateY(0)}
+.ups-cat{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--clay);margin-bottom:0.2rem}
+.ups-name{font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-weight:400;margin-bottom:0.15rem}
+.ups-price{font-size:0.75rem;color:var(--mid);font-weight:300}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark);color:var(--cream);padding:0.75rem 1.8rem;font-size:0.75rem;letter-spacing:0.08em;opacity:0;transition:all 0.4s;z-index:999;pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* FOOTER */
+footer{background:var(--dark);color:var(--cream);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
+.foot-brand{font-family:'Cormorant Garamond',serif;font-size:1.1rem;letter-spacing:0.25em;font-weight:300}
+.foot-links{display:flex;gap:1.5rem}
+.foot-links a{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(247,243,238,0.4);text-decoration:none;transition:color 0.3s}
+.foot-links a:hover{color:var(--cream)}
+.foot-copy{font-size:0.68rem;color:rgba(247,243,238,0.25)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes removeItem{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-20px)}}
+</style>
+
+<div class="toast" id="toast"></div>
+
+<nav>
+  <div class="brand">MODRN STIL</div>
+  <ul class="nav-links">
+    <li><a href="modrn_stil_homepage.html">Home</a></li>
+    <li><a href="modrn_stil_collections.html">Collections</a></li>
+    <li><a href="modrn_stil_rooms.html">Rooms</a></li>
+    <li><a href="modrn_stil_new_in.html">New In</a></li>
+    <li><a href="modrn_stil_our_story.html">Our Story</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-icons">
+      <a href="modrn_stil_search.html">Search</a>
+      <a href="modrn_stil_wishlist.html">Wishlist</a>
+      <a href="modrn_stil_cart.html" class="active">Cart (3)<span class="cart-bubble" id="cartBubble">3</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- CHECKOUT PROGRESS -->
+<div class="progress-bar">
+  <div class="progress-inner">
+    <div class="step active"><div class="step-num">1</div>Cart</div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-num">2</div>Shipping</div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-num">3</div>Payment</div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-num">4</div>Confirm</div>
+  </div>
+</div>
+
+<!-- FREE SHIPPING BANNER -->
+<div class="shipping-banner">
+  <div class="sb-text">You're <strong id="shippingLeft">₱14,500</strong> away from free shipping!</div>
+  <div class="sb-progress"><div class="sb-fill" id="sbFill" style="width:30%"></div></div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="ph-left">
+    <div class="breadcrumb">Home / Cart</div>
+    <h1>Your <em>Cart</em></h1>
+  </div>
+  <div class="ph-right"><a href="#" onclick="showToast('Redirecting to Collections...')">← Continue Shopping</a></div>
+</div>
+
+<div class="main">
+  <!-- CART ITEMS -->
+  <div class="cart-section">
+    <div class="cart-items" id="cartItems"></div>
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">🛒</div>
+      <div class="empty-title">Your cart is empty</div>
+      <div class="empty-sub">Looks like you haven't added anything yet. Let's fix that.</div>
+      <button class="btn-shop-now" onclick="showToast('Redirecting to Collections...')">Shop Collections</button>
+    </div>
+    <div class="cart-footer" id="cartFooter">
+      <button class="continue-btn" onclick="showToast('Redirecting to Collections...')">← Continue Shopping</button>
+      <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+    </div>
+  </div>
+
+  <!-- ORDER SUMMARY SIDEBAR -->
+  <div class="summary-sidebar">
+    <div class="ss-title">Order Summary</div>
+
+    <!-- PROMO CODE -->
+    <div class="promo-wrap">
+      <div class="promo-label">Promo Code</div>
+      <div class="promo-row">
+        <input class="promo-input" id="promoInput" placeholder="Enter code (try MODRN10)" maxlength="20">
+        <button class="btn-apply" onclick="applyPromo()">Apply</button>
+      </div>
+      <div class="promo-success" id="promoSuccess">✓ MODRN10 applied — 10% off!</div>
+      <div class="promo-error" id="promoError">✗ Invalid code. Try MODRN10</div>
+    </div>
+
+    <!-- SHIPPING OPTIONS -->
+    <div class="shipping-wrap">
+      <div class="ship-label">Shipping Method</div>
+      <div class="ship-option selected" onclick="selectShip(this,0,'Free')">
+        <div class="ship-left"><div class="ship-radio"><div class="ship-dot"></div></div><div class="ship-info"><div class="ship-name">Standard Delivery</div><div class="ship-eta">5–7 business days</div></div></div>
+        <div class="ship-free">Free</div>
+      </div>
+      <div class="ship-option" onclick="selectShip(this,350,'₱350')">
+        <div class="ship-left"><div class="ship-radio"><div class="ship-dot"></div></div><div class="ship-info"><div class="ship-name">Express Delivery</div><div class="ship-eta">2–3 business days</div></div></div>
+        <div class="ship-price">₱350</div>
+      </div>
+      <div class="ship-option" onclick="selectShip(this,850,'₱850')">
+        <div class="ship-left"><div class="ship-radio"><div class="ship-dot"></div></div><div class="ship-info"><div class="ship-name">Same-Day Metro Manila</div><div class="ship-eta">Order before 12PM</div></div></div>
+        <div class="ship-price">₱850</div>
+      </div>
+    </div>
+
+    <!-- SUMMARY ROWS -->
+    <div class="sum-rows">
+      <div class="sum-row"><span class="sum-key">Subtotal (<span id="itemCountLabel">3</span> items)</span><span class="sum-val" id="subtotalVal">₱35,500</span></div>
+      <div class="sum-row"><span class="sum-key">Shipping</span><span class="sum-val" id="shippingVal"><span style="color:var(--green)">Free</span></span></div>
+      <div class="sum-row" id="discountRow" style="display:none"><span class="sum-key">Discount (10%)</span><span class="sum-val sum-discount" id="discountVal">−₱3,550</span></div>
+      <div class="sum-row"><span class="sum-key">Est. Tax (12% VAT)</span><span class="sum-val" id="taxVal">₱4,260</span></div>
+    </div>
+    <div class="sum-total-row">
+      <span class="sum-total-label">Total</span>
+      <span class="sum-total-val" id="totalVal">₱39,760</span>
+    </div>
+
+    <button class="btn-checkout" onclick="checkout()">Proceed to Checkout</button>
+    <button class="btn-paypal" onclick="showToast('Redirecting to PayPal...')">Pay with PayPal</button>
+
+    <!-- TRUST BADGES -->
+    <div class="trust-badges">
+      <div class="trust-item"><div class="trust-icon">🔒</div><div class="trust-text"><strong>Secure Payment</strong>SSL encrypted checkout</div></div>
+      <div class="trust-item"><div class="trust-icon">📦</div><div class="trust-text"><strong>Free Returns</strong>30-day return policy</div></div>
+      <div class="trust-item"><div class="trust-icon">✦</div><div class="trust-text"><strong>Authenticity</strong>100% handcrafted pieces</div></div>
+      <div class="trust-item"><div class="trust-icon">💬</div><div class="trust-text"><strong>Live Support</strong>9AM–6PM Mon–Sat</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- UPSELL -->
+<div class="upsell">
+  <div class="ups-header">
+    <div><div class="ups-eyebrow">✦ Complete Your Space</div><div class="ups-title">Pairs perfectly with</div></div>
+    <a href="modrn_stil_collections.html" class="ups-link">View All →</a>
+  </div>
+  <div class="ups-grid" id="upsGrid"></div>
+</div>
+
+<footer>
+  <div class="foot-brand">MODRN STIL</div>
+  <div class="foot-links"><a href="#">Instagram</a><a href="#">Pinterest</a><a href="#">FAQ</a><a href="#">Contact</a></div>
+  <div class="foot-copy">© 2026 Modrn Stil. All rights reserved.</div>
+</footer>
+
+<script>
+function lh(hex,a){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`rgb(${Math.min(255,r+(255-r)*a)},${Math.min(255,g+(255-g)*a)},${Math.min(255,b+(255-b)*a)})`}
+
+let cartData=[
+  {id:1,name:'Arko Lounge Chair',cat:'Living Room',price:18500,qty:1,badge:'New',variant:'Walnut / Natural Linen',stock:'Only 3 left',color:'#A89070',draw:'chair'},
+  {id:2,name:'Tsuchi Ceramic Set',cat:'Decor',price:6400,qty:2,badge:'',variant:'Set of 3 / Earth Tones',stock:'In stock',color:'#C4B8A5',draw:'vase'},
+  {id:3,name:'Muslin Throw Blanket',cat:'Bedroom',price:4200,qty:1,badge:'Sale',variant:'120×180cm / Oat',stock:'In stock',color:'#D8CEC0',draw:'blanket',original:5500},
+];
+
+const upsellData=[
+  {name:'Wabi Pendant Lamp',cat:'Lighting',price:9800,color:'#1C1916',draw:'lamp'},
+  {name:'Hinoki Side Table',cat:'Living Room',price:12200,color:'#8B7058',draw:'table'},
+  {name:'Arch Floor Mirror',cat:'Bedroom',price:14500,color:'#C4B8A5',draw:'mirror'},
+  {name:'Shou Sugi Ban Tray',cat:'Decor',price:2800,color:'#2C2018',draw:'tray'},
+];
+
+let shippingCost=0;
+let discountApplied=false;
+const FREE_THRESHOLD=50000;
+
+function drawScene(canvas,type,color){
+  const w=canvas.width||200,h=canvas.height||200;
+  canvas.width=w;canvas.height=h;
+  const ctx=canvas.getContext('2d');
+  const bg=lh(color,0.72);
+  ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+  ctx.fillStyle=lh(color,0.45);ctx.fillRect(0,h*0.78,w,h*0.22);
+  const g=ctx.createRadialGradient(w*0.3,h*0.25,5,w*0.3,h*0.25,w*0.7);
+  g.addColorStop(0,'rgba(255,245,230,0.3)');g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  if(type==='chair'){
+    ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(w*0.12,h*0.42,w*0.76,h*0.24,6);ctx.fill();
+    ctx.fillStyle=lh(color,0.15);ctx.beginPath();ctx.roundRect(w*0.12,h*0.3,w*0.11,h*0.2,4);ctx.fill();
+    ctx.fillStyle=lh(color,0.15);ctx.beginPath();ctx.roundRect(w*0.77,h*0.3,w*0.11,h*0.2,4);ctx.fill();
+    ctx.fillStyle=lh(color,0.25);ctx.beginPath();ctx.roundRect(w*0.2,h*0.44,w*0.6,h*0.18,5);ctx.fill();
+    ctx.fillStyle='#F0E8D8';ctx.beginPath();ctx.roundRect(w*0.28,h*0.34,w*0.18,w*0.12,5);ctx.fill();
+    ctx.strokeStyle=lh(color,-0.2);ctx.lineWidth=3;
+    [[0.2,0.66,0.18,0.84],[0.64,0.66,0.66,0.84],[0.3,0.66,0.27,0.84],[0.7,0.66,0.73,0.84]].forEach(([x1,y1,x2,y2])=>{ctx.beginPath();ctx.moveTo(w*x1,h*y1);ctx.lineTo(w*x2,h*y2);ctx.stroke()});
+  } else if(type==='vase'){
+    [[0.22,0.38,0.1,0.22,'#C4B8A5'],[0.52,0.3,0.09,0.28,'#8B7058'],[0.78,0.4,0.08,0.18,'#D4915A']].forEach(([x,y,rx,ry,c])=>{
+      ctx.fillStyle=c;ctx.beginPath();ctx.ellipse(w*x,h*y,w*rx,h*ry,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=lh(c,-0.08);ctx.beginPath();ctx.ellipse(w*x,h*(y-ry),w*rx*0.7,h*0.02,0,0,Math.PI*2);ctx.fill();
+    });
+    ctx.fillStyle='#8B9B78';ctx.fillRect(w*0.2,h*0.12,w*0.04,h*0.14);
+    ctx.fillStyle='#8B7058';ctx.fillRect(w*0.1,h*0.62,w*0.8,h*0.04);
+  } else if(type==='blanket'){
+    ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(w*0.08,h*0.25,w*0.84,h*0.5,8);ctx.fill();
+    ctx.strokeStyle=lh(color,-0.15);ctx.lineWidth=2;
+    for(let i=0;i<6;i++){ctx.beginPath();ctx.moveTo(w*(0.08+i*0.15),h*0.25);ctx.lineTo(w*(0.08+i*0.15),h*0.75);ctx.stroke()}
+    for(let j=0;j<4;j++){ctx.beginPath();ctx.moveTo(w*0.08,h*(0.33+j*0.12));ctx.lineTo(w*0.92,h*(0.33+j*0.12));ctx.stroke()}
+    for(let k=0;k<7;k++){ctx.fillStyle=lh(color,-0.12);ctx.fillRect(w*(0.05+k*0.13),h*0.75,w*0.025,h*0.07)}
+  } else if(type==='lamp'){
+    ctx.fillStyle='rgba(0,0,0,0.55)';ctx.fillRect(0,0,w,h);
+    const gl=ctx.createRadialGradient(w/2,h*0.22,5,w/2,h*0.25,w*0.6);
+    gl.addColorStop(0,'rgba(255,210,120,0.5)');gl.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gl;ctx.fillRect(0,0,w,h);
+    ctx.fillStyle='#E0C898';ctx.beginPath();ctx.moveTo(w*0.25,h*0.34);ctx.lineTo(w*0.75,h*0.34);ctx.lineTo(w*0.6,h*0.14);ctx.lineTo(w*0.4,h*0.14);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#8B7858';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(w/2,0);ctx.lineTo(w/2,h*0.14);ctx.stroke();
+    ctx.strokeStyle='rgba(139,120,88,0.3)';ctx.lineWidth=1;
+    for(let a=0;a<9;a++){const ang=a*(Math.PI/4.5);ctx.beginPath();ctx.moveTo(w/2,h*0.14);ctx.lineTo(w/2+Math.cos(ang)*w*0.28,h*0.14+Math.sin(ang)*h*0.32);ctx.stroke()}
+    const fg=ctx.createRadialGradient(w/2,h*0.9,3,w/2,h*0.9,w*0.4);
+    fg.addColorStop(0,'rgba(255,180,80,0.28)');fg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=fg;ctx.fillRect(0,h*0.7,w,h*0.3);
+  } else if(type==='table'){
+    ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(w*0.1,h*0.43,w*0.8,h*0.07,3);ctx.fill();
+    ctx.strokeStyle=lh(color,-0.3);ctx.lineWidth=3;
+    ctx.beginPath();ctx.moveTo(w*0.2,h*0.5);ctx.lineTo(w*0.2,h*0.78);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(w*0.8,h*0.5);ctx.lineTo(w*0.8,h*0.78);ctx.stroke();
+    ctx.fillStyle='#D4C8B0';ctx.beginPath();ctx.ellipse(w*0.5,h*0.36,w*0.09,h*0.12,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#8B9B78';ctx.fillRect(w*0.48,h*0.2,w*0.04,h*0.16);
+  } else if(type==='mirror'){
+    ctx.strokeStyle=color;ctx.lineWidth=6;
+    ctx.beginPath();ctx.moveTo(w*0.5,h*0.12);ctx.bezierCurveTo(w*0.82,h*0.12,w*0.9,h*0.34,w*0.9,h*0.52);
+    ctx.bezierCurveTo(w*0.9,h*0.74,w*0.7,h*0.84,w*0.5,h*0.84);
+    ctx.bezierCurveTo(w*0.3,h*0.84,w*0.1,h*0.74,w*0.1,h*0.52);
+    ctx.bezierCurveTo(w*0.1,h*0.32,w*0.22,h*0.12,w*0.5,h*0.12);ctx.stroke();
+    ctx.fillStyle='rgba(200,220,235,0.35)';ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.12)';ctx.beginPath();ctx.ellipse(w*0.34,h*0.33,w*0.09,w*0.06,-0.5,0,Math.PI*2);ctx.fill();
+  } else if(type==='tray'){
+    ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(w*0.12,h*0.38,w*0.76,h*0.22,4);ctx.fill();
+    ctx.fillStyle=lh(color,0.3);ctx.beginPath();ctx.roundRect(w*0.17,h*0.4,w*0.66,h*0.18,3);ctx.fill();
+    ctx.fillStyle='#D4C8B0';ctx.beginPath();ctx.ellipse(w*0.36,h*0.48,w*0.08,h*0.1,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#8B9B78';ctx.fillRect(w*0.61,h*0.36,w*0.03,h*0.12);
+  }
+}
+
+function getSubtotal(){return cartData.reduce((s,i)=>s+i.price*i.qty,0)}
+
+function updateShippingBanner(){
+  const sub=getSubtotal();
+  const left=Math.max(0,FREE_THRESHOLD-sub);
+  const pct=Math.min(100,(sub/FREE_THRESHOLD)*100);
+  document.getElementById('sbFill').style.width=pct+'%';
+  if(left===0){
+    document.getElementById('shippingLeft').textContent='You\'ve unlocked';
+    document.querySelector('.sb-text').innerHTML='🎉 You\'ve unlocked <strong>Free Shipping!</strong>';
+  } else {
+    document.querySelector('.sb-text').innerHTML=`You're <strong id="shippingLeft">₱${left.toLocaleString()}</strong> away from free shipping!`;
+  }
+}
+
+function updateSummary(){
+  const sub=getSubtotal();
+  const discount=discountApplied?Math.round(sub*0.10):0;
+  const tax=Math.round((sub-discount+shippingCost)*0.12);
+  const total=sub-discount+shippingCost+tax;
+  document.getElementById('subtotalVal').textContent='₱'+sub.toLocaleString();
+  document.getElementById('taxVal').textContent='₱'+tax.toLocaleString();
+  document.getElementById('totalVal').textContent='₱'+total.toLocaleString();
+  document.getElementById('itemCountLabel').textContent=cartData.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cartBubble').textContent=cartData.reduce((s,i)=>s+i.qty,0);
+  if(discountApplied){
+    document.getElementById('discountVal').textContent='−₱'+discount.toLocaleString();
+    document.getElementById('discountRow').style.display='flex';
+  }
+  updateShippingBanner();
+}
+
+function renderCart(){
+  const wrap=document.getElementById('cartItems');
+  const empty=document.getElementById('emptyState');
+  const footer=document.getElementById('cartFooter');
+  wrap.innerHTML='';
+  if(cartData.length===0){
+    empty.classList.add('show');
+    footer.style.display='none';
+    document.getElementById('cartBubble').textContent='0';
+    return;
+  }
+  empty.classList.remove('show');
+  footer.style.display='flex';
+  cartData.forEach((item,idx)=>{
+    const div=document.createElement('div');
+    div.className='cart-item';div.id='ci-'+item.id;
+    div.style.animationDelay=(0.1*idx+0.4)+'s';
+    const isSale=item.badge==='Sale';
+    div.innerHTML=`
+      <div class="ci-thumb">
+        <canvas id="cc${item.id}" width="90" height="115"></canvas>
+        ${item.badge?`<div class="ci-badge ${isSale?'sale':''}">${item.badge}</div>`:''}
+      </div>
+      <div class="ci-info">
+        <div class="ci-cat">${item.cat}</div>
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-variant">${item.variant}</div>
+        ${item.stock.includes('Only')?`<div class="ci-stock">⚠ ${item.stock}</div>`:''}
+        <div class="ci-actions">
+          <button class="ci-remove" onclick="removeFromCart(${item.id})">Remove</button>
+          <button class="ci-save" onclick="saveForLater(${item.id},'${item.name}')">Save for later</button>
+        </div>
+      </div>
+      <div class="ci-right">
+        <div>
+          <div class="ci-price${isSale?' sale':''}">₱${(item.price*item.qty).toLocaleString()}</div>
+          ${item.original?`<div class="ci-original">₱${(item.original*item.qty).toLocaleString()}</div>`:''}
+        </div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <div class="qty-num" id="qty-${item.id}">${item.qty}</div>
+          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+        </div>
+      </div>`;
+    wrap.appendChild(div);
+    setTimeout(()=>drawScene(document.getElementById('cc'+item.id),item.draw,item.color),30);
+  });
+  updateSummary();
+}
+
+function changeQty(id,delta){
+  const item=cartData.find(i=>i.id===id);
+  if(!item)return;
+  const newQty=item.qty+delta;
+  if(newQty<1){removeFromCart(id);return}
+  if(newQty>10){showToast('Maximum quantity is 10');return}
+  item.qty=newQty;
+  document.getElementById('qty-'+id).textContent=newQty;
+  const priceEl=document.querySelector(`#ci-${id} .ci-price`);
+  if(priceEl)priceEl.textContent='₱'+(item.price*newQty).toLocaleString();
+  if(item.original){const orig=document.querySelector(`#ci-${id} .ci-original`);if(orig)orig.textContent='₱'+(item.original*newQty).toLocaleString()}
+  updateSummary();
+}
+
+function removeFromCart(id){
+  const el=document.getElementById('ci-'+id);
+  if(el){el.style.transition='all 0.35s';el.style.opacity='0';el.style.transform='translateX(-20px)';
+    setTimeout(()=>{cartData=cartData.filter(i=>i.id!==id);renderCart()},350)}
+  showToast('Item removed from cart');
+}
+
+function saveForLater(id,name){
+  cartData=cartData.filter(i=>i.id!==id);
+  renderCart();
+  showToast(`"${name}" saved to wishlist ♡`);
+}
+
+function clearCart(){
+  if(cartData.length===0)return;
+  cartData=[];renderCart();
+  showToast('Cart cleared');
+}
+
+function selectShip(el,cost,label){
+  document.querySelectorAll('.ship-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  shippingCost=cost;
+  const sv=document.getElementById('shippingVal');
+  sv.innerHTML=cost===0?'<span style="color:var(--green)">Free</span>':label;
+  updateSummary();
+}
+
+function applyPromo(){
+  const code=document.getElementById('promoInput').value.trim().toUpperCase();
+  const success=document.getElementById('promoSuccess');
+  const error=document.getElementById('promoError');
+  success.style.display='none';error.style.display='none';
+  if(code==='MODRN10'){
+    discountApplied=true;
+    success.style.display='block';
+    updateSummary();
+    showToast('Promo code applied — 10% off!');
+  } else {
+    error.style.display='block';
+    discountApplied=false;
+    document.getElementById('discountRow').style.display='none';
+    updateSummary();
+  }
+}
+
+function checkout(){
+  showToast('Proceeding to checkout...');
+  setTimeout(()=>showToast('🎉 This is a demo — checkout coming soon!'),1500);
+}
+
+let toastT;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// Upsell grid
+function renderUpsell(){
+  const grid=document.getElementById('upsGrid');
+  upsellData.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='ups-card';
+    d.innerHTML=`<div class="ups-img">
+      <canvas id="uc${i}" width="200" height="200"></canvas>
+      <button class="ups-add-btn" onclick="addUpsell('${item.name}',${item.price})">+ Add to Cart</button>
+    </div>
+    <div class="ups-cat">${item.cat}</div>
+    <div class="ups-name">${item.name}</div>
+    <div class="ups-price">₱${item.price.toLocaleString()}</div>`;
+    grid.appendChild(d);
+    setTimeout(()=>drawScene(document.getElementById('uc'+i),item.draw,item.color),60);
+  });
+}
+
+function addUpsell(name,price){
+  cartData.push({id:Date.now(),name,cat:'',price,qty:1,badge:'',variant:'Default',stock:'In stock',color:'#C4B8A5',draw:'vase'});
+  renderCart();
+  showToast(`"${name}" added to cart!`);
+}
+
+window.addEventListener('load',()=>{renderCart();renderUpsell()});
+</script>
