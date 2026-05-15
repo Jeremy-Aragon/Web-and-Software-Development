@@ -2,7 +2,9 @@
 
 A fully responsive, multi-page e-commerce front-end for a premium home decor brand. Built with vanilla HTML, CSS, and JavaScript — no frameworks, no dependencies.
 
-![MODRN STIL Preview](Homepage_Right_background_image.png)
+🌐 **[Live Demo → modrn-stil.vercel.app](https://modrn-stil.vercel.app/)**
+
+![MODRN STIL Preview](demo.png)
 
 ---
 
@@ -88,7 +90,7 @@ modrn-stil/
 
 ## Getting Started
 
-No build tools or package managers needed. Just open in a browser:
+View it live at **[modrn-stil.vercel.app](https://modrn-stil.vercel.app/)**, or run it locally — no build tools or package managers needed:
 
 ```bash
 git clone https://github.com/your-username/modrn-stil.git
