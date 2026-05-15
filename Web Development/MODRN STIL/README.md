@@ -118,6 +118,7 @@ npx serve .
 ## Author
 
 Designed and built as a front-end portfolio project showcasing e-commerce UI patterns, CSS design systems, and creative use of the Canvas API.
+- Jeremy Aragon
 
 ---
 
