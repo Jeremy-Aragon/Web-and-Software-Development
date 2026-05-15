@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOIRHAUS — Urban Luxury Hotel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Syncopate:wght@400;700&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">NOIR<span>.</span>HAUS</a>
+    <ul class="nav-links">
+      <li><a href="#">Rooms</a></li>
+      <li><a href="#">Dining</a></li>
+      <li><a href="#">Experiences</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <span class="nav-tel">+1 (212) 000 — 0000</span>
+      <button class="btn-reserve">Reserve</button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="closeMobileMenu()">Rooms</a>
+    <a href="#" onclick="closeMobileMenu()">Dining</a>
+    <a href="#" onclick="closeMobileMenu()">Experiences</a>
+    <a href="#" onclick="closeMobileMenu()">Events</a>
+    <a href="#" onclick="closeMobileMenu()">About</a>
+    <div class="mobile-menu-tel">+1 (212) 000 — 0000</div>
+    <button class="mobile-menu-reserve">Reserve a Room</button>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">Midtown Manhattan · Est. 2019</div>
+      <h1 class="hero-title">
+        Where the city<br>
+        <em>never sleeps,</em><br>
+        neither do we.
+      </h1>
+      <p class="hero-desc">
+        A sanctuary of shadow and light in the heart of Manhattan. Forty-two floors of obsessively curated luxury, where every surface has a story and every night is an occasion.
+      </p>
+      <div class="hero-ctas">
+        <button class="btn-primary">Book Your Stay</button>
+        <button class="btn-ghost">Explore Rooms</button>
+      </div>
+      <div class="floor-count">Floor 01 — 42 · New York City</div>
+    </div>
+    <div class="hero-right">
+      <img src="HeroRightSide.png" class="hero-img" alt="Luxury suite with Manhattan city view at night">
+      <div class="hero-right-overlay"></div>
+      <div class="room-ticker">
+        <strong>42</strong>
+        Floors of luxury
+      </div>
+    </div>
+    <div class="scroll-ind">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- BOOKING BAR -->
+  <div class="booking-bar">
+    <div class="booking-inner">
+      <div class="book-field">
+        <label>Check In</label>
+        <input type="text" placeholder="DD / MM / YYYY">
+      </div>
+      <div class="book-field">
+        <label>Check Out</label>
+        <input type="text" placeholder="DD / MM / YYYY">
+      </div>
+      <div class="book-field">
+        <label>Guests</label>
+        <select>
+          <option>1 Adult</option>
+          <option>2 Adults</option>
+          <option>2 Adults, 1 Child</option>
+          <option>Suite Party</option>
+        </select>
+      </div>
+      <div class="book-field">
+        <label>Room Type</label>
+        <select>
+          <option>Any Room</option>
+          <option>Noir Suite</option>
+          <option>Penthouse</option>
+          <option>City View Deluxe</option>
+        </select>
+      </div>
+      <button class="book-submit">Check Availability</button>
+    </div>
+  </div>
+
+  <!-- ROOMS -->
+  <section class="rooms">
+    <div class="section-header" id="roomsHeader">
+      <div>
+        <div class="section-eyebrow">Accommodation</div>
+        <h2 class="section-title">Curated for<br><em>the discerning</em></h2>
+      </div>
+      <button class="section-link">View All Rooms</button>
+    </div>
+    <div class="rooms-grid">
+      <div class="room-card" id="card0">
+        <div class="room-canvas-wrap">
+          <img src="The Penthouse Suite.png" alt="The Penthouse Suite" class="room-img">
+          <canvas id="roomCanvas0"></canvas>
+          <div class="room-overlay"></div>
+        </div>
+        <div class="room-info">
+          <div class="room-floor">Floors 38 — 42</div>
+          <div class="room-name">The Penthouse Suite</div>
+          <div class="room-desc">Our crown jewel. 3,200 sq ft of curated darkness, a private terrace overlooking the city grid, and a butler on call 24 hours. For those who expect nothing less than everything.</div>
+          <div class="room-bottom">
+            <div class="room-price">$2,400 <span>/ night</span></div>
+            <button class="room-btn">View Suite</button>
+          </div>
+        </div>
+      </div>
+      <div class="room-card" id="card1">
+        <div class="room-canvas-wrap">
+          <img src="Noir Deluxe.png" alt="Noir Deluxe" class="room-img">
+          <canvas id="roomCanvas1"></canvas>
+          <div class="room-overlay"></div>
+        </div>
+        <div class="room-info">
+          <div class="room-floor">Floors 20 — 37</div>
+          <div class="room-name">Noir Deluxe</div>
+          <div class="room-bottom">
+            <div class="room-price">$680 <span>/ night</span></div>
+            <button class="room-btn">View Room</button>
+          </div>
+        </div>
+      </div>
+      <div class="room-card" id="card2">
+        <div class="room-canvas-wrap">
+          <img src="City View Standard.png" alt="City View Standard" class="room-img">
+          <canvas id="roomCanvas2"></canvas>
+          <div class="room-overlay"></div>
+        </div>
+        <div class="room-info">
+          <div class="room-floor">Floors 10 — 19</div>
+          <div class="room-name">City View Standard</div>
+          <div class="room-bottom">
+            <div class="room-price">$390 <span>/ night</span></div>
+            <button class="room-btn">View Room</button>
+          </div>
+        </div>
+      </div>
+      <div class="room-card" id="card3">
+        <div class="room-canvas-wrap">
+          <img src="The Black Label.png" alt="The Black Label" class="room-img">
+          <canvas id="roomCanvas3"></canvas>
+          <div class="room-overlay"></div>
+        </div>
+        <div class="room-info">
+          <div class="room-floor">Floor 42 only</div>
+          <div class="room-name">The Black Label</div>
+          <div class="room-bottom">
+            <div class="room-price">$5,800 <span>/ night</span></div>
+            <button class="room-btn">Inquire</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE STRIP -->
+  <div class="exp-strip">
+    <div class="exp-item">
+      <div class="exp-num">42</div>
+      <div class="exp-label">Floors Above Manhattan</div>
+      <div class="exp-desc">Every room commands an unobstructed view of the city that never dims.</div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-num">24<span style="font-size:1rem;color:var(--mid)">h</span></div>
+      <div class="exp-label">Butler Service</div>
+      <div class="exp-desc">Your personal butler anticipates every need before it's expressed.</div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-num">3</div>
+      <div class="exp-label">Award-Winning Restaurants</div>
+      <div class="exp-desc">From rooftop omakase to a Michelin-starred underground supper club.</div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-num">∞</div>
+      <div class="exp-label">Bespoke Experiences</div>
+      <div class="exp-desc">Midnight gallery tours, private jazz sessions, and itineraries written just for you.</div>
+    </div>
+  </div>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-inner">
+      Noir Haus New York <span class="sep">✦</span> Urban Luxury Redefined <span class="sep">✦</span> 42 Floors <span class="sep">✦</span> Midtown Manhattan <span class="sep">✦</span> Est. 2019 <span class="sep">✦</span> Michelin Dining <span class="sep">✦</span> Private Events <span class="sep">✦</span> Butler Service <span class="sep">✦</span>&nbsp;
+      Noir Haus New York <span class="sep">✦</span> Urban Luxury Redefined <span class="sep">✦</span> 42 Floors <span class="sep">✦</span> Midtown Manhattan <span class="sep">✦</span> Est. 2019 <span class="sep">✦</span> Michelin Dining <span class="sep">✦</span> Private Events <span class="sep">✦</span> Butler Service <span class="sep">✦</span>&nbsp;
+    </div>
+  </div>
+
+  <!-- GALLERY STRIP -->
+  <div class="gallery-strip">
+    <div class="gallery-cell"><img src="The Penthouse Suite.png" alt="The Penthouse Suite" class="gallery-img"></div>
+    <div class="gallery-cell"><img src="Noir Deluxe.png" alt="Noir Deluxe" class="gallery-img"></div>
+    <div class="gallery-cell"><img src="City View Standard.png" alt="City View Standard" class="gallery-img"></div>
+    <div class="gallery-cell"><img src="The Black Label.png" alt="The Black Label" class="gallery-img"></div>
+    <div class="gallery-cell"><img src="HeroRightSide.png" alt="Hero right-side view" class="gallery-img"></div>
+  </div>
+
+  <!-- TESTIMONIAL -->
+  <section class="testimonial">
+    <div class="test-left">
+      <div class="test-eyebrow">Guest Stories</div>
+      <blockquote class="test-quote">
+        Noir Haus doesn't feel like a hotel. It feels like the city itself handed you the keys to its best-kept secret.
+      </blockquote>
+      <div class="test-attr"><strong>Margaux D.</strong> — Suite 3901, November 2025</div>
+    </div>
+    <div class="test-divider">
+      <div class="test-d-item">
+        <div class="test-d-num">4.97</div>
+        <div class="test-d-label">Average Guest Rating</div>
+      </div>
+      <div class="test-d-item">
+        <div class="test-d-num">12k+</div>
+        <div class="test-d-label">Nights Booked in 2025</div>
+      </div>
+      <div class="test-d-item">
+        <div class="test-d-num">#1</div>
+        <div class="test-d-label">Luxury Hotel — NYC, Condé Nast 2025</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand-logo">NOIR<span>.</span>HAUS</div>
+        <div class="foot-tagline">"A sanctuary for those who find beauty in the dark."</div>
+        <div class="foot-address">
+          1 Noir Plaza, 42nd Floor<br>
+          Midtown Manhattan, New York<br>
+          NY 10036, United States
+        </div>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Hotel</div>
+        <ul>
+          <li><a href="#">Rooms & Suites</a></li>
+          <li><a href="#">The Penthouse</a></li>
+          <li><a href="#">Dining</a></li>
+          <li><a href="#">Spa & Wellness</a></li>
+          <li><a href="#">Rooftop Bar</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Experiences</div>
+        <ul>
+          <li><a href="#">Private Events</a></li>
+          <li><a href="#">Gallery Access</a></li>
+          <li><a href="#">Midnight Concierge</a></li>
+          <li><a href="#">City Itineraries</a></li>
+          <li><a href="#">Gift Cards</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Contact</div>
+        <ul>
+          <li><a href="#">+1 (212) 000 — 0000</a></li>
+          <li><a href="#">stay@noirhaus.com</a></li>
+          <li><a href="#">Press Enquiries</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div class="foot-copy">© 2026 Noir Haus. All rights reserved. A concept portfolio project.</div>
+      <div class="foot-socials">
+        <a href="#">Instagram</a>
+        <a href="#">Pinterest</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
