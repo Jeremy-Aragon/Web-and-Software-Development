@@ -4,7 +4,7 @@ A fully responsive, multi-page e-commerce front-end for a premium home decor bra
 
 🌐 **[Live Demo → modrn-stil.vercel.app](https://modrn-stil.vercel.app/)**
 
-![MODRN STIL Preview](demo.png)
+![MODRN STIL Preview](image.png)
 
 ---
 
