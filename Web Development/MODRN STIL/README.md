@@ -83,7 +83,7 @@ modrn-stil/
 ├── Arko_Lounge_Chair.png
 ├── Linen_Throw_Pillow_Set.png
 ├── Wabi_Pendant_Lamp.png
-└── Homepage_Right_background_image.png
+└── image.png
 ```
 
 ---
