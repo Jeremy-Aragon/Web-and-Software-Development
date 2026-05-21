@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rooms & Suites — NOIRHAUS · Midtown Manhattan</title>
+  <meta name="description" content="Four distinct expressions of luxury. From the City View Standard to the invitation-only Black Label — every room at Noir Haus is a world apart.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Syncopate:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET & ROOT ─────────────────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black:   #080808;
+      --void:    #0E0D0C;
+      --carbon:  #161412;
+      --ash:     #252220;
+      --smoke:   #3A3530;
+      --mid:     #6E6560;
+      --muted:   #9E9892;
+      --cream:   #E8E2D9;
+      --white:   #F5F1EC;
+      --gold:    #B8965A;
+      --gold-lt: #D4AF72;
+      --red:     #8B2E2E;
+      --border:  rgba(184,150,90,0.18);
+      --border2: rgba(255,255,255,0.06);
+      --trans:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: radial-gradient(circle at top left, rgba(184,150,90,0.05), transparent 16%),
+                  radial-gradient(circle at bottom right, rgba(255,255,255,0.02), transparent 22%),
+                  var(--black);
+      color: var(--cream);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9990; opacity: 0.5;
+    }
+
+    /* ── PAGE LOADER ─────────────────────────────────────────────────────── */
+    .page-loader {
+      position: fixed; inset: 0; background: var(--black);
+      z-index: 10000; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2rem;
+      transition: opacity 0.8s var(--trans), visibility 0.8s;
+    }
+    .page-loader.done { opacity: 0; visibility: hidden; }
+    .loader-logo { font-family: 'Syncopate', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.4em; color: var(--white); }
+    .loader-logo span { color: var(--gold); }
+    .loader-bar { width: 200px; height: 1px; background: var(--ash); overflow: hidden; }
+    .loader-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.05s linear; }
+
+    /* ── CURSOR ──────────────────────────────────────────────────────────── */
+    .cursor {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor.expanded { width: 60px; height: 60px; background: rgba(184,150,90,0.15); }
+    .cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border: 1px solid rgba(184,150,90,0.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.8rem 3rem;
+      background: rgba(8,8,8,0.08); backdrop-filter: blur(14px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.16);
+      transition: padding 0.4s var(--trans), background 0.4s, transform 0.4s;
+    }
+    nav.scrolled {
+      padding: 1.2rem 3rem; background: rgba(8,8,8,0.96);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border2);
+    }
+    nav::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0) 100%);
+      pointer-events: none; transition: opacity 0.4s;
+    }
+    nav.scrolled::before { opacity: 0; }
+    .nav-logo {
+      font-family: 'Syncopate', sans-serif; font-size: 1rem; font-weight: 700;
+      letter-spacing: 0.3em; color: var(--white); text-decoration: none; position: relative;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; position: relative; }
+    .nav-links a {
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color 0.3s; position: relative;
+    }
+    .nav-links a.active { color: var(--gold); }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px; background: var(--gold); transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-actions { display: flex; align-items: center; gap: 2rem; position: relative; }
+    .nav-tel { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--mid); }
+    .btn-reserve {
+      font-family: 'Syncopate', sans-serif; font-size: 0.55rem; letter-spacing: 0.25em;
+      text-transform: uppercase; padding: 0.7rem 1.6rem;
+      background: transparent; border: 1px solid var(--gold);
+      color: var(--gold); cursor: none; transition: background 0.3s, color 0.3s;
+    }
+    .btn-reserve:hover { background: var(--gold); color: var(--black); }
+
+    /* ── HAMBURGER ───────────────────────────────────────────────────────── */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none; z-index: 600;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 1px; background: var(--muted);
+      transition: transform 0.3s, opacity 0.3s, background 0.3s; transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); background: var(--gold); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); background: var(--gold); }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; background: var(--void); z-index: 400;
+      flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem;
+      opacity: 0; transform: translateY(-10px);
+      transition: opacity 0.4s, transform 0.4s; pointer-events: none;
+    }
+    .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 400;
+      color: var(--cream); text-decoration: none; letter-spacing: 0.05em; transition: color 0.3s;
+    }
+    .mobile-menu a:hover, .mobile-menu a.active { color: var(--gold); }
+    .mobile-menu-tel { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--mid); margin-top: 1rem; }
+    .mobile-menu-reserve {
+      font-family: 'Syncopate', sans-serif; font-size: 0.58rem; letter-spacing: 0.25em;
+      text-transform: uppercase; padding: 0.9rem 2.5rem; background: transparent;
+      border: 1px solid var(--gold); color: var(--gold); cursor: pointer; margin-top: 1rem;
+      transition: background 0.3s, color 0.3s;
+    }
+    .mobile-menu-reserve:hover { background: var(--gold); color: var(--black); }
+
+    /* ── SHARED BUTTONS ──────────────────────────────────────────────────── */
+    .btn-primary {
+      font-family: 'Syncopate', sans-serif; font-size: 0.6rem; letter-spacing: 0.25em;
+      text-transform: uppercase; padding: 1rem 2.5rem;
+      background: var(--gold); color: var(--black); border: none; cursor: none;
+      transition: background 0.3s, transform 0.2s; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .btn-outline {
+      font-family: 'Syncopate', sans-serif; font-size: 0.55rem; letter-spacing: 0.22em;
+      text-transform: uppercase; padding: 0.85rem 2rem;
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted); cursor: none; transition: border-color 0.3s, color 0.3s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── ROOMS HERO ──────────────────────────────────────────────────────── */
+    .rooms-hero {
+      position: relative; height: 65vh; min-height: 520px;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+    }
+    .rooms-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(14,13,12,0.92) 0%, rgba(8,8,8,0.6) 55%, rgba(8,8,8,0.85) 100%);
+      z-index: 1;
+    }
+    .rooms-hero-img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center 30%;
+      filter: brightness(0.45) saturate(0.7);
+    }
+    .rooms-hero-content {
+      position: relative; z-index: 2; padding: 0 5rem 5rem;
+      max-width: 820px;
+    }
+    .rooms-hero-eyebrow {
+      font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+    }
+    .rooms-hero-eyebrow::before { content: '—— '; opacity: 0.5; }
+    .rooms-hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5.5vw, 5.5rem);
+      font-weight: 400; line-height: 1.04; letter-spacing: -0.02em;
+      color: var(--white); margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+    }
+    .rooms-hero-title em { font-style: italic; color: var(--gold-lt); }
+    .rooms-hero-desc {
+      font-size: 0.82rem; font-weight: 300; color: var(--muted);
+      line-height: 1.85; max-width: 460px;
+      opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+    }
+    /* Horizontal rule with number */
+    .rooms-hero-rule {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+      height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    /* ── BOOKING BAR ─────────────────────────────────────────────────────── */
+    .booking-bar {
+      background: var(--carbon); border-bottom: 1px solid var(--border2);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .booking-inner {
+      display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto;
+      max-width: 1400px; margin: 0 auto;
+    }
+    .book-field {
+      padding: 1.4rem 2rem;
+      border-right: 1px solid var(--border2);
+      display: flex; flex-direction: column; gap: 0.35rem;
+    }
+    .book-field label {
+      font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); font-weight: 400;
+    }
+    .book-field input, .book-field select {
+      background: none; border: none; outline: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+      color: var(--cream); font-weight: 300; cursor: pointer; width: 100%;
+    }
+    .book-field select option { background: var(--carbon); color: var(--cream); }
+    .book-submit {
+      font-family: 'Syncopate', sans-serif; font-size: 0.55rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 0 2.5rem; background: var(--gold); color: var(--black);
+      border: none; cursor: none; transition: background 0.3s; white-space: nowrap;
+    }
+    .book-submit:hover { background: var(--gold-lt); }
+
+    /* ── FILTER BAR ──────────────────────────────────────────────────────── */
+    .filter-bar {
+      padding: 2.5rem 5rem;
+      display: flex; align-items: center; gap: 0; 
+      border-bottom: 1px solid var(--border2);
+      overflow-x: auto;
+    }
+    .filter-bar-label {
+      font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--mid); margin-right: 2.5rem; white-space: nowrap; flex-shrink: 0;
+    }
+    .filter-tabs { display: flex; gap: 0; }
+    .filter-tab {
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); padding: 0.6rem 1.6rem;
+      border: 1px solid var(--border2); border-left: none;
+      background: none; cursor: none; transition: all 0.3s; white-space: nowrap;
+    }
+    .filter-tab:first-child { border-left: 1px solid var(--border2); }
+    .filter-tab:hover { color: var(--cream); border-color: var(--border); }
+    .filter-tab.active { background: var(--ash); color: var(--gold); border-color: var(--border); }
+    .filter-count {
+      margin-left: auto; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--mid);
+      white-space: nowrap; padding-left: 2rem; flex-shrink: 0;
+    }
+
+    /* ── FEATURED ROOM (BLACK LABEL) ─────────────────────────────────────── */
+    .featured-room {
+      position: relative; height: 88vh; min-height: 620px;
+      overflow: hidden; cursor: none;
+    }
+    .featured-room-img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.8s var(--trans);
+      filter: brightness(0.5) saturate(0.8);
+    }
+    .featured-room:hover .featured-room-img { transform: scale(1.03); }
+    .featured-room-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.6) 55%, rgba(8,8,8,0.25) 100%);
+    }
+    .featured-room-content {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 5rem;
+    }
+    .featured-badge {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      font-size: 0.55rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+    }
+    .featured-badge::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
+    .featured-badge-tag {
+      background: var(--gold); color: var(--black); padding: 0.2rem 0.7rem;
+      font-size: 0.5rem; letter-spacing: 0.2em; margin-left: 0.5rem;
+    }
+    .featured-floor {
+      font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--mid); margin-bottom: 0.8rem;
+    }
+    .featured-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      font-weight: 400; line-height: 1.0; letter-spacing: -0.02em;
+      color: var(--white); margin-bottom: 1.5rem;
+    }
+    .featured-desc {
+      font-size: 0.82rem; font-weight: 300; color: var(--muted);
+      line-height: 1.85; max-width: 420px; margin-bottom: 2.5rem;
+    }
+    .featured-meta {
+      display: flex; align-items: center; gap: 3rem; margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .featured-meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+    .featured-meta-label {
+      font-size: 0.52rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mid);
+    }
+    .featured-meta-val {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cream);
+    }
+    .featured-actions { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+    .featured-price {
+      font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold-lt);
+    }
+    .featured-price span { font-family: 'DM Sans', sans-serif; font-size: 0.65rem; color: var(--mid); font-weight: 300; }
+    /* Side amenity strip */
+    .featured-amenities-strip {
+      position: absolute; right: 5rem; top: 50%; transform: translateY(-50%);
+      z-index: 3; display: flex; flex-direction: column; gap: 0.8rem;
+    }
+    .featured-amenity-pill {
+      font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase;
+      border: 1px solid var(--border); color: var(--muted); padding: 0.45rem 1rem;
+      background: rgba(14,13,12,0.7); backdrop-filter: blur(8px);
+      text-align: center; white-space: nowrap;
+    }
+    /* Corner number */
+    .featured-corner-num {
+      position: absolute; right: 5rem; bottom: 5rem; z-index: 3;
+      font-family: 'Syncopate', sans-serif; font-size: 0.55rem; letter-spacing: 0.3em;
+      color: var(--mid);
+    }
+    .featured-corner-num strong {
+      font-family: 'Playfair Display', serif; font-size: 4rem;
+      color: rgba(184,150,90,0.12); display: block; line-height: 1;
+    }
+
+    /* ── ROOMS GRID ──────────────────────────────────────────────────────── */
+    .rooms-section {
+      padding: 6rem 5rem;
+    }
+    .rooms-section-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 3.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border2);
+    }
+    .section-eyebrow {
+      font-size: 0.58rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.8rem;
+    }
+    .section-eyebrow::before { content: '—— '; opacity: 0.5; }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 400; line-height: 1.1; letter-spacing: -0.02em;
+      color: var(--white);
+    }
+    .section-title em { font-style: italic; color: var(--gold-lt); }
+
+    .rooms-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border2);
+    }
+    .room-card {
+      background: var(--black);
+      display: grid; grid-template-columns: 1fr 1fr;
+      overflow: hidden; position: relative;
+      transition: background 0.4s;
+    }
+    .room-card:hover { background: rgba(22,20,18,0.98); }
+    .room-card-img-wrap {
+      position: relative; overflow: hidden; min-height: 380px;
+    }
+    .room-card-img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s var(--trans);
+      filter: brightness(0.7) saturate(0.8);
+    }
+    .room-card:hover .room-card-img { transform: scale(1.06); }
+    .room-card-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, transparent 60%, rgba(8,8,8,0.8) 100%);
+    }
+    .room-card-body {
+      padding: 3rem 2.5rem;
+      display: flex; flex-direction: column; justify-content: space-between;
+      border-left: 1px solid var(--border2);
+    }
+    .room-card-number {
+      font-family: 'Playfair Display', serif; font-size: 4rem;
+      color: rgba(184,150,90,0.08); line-height: 1; margin-bottom: 0.5rem;
+      user-select: none;
+    }
+    .room-card-floor {
+      font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.6rem;
+    }
+    .room-card-name {
+      font-family: 'Playfair Display', serif; font-size: 1.6rem;
+      font-weight: 400; line-height: 1.1; color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .room-card-desc {
+      font-size: 0.78rem; font-weight: 300; color: var(--muted);
+      line-height: 1.85; margin-bottom: 1.5rem; flex: 1;
+    }
+    .room-card-amenities {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.8rem;
+    }
+    .room-amenity-tag {
+      font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase;
+      border: 1px solid var(--border); color: var(--mid); padding: 0.25rem 0.65rem;
+    }
+    .room-card-bottom {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      padding-top: 1.5rem; border-top: 1px solid var(--border2);
+    }
+    .room-card-price {
+      font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold-lt);
+    }
+    .room-card-price span {
+      font-family: 'DM Sans', sans-serif; font-size: 0.6rem;
+      color: var(--mid); font-weight: 300;
+    }
+    .room-card-btn {
+      font-family: 'Syncopate', sans-serif; font-size: 0.5rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 0.7rem 1.4rem; background: transparent;
+      border: 1px solid var(--border); color: var(--muted);
+      cursor: none; transition: all 0.3s;
+    }
+    .room-card-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--black); }
+
+    /* ── ROOM DETAILS (expandable panels) ──────────────────────────────── */
+    .room-detail-section {
+      border-top: 1px solid var(--border2);
+    }
+    .room-detail-item {
+      border-bottom: 1px solid var(--border2);
+      overflow: hidden;
+    }
+    .room-detail-trigger {
+      width: 100%; padding: 2rem 5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: none; border: none; cursor: none; text-align: left;
+      transition: background 0.3s;
+    }
+    .room-detail-trigger:hover { background: rgba(255,255,255,0.02); }
+    .room-detail-trigger-left { display: flex; align-items: center; gap: 3rem; }
+    .room-detail-num {
+      font-family: 'Syncopate', sans-serif; font-size: 0.55rem;
+      letter-spacing: 0.25em; color: var(--mid);
+    }
+    .room-detail-name {
+      font-family: 'Playfair Display', serif; font-size: 1.3rem;
+      color: var(--white);
+    }
+    .room-detail-price-inline {
+      font-size: 0.7rem; color: var(--gold); letter-spacing: 0.1em; margin-left: auto; padding-right: 3rem;
+    }
+    .room-detail-icon {
+      font-size: 1.2rem; color: var(--gold); width: 24px; text-align: center;
+      transition: transform 0.4s var(--trans);
+    }
+    .room-detail-item.open .room-detail-icon { transform: rotate(45deg); }
+    .room-detail-panel {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.5s var(--trans);
+    }
+    .room-detail-item.open .room-detail-panel { max-height: 600px; }
+    .room-detail-inner {
+      padding: 0 5rem 3rem;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3rem;
+    }
+    .room-detail-col-title {
+      font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+    .room-detail-body {
+      font-size: 0.78rem; font-weight: 300; color: var(--muted); line-height: 1.85;
+    }
+    .room-detail-amenity-list {
+      list-style: none; display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .room-detail-amenity-list li {
+      font-size: 0.75rem; font-weight: 300; color: var(--muted);
+      padding-left: 1.2rem; position: relative; line-height: 1.5;
+    }
+    .room-detail-amenity-list li::before {
+      content: '—'; position: absolute; left: 0; color: var(--gold); font-size: 0.6rem;
+    }
+
+    /* ── COMPARISON TABLE ────────────────────────────────────────────────── */
+    .compare-section {
+      padding: 6rem 5rem;
+      border-top: 1px solid var(--border2);
+    }
+    .compare-table-wrap { overflow-x: auto; margin-top: 3rem; }
+    .compare-table {
+      width: 100%; border-collapse: collapse; min-width: 700px;
+    }
+    .compare-table th {
+      padding: 1.5rem 1.8rem; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-table th:first-child {
+      font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--mid); width: 22%;
+    }
+    .compare-table th:not(:first-child) .th-name {
+      font-family: 'Playfair Display', serif; font-size: 1rem;
+      color: var(--white); display: block; margin-bottom: 0.25rem;
+    }
+    .compare-table th:not(:first-child) .th-price {
+      font-size: 0.58rem; letter-spacing: 0.1em; color: var(--gold);
+    }
+    .compare-table td {
+      padding: 1rem 1.8rem; border-bottom: 1px solid var(--border2);
+      font-size: 0.76rem; font-weight: 300; color: var(--muted);
+      vertical-align: middle;
+    }
+    .compare-table td:first-child {
+      font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--mid);
+    }
+    .compare-table tr:hover td { background: rgba(255,255,255,0.015); }
+    .check { color: var(--gold); font-size: 0.9rem; }
+    .cross { color: var(--smoke); font-size: 0.9rem; }
+    .compare-col-highlight { background: rgba(184,150,90,0.04); }
+    .compare-cta-row td {
+      padding-top: 2rem; border: none;
+    }
+    .compare-cta-btn {
+      font-family: 'Syncopate', sans-serif; font-size: 0.5rem; letter-spacing: 0.2em;
+      text-transform: uppercase; padding: 0.7rem 1.4rem;
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted); cursor: none; transition: all 0.3s; width: 100%;
+    }
+    .compare-cta-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--black); }
+
+    /* ── EXPERIENCE STRIP ────────────────────────────────────────────────── */
+    .exp-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border2);
+    }
+    .exp-strip-item {
+      padding: 3rem 2.5rem; border-right: 1px solid var(--border2);
+      transition: background 0.3s;
+    }
+    .exp-strip-item:last-child { border-right: none; }
+    .exp-strip-item:hover { background: rgba(255,255,255,0.02); }
+    .exp-strip-icon { font-size: 1.2rem; margin-bottom: 1rem; }
+    .exp-strip-title {
+      font-family: 'Playfair Display', serif; font-size: 0.95rem;
+      color: var(--white); margin-bottom: 0.6rem;
+    }
+    .exp-strip-desc {
+      font-size: 0.72rem; font-weight: 300; color: var(--mid); line-height: 1.7;
+    }
+
+    /* ── GALLERY STRIP ───────────────────────────────────────────────────── */
+    .gallery-strip {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 2fr;
+      height: 320px;
+      gap: 1px; background: var(--border2);
+    }
+    .gallery-cell {
+      position: relative; overflow: hidden; cursor: none;
+    }
+    .gallery-cell-img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.6) saturate(0.8);
+      transition: transform 0.6s var(--trans), filter 0.4s;
+    }
+    .gallery-cell:hover .gallery-cell-img { transform: scale(1.06); filter: brightness(0.75) saturate(0.9); }
+    .gallery-cell-label {
+      position: absolute; bottom: 1.2rem; left: 1.2rem;
+      font-size: 0.52rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); background: rgba(8,8,8,0.6); padding: 0.25rem 0.7rem;
+    }
+
+    /* ── POLICIES SECTION ────────────────────────────────────────────────── */
+    .policies {
+      padding: 5rem;
+      border-top: 1px solid var(--border2);
+      display: grid; grid-template-columns: 1fr 2fr; gap: 5rem;
+    }
+    .policies-left .section-eyebrow { margin-bottom: 0.8rem; }
+    .policies-left .section-title { font-size: clamp(1.6rem, 2.5vw, 2.2rem); margin-bottom: 1.2rem; }
+    .policies-left p {
+      font-size: 0.78rem; font-weight: 300; color: var(--muted); line-height: 1.85;
+    }
+    .policies-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .policy-item { border-left: 1px solid var(--border); padding-left: 1.5rem; }
+    .policy-title {
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.6rem;
+    }
+    .policy-val {
+      font-family: 'Playfair Display', serif; font-size: 0.95rem;
+      color: var(--white); margin-bottom: 0.4rem;
+    }
+    .policy-note { font-size: 0.7rem; font-weight: 300; color: var(--mid); line-height: 1.6; }
+
+    /* ── CTA STRIP ───────────────────────────────────────────────────────── */
+    .cta-strip {
+      padding: 8rem 5rem; text-align: center;
+      border-top: 1px solid var(--border2);
+      background: radial-gradient(ellipse at center, rgba(184,150,90,0.05) 0%, transparent 65%);
+    }
+    .cta-eyebrow {
+      font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+    }
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 400; line-height: 1.1; color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .cta-title em { font-style: italic; color: var(--gold-lt); }
+    .cta-desc {
+      font-size: 0.82rem; font-weight: 300; color: var(--muted);
+      line-height: 1.85; max-width: 480px; margin: 0 auto 2.5rem;
+    }
+    .cta-actions { display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .cta-email-link {
+      font-size: 0.72rem; letter-spacing: 0.12em; color: var(--muted);
+      text-decoration: none; border-bottom: 1px solid var(--border);
+      padding-bottom: 0.2rem; transition: color 0.3s, border-color 0.3s;
+    }
+    .cta-email-link:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────────── */
+    footer { padding: 5rem 5rem 2rem; border-top: 1px solid var(--border2); }
+    .foot-top {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 4rem; margin-bottom: 3rem;
+    }
+    .foot-brand-logo {
+      font-family: 'Syncopate', sans-serif; font-size: 1rem; font-weight: 700;
+      letter-spacing: 0.3em; color: var(--white); margin-bottom: 1rem;
+    }
+    .foot-brand-logo span { color: var(--gold); }
+    .foot-tagline {
+      font-size: 0.72rem; font-style: italic; color: var(--mid); line-height: 1.7;
+      margin-bottom: 1.2rem; font-family: 'Playfair Display', serif;
+    }
+    .foot-address { font-size: 0.7rem; font-weight: 300; color: var(--mid); line-height: 1.8; margin-bottom: 1.5rem; }
+    .foot-awards { display: flex; gap: 1rem; }
+    .award-badge {
+      font-family: 'Syncopate', sans-serif; font-size: 0.45rem; letter-spacing: 0.15em;
+      text-transform: uppercase; border: 1px solid var(--border);
+      padding: 0.5rem 0.8rem; text-align: center; line-height: 1.6; color: var(--mid);
+    }
+    .award-badge span { display: block; color: var(--gold); }
+    .foot-col-title {
+      font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+    }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+    .foot-col ul li a {
+      font-size: 0.72rem; font-weight: 300; color: var(--mid); text-decoration: none;
+      letter-spacing: 0.05em; transition: color 0.3s;
+    }
+    .foot-col ul li a:hover { color: var(--gold); }
+    .foot-newsletter { margin-top: 2rem; }
+    .nl-form { display: flex; border: 1px solid var(--border2); margin-top: 0.8rem; }
+    .nl-input {
+      flex: 1; background: none; border: none; outline: none;
+      padding: 0.7rem 1rem; font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem; color: var(--cream); font-weight: 300;
+    }
+    .nl-btn {
+      padding: 0.7rem 1.2rem; background: none; border: none; border-left: 1px solid var(--border2);
+      color: var(--gold); font-size: 1rem; cursor: none; transition: background 0.3s;
+    }
+    .nl-btn:hover { background: var(--ash); }
+    .foot-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border2); padding-top: 2rem;
+    }
+    .foot-copy { font-size: 0.65rem; color: var(--mid); letter-spacing: 0.05em; }
+    .foot-socials { display: flex; gap: 2rem; }
+    .foot-socials a {
+      font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none; transition: color 0.3s;
+    }
+    .foot-socials a:hover { color: var(--gold); }
+
+    /* ── ROOM MODAL ──────────────────────────────────────────────────────── */
+    .room-modal {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(8,8,8,0.92); backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem; opacity: 0; visibility: hidden;
+      transition: opacity 0.4s var(--trans), visibility 0.4s;
+    }
+    .room-modal.open { opacity: 1; visibility: visible; }
+    .modal-inner {
+      background: var(--carbon); border: 1px solid var(--border2);
+      max-width: 900px; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr;
+      max-height: 90vh; overflow: hidden;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10;
+      background: var(--ash); border: 1px solid var(--border2);
+      color: var(--muted); width: 36px; height: 36px;
+      cursor: none; font-size: 0.9rem; transition: all 0.3s; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-close:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+    .modal-img-wrap { position: relative; overflow: hidden; }
+    .modal-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .modal-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, transparent 60%, var(--carbon) 100%);
+    }
+    .modal-content { padding: 3rem 2.5rem; overflow-y: auto; }
+    .modal-floor { font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 400; color: var(--white); margin-bottom: 1rem; }
+    .modal-desc { font-size: 0.76rem; font-weight: 300; color: var(--muted); line-height: 1.85; margin-bottom: 1.8rem; }
+    .modal-amenities { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.5rem; }
+    .modal-amenity {
+      font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase;
+      border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.8rem; white-space: nowrap;
+    }
+    .modal-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border2); padding-top: 1.5rem;
+    }
+    .modal-price { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold-lt); }
+    .modal-price span { font-family: 'DM Sans', sans-serif; font-size: 0.65rem; color: var(--mid); font-weight: 300; }
+
+    /* ── TOAST ───────────────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ash); border: 1px solid var(--border);
+      color: var(--cream); font-size: 0.75rem; padding: 0.8rem 2rem;
+      letter-spacing: 0.1em; opacity: 0; visibility: hidden;
+      transition: all 0.4s; z-index: 6000; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+    /* ── SCROLL ANIMATIONS ───────────────────────────────────────────────── */
+    .reveal-on-scroll {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s var(--trans), transform 0.7s var(--trans);
+    }
+    .reveal-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── KEYFRAMES ───────────────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+    @media (max-width: 1200px) {
+      .rooms-grid { grid-template-columns: 1fr; }
+      .featured-amenities-strip { display: none; }
+      .compare-section { padding: 5rem 3rem; }
+      .policies { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    @media (max-width: 1024px) {
+      nav { padding: 1.4rem 2rem; }
+      .nav-links { gap: 1.5rem; }
+      .nav-tel { display: none; }
+      .rooms-hero-content { padding: 0 3rem 4rem; }
+      .filter-bar { padding: 2rem 3rem; }
+      .rooms-section { padding: 5rem 3rem; }
+      .featured-room-content { padding: 4rem 3rem; }
+      .room-detail-trigger { padding: 1.8rem 3rem; }
+      .room-detail-inner { padding: 0 3rem 2.5rem; grid-template-columns: 1fr 1fr; }
+      .compare-section { padding: 5rem 2rem; }
+      .gallery-strip { height: 220px; grid-template-columns: 1fr 1fr; }
+      .gallery-cell:nth-child(3), .gallery-cell:nth-child(4) { display: none; }
+      .policies { padding: 4rem 3rem; }
+      .cta-strip { padding: 6rem 3rem; }
+      footer { padding: 4rem 3rem 2rem; }
+      .foot-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+      .booking-inner { grid-template-columns: 1fr 1fr; }
+      .book-submit { grid-column: 1 / -1; padding: 1.4rem; }
+      .exp-strip { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor, .cursor-ring { display: none; }
+      button, a, input, select { cursor: pointer !important; }
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links, .nav-tel, .btn-reserve { display: none; }
+      .nav-hamburger { display: flex; }
+      .mobile-menu { display: flex; }
+      .rooms-hero { height: 55vh; }
+      .rooms-hero-content { padding: 0 1.5rem 3rem; }
+      .booking-inner { grid-template-columns: 1fr; }
+      .book-field { border-right: none; border-bottom: 1px solid var(--border2); padding: 1.2rem 1.5rem; }
+      .book-submit { grid-column: 1; padding: 1.3rem; }
+      .filter-bar { padding: 1.5rem; gap: 0; }
+      .filter-bar-label { display: none; }
+      .filter-tab { padding: 0.5rem 1rem; font-size: 0.55rem; }
+      .filter-count { display: none; }
+      .featured-room { height: 70vh; }
+      .featured-room-content { padding: 2rem 1.5rem; }
+      .featured-amenities-strip { display: none; }
+      .featured-title { font-size: clamp(2rem, 8vw, 3rem); }
+      .rooms-section { padding: 3.5rem 1.5rem; }
+      .rooms-section-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .room-card { grid-template-columns: 1fr; }
+      .room-card-img-wrap { min-height: 260px; }
+      .room-card-body { border-left: none; border-top: 1px solid var(--border2); padding: 2rem 1.5rem; }
+      .room-detail-trigger { padding: 1.4rem 1.5rem; }
+      .room-detail-trigger-left { gap: 1.5rem; }
+      .room-detail-inner { padding: 0 1.5rem 2rem; grid-template-columns: 1fr; }
+      .compare-section { padding: 3.5rem 1.5rem; }
+      .gallery-strip { height: 160px; grid-template-columns: 1fr 1fr; }
+      .exp-strip { grid-template-columns: 1fr 1fr; }
+      .exp-strip-item { padding: 2rem 1.5rem; }
+      .policies { padding: 3.5rem 1.5rem; }
+      .policies-grid { grid-template-columns: 1fr; }
+      .cta-strip { padding: 5rem 1.5rem; }
+      .cta-actions { flex-direction: column; align-items: center; }
+      footer { padding: 3rem 1.5rem 1.5rem; }
+      .foot-top { grid-template-columns: 1fr; gap: 2rem; }
+      .foot-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+      .foot-socials { justify-content: center; flex-wrap: wrap; gap: 1.2rem; }
+      .modal-inner { grid-template-columns: 1fr; max-width: 460px; }
+      .modal-img { min-height: 240px; max-height: 240px; }
+    }
+    @media (max-width: 480px) {
+      .nav-logo { font-size: 0.85rem; }
+      .rooms-hero-content { padding: 0 1.2rem 2.5rem; }
+      .rooms-section { padding: 3rem 1.2rem; }
+      .room-detail-trigger-left { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+      .room-detail-price-inline { padding-right: 0; }
+      .exp-strip { grid-template-columns: 1fr; }
+      .exp-strip-item { border-right: none; border-bottom: 1px solid var(--border2); }
+    }
+    @media (hover: none) {
+      .room-card:hover .room-card-img, .featured-room:hover .featured-room-img,
+      .gallery-cell:hover .gallery-cell-img { transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- PAGE LOADER -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-logo">NOIR<span>.</span>HAUS</div>
+    <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <a class="nav-logo" href="index.html">NOIR<span>.</span>HAUS</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rooms.html" class="active">Rooms</a></li>
+      <li><a href="index.html#dining">Dining</a></li>
+      <li><a href="index.html#experiences">Experiences</a></li>
+      <li><a href="index.html#story">About</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <span class="nav-tel">+1 (212) 000 — 0000</span>
+      <button class="btn-reserve" onclick="scrollToBooking()">Reserve</button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMobileMenu()">Home</a>
+    <a href="rooms.html" class="active" onclick="closeMobileMenu()">Rooms</a>
+    <a href="dining.html" onclick="closeMobileMenu()">Dining</a>
+    <a href="experiences.html" onclick="closeMobileMenu()">Experiences</a>
+    <a href="about.html" onclick="closeMobileMenu()">About</a>
+    <a href="contact.html" onclick="closeMobileMenu()">Contact</a>
+    <div class="mobile-menu-tel">+1 (212) 000 — 0000</div>
+    <button class="mobile-menu-reserve" onclick="closeMobileMenu(); scrollToBooking();">Reserve a Room</button>
+  </div>
+
+  <!-- HERO -->
+  <section class="rooms-hero">
+    <img src="The Penthouse Suite.png" alt="Penthouse Suite at Noir Haus" class="rooms-hero-img">
+    <div class="rooms-hero-bg"></div>
+    <div class="rooms-hero-content">
+      <div class="rooms-hero-eyebrow">Accommodation · Four Expressions of Luxury</div>
+      <h1 class="rooms-hero-title">
+        Every room,<br>a world <em>apart.</em>
+      </h1>
+      <p class="rooms-hero-desc">
+        From city views at floor ten to a private residence above the skyline — each room at Noir Haus is designed to be inhabited, not merely occupied.
+      </p>
+    </div>
+    <div class="rooms-hero-rule"></div>
+  </section>
+
+  <!-- BOOKING BAR -->
+  <div class="booking-bar" id="bookingBar">
+    <div class="booking-inner">
+      <div class="book-field">
+        <label>Check In</label>
+        <input type="text" id="checkIn" placeholder="DD / MM / YYYY" readonly>
+      </div>
+      <div class="book-field">
+        <label>Check Out</label>
+        <input type="text" id="checkOut" placeholder="DD / MM / YYYY" readonly>
+      </div>
+      <div class="book-field">
+        <label>Guests</label>
+        <select>
+          <option>1 Adult</option>
+          <option>2 Adults</option>
+          <option>2 Adults, 1 Child</option>
+          <option>Suite Party</option>
+        </select>
+      </div>
+      <div class="book-field">
+        <label>Room Type</label>
+        <select id="roomTypeSelect">
+          <option>Any Room</option>
+          <option>City View Standard</option>
+          <option>Noir Deluxe</option>
+          <option>The Penthouse Suite</option>
+          <option>The Black Label</option>
+        </select>
+      </div>
+      <button class="book-submit" onclick="handleBooking()">Check Availability</button>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="filterBar">
+    <div class="filter-bar-label">Filter by</div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all" onclick="filterRooms('all', this)">All Rooms</button>
+      <button class="filter-tab" data-filter="suite" onclick="filterRooms('suite', this)">Suites</button>
+      <button class="filter-tab" data-filter="deluxe" onclick="filterRooms('deluxe', this)">Deluxe</button>
+      <button class="filter-tab" data-filter="standard" onclick="filterRooms('standard', this)">Standard</button>
+      <button class="filter-tab" data-filter="exclusive" onclick="filterRooms('exclusive', this)">By Invitation</button>
+    </div>
+    <div class="filter-count" id="filterCount">Showing 4 of 4 rooms</div>
+  </div>
+
+  <!-- FEATURED: THE BLACK LABEL -->
+  <div class="featured-room" data-room-type="exclusive" id="featuredBlackLabel">
+    <img src="The Black Label.png" alt="The Black Label" class="featured-room-img">
+    <div class="featured-room-overlay"></div>
+    <div class="featured-room-content">
+      <div class="featured-badge">
+        Our Most Exclusive Offering
+        <span class="featured-badge-tag">By Invitation</span>
+      </div>
+      <div class="featured-floor">Floor 42 · Full Floor Residence</div>
+      <h2 class="featured-title">The Black Label<br><em>Private Collection</em></h2>
+      <p class="featured-desc">
+        The most private address in New York. A full-floor residence above a hotel, above a city — with a private entrance, a dedicated staff of three, and a silence money cannot usually buy.
+      </p>
+      <div class="featured-meta">
+        <div class="featured-meta-item">
+          <div class="featured-meta-label">Size</div>
+          <div class="featured-meta-val">4,800 sq ft</div>
+        </div>
+        <div class="featured-meta-item">
+          <div class="featured-meta-label">Outlook</div>
+          <div class="featured-meta-val">360° Manhattan</div>
+        </div>
+        <div class="featured-meta-item">
+          <div class="featured-meta-label">Staff</div>
+          <div class="featured-meta-val">3 Dedicated</div>
+        </div>
+        <div class="featured-meta-item">
+          <div class="featured-meta-label">Availability</div>
+          <div class="featured-meta-val">Inquiry Only</div>
+        </div>
+      </div>
+      <div class="featured-actions">
+        <div class="featured-price">$5,800 <span>/ night</span></div>
+        <button class="btn-primary" onclick="openModal('black')">View Residence →</button>
+        <button class="btn-outline" onclick="handleInquiry()">Private Inquiry</button>
+      </div>
+    </div>
+    <div class="featured-amenities-strip">
+      <div class="featured-amenity-pill">Private Entrance</div>
+      <div class="featured-amenity-pill">360° Views</div>
+      <div class="featured-amenity-pill">Wine Cellar Access</div>
+      <div class="featured-amenity-pill">Screening Room</div>
+      <div class="featured-amenity-pill">Private Dining</div>
+      <div class="featured-amenity-pill">Staff of 3</div>
+    </div>
+    <div class="featured-corner-num">
+      <strong>01</strong>
+      Floor 42
+    </div>
+  </div>
+
+  <!-- ROOMS GRID -->
+  <section class="rooms-section">
+    <div class="rooms-section-header reveal-on-scroll">
+      <div>
+        <div class="section-eyebrow">All Accommodations</div>
+        <h2 class="section-title">Every floor tells<br>a <em>different story</em></h2>
+      </div>
+      <button class="btn-outline" onclick="scrollToBooking()">Check Availability</button>
+    </div>
+
+    <div class="rooms-grid" id="roomsGrid">
+
+      <!-- The Penthouse Suite -->
+      <div class="room-card reveal-on-scroll" data-room-type="suite" id="card-penthouse">
+        <div class="room-card-img-wrap">
+          <img src="The Penthouse Suite.png" alt="The Penthouse Suite" class="room-card-img" loading="lazy">
+          <div class="room-card-img-overlay"></div>
+        </div>
+        <div class="room-card-body">
+          <div>
+            <div class="room-card-number">02</div>
+            <div class="room-card-floor">Floors 38 — 42</div>
+            <div class="room-card-name">The Penthouse Suite</div>
+            <p class="room-card-desc">
+              Our crown jewel. 3,200 sq ft of curated darkness, a private terrace overlooking the city grid, and a butler on call 24 hours. For those who expect nothing less than everything — and know it when they see it.
+            </p>
+            <div class="room-card-amenities">
+              <span class="room-amenity-tag">3,200 sq ft</span>
+              <span class="room-amenity-tag">Private Terrace</span>
+              <span class="room-amenity-tag">24h Butler</span>
+              <span class="room-amenity-tag">Grand Piano</span>
+              <span class="room-amenity-tag">Wet Bar</span>
+              <span class="room-amenity-tag">Chef On Request</span>
+            </div>
+          </div>
+          <div class="room-card-bottom">
+            <div class="room-card-price">$2,400 <span>/ night</span></div>
+            <button class="room-card-btn" onclick="openModal('penthouse')">View Suite →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Noir Deluxe -->
+      <div class="room-card reveal-on-scroll" data-room-type="deluxe" id="card-deluxe">
+        <div class="room-card-img-wrap">
+          <img src="Noir Deluxe.png" alt="Noir Deluxe" class="room-card-img" loading="lazy">
+          <div class="room-card-img-overlay"></div>
+        </div>
+        <div class="room-card-body">
+          <div>
+            <div class="room-card-number">03</div>
+            <div class="room-card-floor">Floors 20 — 37</div>
+            <div class="room-card-name">Noir Deluxe</div>
+            <p class="room-card-desc">
+              Dark walnut panelling, burnished brass, hand-stitched leather headboard. A room that performs as well as it looks. Floor-to-ceiling windows frame a city skyline that belongs to you alone. The Noir Deluxe is where the hotel's aesthetic lives most fully.
+            </p>
+            <div class="room-card-amenities">
+              <span class="room-amenity-tag">King Bed</span>
+              <span class="room-amenity-tag">City Views</span>
+              <span class="room-amenity-tag">Deep-Soak Tub</span>
+              <span class="room-amenity-tag">Espresso Bar</span>
+              <span class="room-amenity-tag">Marble Bath</span>
+              <span class="room-amenity-tag">Bose Sound</span>
+            </div>
+          </div>
+          <div class="room-card-bottom">
+            <div class="room-card-price">$680 <span>/ night</span></div>
+            <button class="room-card-btn" onclick="openModal('deluxe')">View Room →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- City View Standard -->
+      <div class="room-card reveal-on-scroll" data-room-type="standard" id="card-standard">
+        <div class="room-card-img-wrap">
+          <img src="City View Standard.png" alt="City View Standard" class="room-card-img" loading="lazy">
+          <div class="room-card-img-overlay"></div>
+        </div>
+        <div class="room-card-body">
+          <div>
+            <div class="room-card-number">04</div>
+            <div class="room-card-floor">Floors 10 — 19</div>
+            <div class="room-card-name">City View Standard</div>
+            <p class="room-card-desc">
+              The city spread beneath you, every night. Floor-to-ceiling glass, deep-soak tub, Italian linens, and the quiet hum of Manhattan below. The entry point to Noir Haus — and already extraordinary. This is where the night begins.
+            </p>
+            <div class="room-card-amenities">
+              <span class="room-amenity-tag">Queen or King</span>
+              <span class="room-amenity-tag">City Views</span>
+              <span class="room-amenity-tag">Deep-Soak Tub</span>
+              <span class="room-amenity-tag">Italian Linens</span>
+              <span class="room-amenity-tag">Minibar</span>
+              <span class="room-amenity-tag">Nespresso</span>
+            </div>
+          </div>
+          <div class="room-card-bottom">
+            <div class="room-card-price">$390 <span>/ night</span></div>
+            <button class="room-card-btn" onclick="openModal('standard')">View Room →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- The Black Label -->
+      <div class="room-card reveal-on-scroll" data-room-type="exclusive" id="card-black">
+        <div class="room-card-img-wrap">
+          <img src="The Black Label.png" alt="The Black Label" class="room-card-img" loading="lazy">
+          <div class="room-card-img-overlay"></div>
+        </div>
+        <div class="room-card-body">
+          <div>
+            <div class="room-card-number">01</div>
+            <div class="room-card-floor">Floor 42 only</div>
+            <div class="room-card-name">The Black Label</div>
+            <p class="room-card-desc">
+              By invitation or personal inquiry only. The most private address in New York — a residence above a hotel, above the city. A full floor of quiet, bespoke service, and space designed for absolute privacy.
+            </p>
+            <div class="room-card-amenities">
+              <span class="room-amenity-tag">360° Views</span>
+              <span class="room-amenity-tag">Private Entrance</span>
+              <span class="room-amenity-tag">Dedicated Staff</span>
+              <span class="room-amenity-tag">Screening Room</span>
+              <span class="room-amenity-tag">Wine Cellar</span>
+              <span class="room-amenity-tag">Private Dining</span>
+            </div>
+          </div>
+          <div class="room-card-bottom">
+            <div class="room-card-price">$5,800 <span>/ night</span></div>
+            <button class="room-card-btn" onclick="openModal('black')">Inquire →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ROOM DETAIL ACCORDION -->
+  <div class="room-detail-section">
+
+    <div class="room-detail-item" id="detail-black">
+      <button class="room-detail-trigger" onclick="toggleDetail('detail-black')">
+        <div class="room-detail-trigger-left">
+          <span class="room-detail-num">01</span>
+          <span class="room-detail-name">The Black Label — Private Collection</span>
+        </div>
+        <span class="room-detail-price-inline">From $5,800 / night</span>
+        <span class="room-detail-icon">+</span>
+      </button>
+      <div class="room-detail-panel">
+        <div class="room-detail-inner">
+          <div>
+            <div class="room-detail-col-title">The Experience</div>
+            <p class="room-detail-body">The most private address in Manhattan. Floor 42 spans 4,800 sq ft of a floor that answers to no one — a private entrance bypasses the hotel lobby entirely. Your staff of three includes a dedicated butler, a private chef, and a personal concierge on permanent standby.</p>
+          </div>
+          <div>
+            <div class="room-detail-col-title">In-Room Inclusions</div>
+            <ul class="room-detail-amenity-list">
+              <li>Full floor · 4,800 sq ft</li>
+              <li>Private entrance & elevator</li>
+              <li>360° Manhattan floor-to-ceiling glass</li>
+              <li>Private dining room for 12</li>
+              <li>Screening room with 4K projection</li>
+              <li>Temperature-controlled wine cellar</li>
+              <li>Bespoke fragrance & in-suite art</li>
+              <li>Dedicated staff of three, 24h</li>
+            </ul>
+          </div>
+          <div>
+            <div class="room-detail-col-title">Access & Availability</div>
+            <p class="room-detail-body">The Black Label is available by personal inquiry only. A consultation with our Private Collections team precedes any reservation to ensure the suite is configured to your precise preferences before arrival.</p>
+            <br>
+            <button class="btn-outline" style="margin-top:1rem" onclick="handleInquiry()">Begin Inquiry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-detail-item" id="detail-penthouse">
+      <button class="room-detail-trigger" onclick="toggleDetail('detail-penthouse')">
+        <div class="room-detail-trigger-left">
+          <span class="room-detail-num">02</span>
+          <span class="room-detail-name">The Penthouse Suite</span>
+        </div>
+        <span class="room-detail-price-inline">From $2,400 / night</span>
+        <span class="room-detail-icon">+</span>
+      </button>
+      <div class="room-detail-panel">
+        <div class="room-detail-inner">
+          <div>
+            <div class="room-detail-col-title">The Experience</div>
+            <p class="room-detail-body">Three thousand two hundred square feet of obsessively curated luxury on the upper floors of Noir Haus. The Penthouse spans two levels: a living floor with floor-to-ceiling glass on three sides, a private terrace, and a lower level bedroom designed to make even the most discerning guest pause.</p>
+          </div>
+          <div>
+            <div class="room-detail-col-title">In-Room Inclusions</div>
+            <ul class="room-detail-amenity-list">
+              <li>3,200 sq ft across two levels</li>
+              <li>Private wraparound terrace</li>
+              <li>Steinway baby grand piano</li>
+              <li>Full wet bar from private cellar</li>
+              <li>Chef available on request</li>
+              <li>24-hour dedicated butler service</li>
+              <li>Marble soaking bath & rain shower</li>
+              <li>Personalised arrival concierge</li>
+            </ul>
+          </div>
+          <div>
+            <div class="room-detail-col-title">Reservations</div>
+            <p class="room-detail-body">Penthouse stays require a minimum of two nights. Our concierge will reach out within the hour to confirm and begin curating your arrival experience — including pre-stocking the cellar, arranging any dining reservations, and coordinating transport.</p>
+            <br>
+            <button class="btn-primary" style="margin-top:1rem" onclick="scrollToBooking()">Reserve Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-detail-item" id="detail-deluxe">
+      <button class="room-detail-trigger" onclick="toggleDetail('detail-deluxe')">
+        <div class="room-detail-trigger-left">
+          <span class="room-detail-num">03</span>
+          <span class="room-detail-name">Noir Deluxe</span>
+        </div>
+        <span class="room-detail-price-inline">From $680 / night</span>
+        <span class="room-detail-icon">+</span>
+      </button>
+      <div class="room-detail-panel">
+        <div class="room-detail-inner">
+          <div>
+            <div class="room-detail-col-title">The Experience</div>
+            <p class="room-detail-body">The Noir Deluxe is where the hotel's aesthetic lives most fully expressed — dark walnut panelling floor to ceiling, burnished brass at every fixture, and a hand-stitched leather headboard that you'll photograph within minutes of arrival. Floor-to-ceiling glass frames the Manhattan skyline like a painting you own for the night.</p>
+          </div>
+          <div>
+            <div class="room-detail-col-title">In-Room Inclusions</div>
+            <ul class="room-detail-amenity-list">
+              <li>King or super-king bed</li>
+              <li>Floor-to-ceiling city views</li>
+              <li>Free-standing marble soaking tub</li>
+              <li>Espresso bar with Noir House blend</li>
+              <li>Bose home theatre sound system</li>
+              <li>Blackout drapes & smart lighting</li>
+              <li>Evening turndown service</li>
+              <li>Curated minibar (no plastic)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="room-detail-col-title">Best For</div>
+            <p class="room-detail-body">Business travel with soul. Romantic escapes that don't overstate themselves. The traveller who believes that their room should do as much work as they do. Every Noir Deluxe room is on the 20th floor or higher — the city starts at the glass.</p>
+            <br>
+            <button class="btn-primary" style="margin-top:1rem" onclick="scrollToBooking()">Reserve Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-detail-item" id="detail-standard">
+      <button class="room-detail-trigger" onclick="toggleDetail('detail-standard')">
+        <div class="room-detail-trigger-left">
+          <span class="room-detail-num">04</span>
+          <span class="room-detail-name">City View Standard</span>
+        </div>
+        <span class="room-detail-price-inline">From $390 / night</span>
+        <span class="room-detail-icon">+</span>
+      </button>
+      <div class="room-detail-panel">
+        <div class="room-detail-inner">
+          <div>
+            <div class="room-detail-col-title">The Experience</div>
+            <p class="room-detail-body">The entry point to Noir Haus is no ordinary room. Every detail is attended to: Italian cotton sheets with a 600-thread count, a minibar that does not disappoint, a deep-soak tub that faces the window. On floors ten through nineteen, the city still fills the glass. This is where most people fall in love with the hotel.</p>
+          </div>
+          <div>
+            <div class="room-detail-col-title">In-Room Inclusions</div>
+            <ul class="room-detail-amenity-list">
+              <li>Queen or king bed option</li>
+              <li>Floor-to-ceiling city-view glass</li>
+              <li>Deep-soak bathtub</li>
+              <li>Rainfall & handheld shower</li>
+              <li>Italian 600-thread linen</li>
+              <li>Nespresso machine & minibar</li>
+              <li>Smart TV with curated Noir Haus content</li>
+              <li>High-speed Wi-Fi throughout</li>
+            </ul>
+          </div>
+          <div>
+            <div class="room-detail-col-title">Best For</div>
+            <p class="room-detail-body">First-time Noir Haus guests. Weekend escapes from within the city. Those who appreciate a room that doesn't need to shout. The City View Standard is where the hotel proves that luxury does not require spectacle — only intention.</p>
+            <br>
+            <button class="btn-primary" style="margin-top:1rem" onclick="scrollToBooking()">Reserve Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <section class="compare-section reveal-on-scroll">
+    <div class="section-eyebrow">Compare</div>
+    <h2 class="section-title">Find your <em>perfect room</em></h2>
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>
+              <span class="th-name">City View Standard</span>
+              <span class="th-price">From $390 / night</span>
+            </th>
+            <th>
+              <span class="th-name">Noir Deluxe</span>
+              <span class="th-price">From $680 / night</span>
+            </th>
+            <th>
+              <span class="th-name">Penthouse Suite</span>
+              <span class="th-price">From $2,400 / night</span>
+            </th>
+            <th class="compare-col-highlight">
+              <span class="th-name" style="color:var(--gold)">The Black Label</span>
+              <span class="th-price">From $5,800 / night</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Floor Range</td>
+            <td>10 — 19</td>
+            <td>20 — 37</td>
+            <td>38 — 42</td>
+            <td class="compare-col-highlight" style="color:var(--cream)">Floor 42 (Full)</td>
+          </tr>
+          <tr>
+            <td>Square Footage</td>
+            <td>480 sq ft</td>
+            <td>720 sq ft</td>
+            <td>3,200 sq ft</td>
+            <td class="compare-col-highlight" style="color:var(--cream)">4,800 sq ft</td>
+          </tr>
+          <tr>
+            <td>City Views</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span> Panoramic</td>
+            <td class="compare-col-highlight"><span class="check">✓</span> 360°</td>
+          </tr>
+          <tr>
+            <td>Soaking Tub</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span> Marble</td>
+            <td><span class="check">✓</span> Marble</td>
+            <td class="compare-col-highlight"><span class="check">✓</span> Spa Grade</td>
+          </tr>
+          <tr>
+            <td>Butler Service</td>
+            <td><span class="cross">—</span></td>
+            <td><span class="cross">—</span></td>
+            <td><span class="check">✓</span> 24h</td>
+            <td class="compare-col-highlight"><span class="check">✓</span> Staff of 3</td>
+          </tr>
+          <tr>
+            <td>Private Terrace</td>
+            <td><span class="cross">—</span></td>
+            <td><span class="cross">—</span></td>
+            <td><span class="check">✓</span></td>
+            <td class="compare-col-highlight"><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>In-Suite Bar</td>
+            <td>Minibar</td>
+            <td>Espresso + Minibar</td>
+            <td>Full Wet Bar</td>
+            <td class="compare-col-highlight" style="color:var(--cream)">Full Bar + Cellar</td>
+          </tr>
+          <tr>
+            <td>Dining</td>
+            <td>Room Service</td>
+            <td>Room Service</td>
+            <td>Chef On Request</td>
+            <td class="compare-col-highlight" style="color:var(--cream)">Private Chef + Dining Room</td>
+          </tr>
+          <tr>
+            <td>Private Entrance</td>
+            <td><span class="cross">—</span></td>
+            <td><span class="cross">—</span></td>
+            <td><span class="cross">—</span></td>
+            <td class="compare-col-highlight"><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Availability</td>
+            <td>Open Booking</td>
+            <td>Open Booking</td>
+            <td>Open Booking</td>
+            <td class="compare-col-highlight" style="color:var(--gold)">By Inquiry Only</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="compare-cta-row">
+            <td></td>
+            <td><button class="compare-cta-btn" onclick="selectRoomAndBook('City View Standard')">Reserve →</button></td>
+            <td><button class="compare-cta-btn" onclick="selectRoomAndBook('Noir Deluxe')">Reserve →</button></td>
+            <td><button class="compare-cta-btn" onclick="selectRoomAndBook('The Penthouse Suite')">Reserve →</button></td>
+            <td class="compare-col-highlight"><button class="compare-cta-btn" style="border-color:var(--gold);color:var(--gold);" onclick="handleInquiry()">Inquire →</button></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <!-- GALLERY STRIP -->
+  <div class="gallery-strip">
+    <div class="gallery-cell">
+      <img src="The Penthouse Suite.png" alt="Penthouse Suite" class="gallery-cell-img">
+      <div class="gallery-cell-label">Penthouse Living</div>
+    </div>
+    <div class="gallery-cell">
+      <img src="Noir Deluxe.png" alt="Noir Deluxe" class="gallery-cell-img">
+      <div class="gallery-cell-label">Noir Deluxe</div>
+    </div>
+    <div class="gallery-cell">
+      <img src="City View Standard.png" alt="City View" class="gallery-cell-img">
+      <div class="gallery-cell-label">City View Standard</div>
+    </div>
+    <div class="gallery-cell">
+      <img src="The Black Label.png" alt="The Black Label" class="gallery-cell-img">
+      <div class="gallery-cell-label">Black Label Residence</div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE STRIP -->
+  <div class="exp-strip">
+    <div class="exp-strip-item reveal-on-scroll">
+      <div class="exp-strip-icon">◈</div>
+      <div class="exp-strip-title">All Rooms Include</div>
+      <div class="exp-strip-desc">High-speed Wi-Fi. Curated minibar. Turndown service. Rooftop bar access. Same-day dry cleaning. Blackout drapes. And a concierge who picks up on the first ring.</div>
+    </div>
+    <div class="exp-strip-item reveal-on-scroll">
+      <div class="exp-strip-icon">◆</div>
+      <div class="exp-strip-title">VAULT Dining Access</div>
+      <div class="exp-strip-desc">Guests of Noir Haus receive priority reservation access to VAULT — our two Michelin-starred restaurant on the 41st floor. Some tables are held exclusively for in-house guests.</div>
+    </div>
+    <div class="exp-strip-item reveal-on-scroll">
+      <div class="exp-strip-icon">◇</div>
+      <div class="exp-strip-title">The Midnight Concierge</div>
+      <div class="exp-strip-desc">Our concierge operates 24 hours. From a last-minute gallery booking to a private car at 3am — no request is too small or too late. This is what we consider standard.</div>
+    </div>
+    <div class="exp-strip-item reveal-on-scroll">
+      <div class="exp-strip-icon">◉</div>
+      <div class="exp-strip-title">Early Check-In & Late Out</div>
+      <div class="exp-strip-desc">Subject to availability, we extend check-in from noon and check-out until 2pm — at no additional charge. Penthouse and Black Label guests set their own schedule.</div>
+    </div>
+  </div>
+
+  <!-- POLICIES -->
+  <section class="policies reveal-on-scroll">
+    <div class="policies-left">
+      <div class="section-eyebrow">House Policies</div>
+      <h3 class="section-title">Before you<br><em>arrive</em></h3>
+      <p>We keep things simple. The only rules at Noir Haus are the ones that make your stay better — for you and for those sharing the building.</p>
+    </div>
+    <div class="policies-grid">
+      <div class="policy-item">
+        <div class="policy-title">Check-In</div>
+        <div class="policy-val">From 3:00 PM</div>
+        <div class="policy-note">Early check-in from 12 PM subject to availability, at no charge. Penthouse and Black Label guests may arrange any arrival time.</div>
+      </div>
+      <div class="policy-item">
+        <div class="policy-title">Check-Out</div>
+        <div class="policy-val">Until 12:00 PM</div>
+        <div class="policy-note">Late check-out until 2 PM available at no charge, subject to availability. Guaranteed late checkout available on request.</div>
+      </div>
+      <div class="policy-item">
+        <div class="policy-title">Cancellation</div>
+        <div class="policy-val">72 Hours Prior</div>
+        <div class="policy-note">Full refund for cancellations made 72 hours before arrival. Penthouse & Black Label have a 7-day policy. Special rates are non-refundable.</div>
+      </div>
+      <div class="policy-item">
+        <div class="policy-title">Pets</div>
+        <div class="policy-val">Welcome</div>
+        <div class="policy-note">Dogs and cats welcome in all room categories. A pet amenity kit is provided on arrival. Please advise at booking so we can prepare accordingly.</div>
+      </div>
+      <div class="policy-item">
+        <div class="policy-title">Children</div>
+        <div class="policy-val">Under 12 · Complimentary</div>
+        <div class="policy-note">Children under 12 stay free in existing bedding. A crib or rollaway is available on request. The hotel's atmosphere is curated — we appreciate your guidance of younger guests.</div>
+      </div>
+      <div class="policy-item">
+        <div class="policy-title">Privacy</div>
+        <div class="policy-val">Unconditional</div>
+        <div class="policy-note">Guest identity, stay dates, and preferences are never disclosed. Our staff have signed permanent non-disclosure agreements. What happens at Noir Haus, stays here.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <div class="cta-strip">
+    <div class="cta-eyebrow">Begin Your Stay</div>
+    <h2 class="cta-title">The city is waiting.<br><em>So are we.</em></h2>
+    <p class="cta-desc">Every great night in New York begins with a decision. Tell us your dates, your occasion, your preference — and we'll take care of everything else.</p>
+    <div class="cta-actions">
+      <button class="btn-primary" onclick="scrollToBooking()">Check Availability</button>
+      <a href="mailto:stay@noirhaus.com" class="cta-email-link">stay@noirhaus.com</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand-logo">NOIR<span>.</span>HAUS</div>
+        <div class="foot-tagline">"A sanctuary for those who find beauty in the dark."</div>
+        <div class="foot-address">
+          1 Noir Plaza, 42nd Floor<br>
+          Midtown Manhattan, New York<br>
+          NY 10036, United States
+        </div>
+        <div class="foot-awards">
+          <div class="award-badge">#1 NYC<br><span>Condé Nast 2025</span></div>
+          <div class="award-badge">★★<br><span>Michelin VAULT</span></div>
+          <div class="award-badge">Forbes<br><span>5 Stars</span></div>
+        </div>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Rooms</div>
+        <ul>
+          <li><a href="#" onclick="openModal('black')">The Black Label</a></li>
+          <li><a href="#" onclick="openModal('penthouse')">The Penthouse Suite</a></li>
+          <li><a href="#" onclick="openModal('deluxe')">Noir Deluxe</a></li>
+          <li><a href="#" onclick="openModal('standard')">City View Standard</a></li>
+          <li><a href="index.html#dining">VAULT Restaurant</a></li>
+          <li><a href="#">Spa & Wellness</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Experiences</div>
+        <ul>
+          <li><a href="index.html#experiences">Private Events</a></li>
+          <li><a href="index.html#experiences">Gallery Access</a></li>
+          <li><a href="index.html#experiences">Midnight Concierge</a></li>
+          <li><a href="index.html#experiences">City Itineraries</a></li>
+          <li><a href="#">Gift Cards</a></li>
+          <li><a href="#">Member Programme</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Contact</div>
+        <ul>
+          <li><a href="tel:+12120000000">+1 (212) 000 — 0000</a></li>
+          <li><a href="mailto:stay@noirhaus.com">stay@noirhaus.com</a></li>
+          <li><a href="#">Press Enquiries</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+        <div class="foot-newsletter">
+          <div class="foot-col-title" style="margin-top:2rem">Newsletter</div>
+          <div class="nl-form">
+            <input type="email" placeholder="your@email.com" class="nl-input">
+            <button class="nl-btn">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div class="foot-copy">© 2026 Noir Haus. All rights reserved. A concept portfolio project.</div>
+      <div class="foot-socials">
+        <a href="#">Instagram</a>
+        <a href="#">Pinterest</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Tripadvisor</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ROOM MODAL -->
+  <div class="room-modal" id="roomModal" onclick="closeModalOutside(event)">
+    <div class="modal-inner">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      <div class="modal-img-wrap">
+        <img src="" alt="" id="modalImg" class="modal-img">
+        <div class="modal-img-overlay"></div>
+      </div>
+      <div class="modal-content">
+        <div class="modal-floor" id="modalFloor"></div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <p class="modal-desc" id="modalDesc"></p>
+        <div class="modal-amenities" id="modalAmenities"></div>
+        <div class="modal-bottom">
+          <div class="modal-price" id="modalPrice"></div>
+          <button class="btn-primary" onclick="scrollToBooking(); closeModal();">Reserve This Room</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── PAGE LOADER ──────────────────────────────────────────────────────────
+    const loader = document.getElementById('pageLoader');
+    const loaderFill = document.getElementById('loaderFill');
+    let loadProgress = 0;
+    const loadInterval = setInterval(() => {
+      loadProgress += Math.random() * 18;
+      if (loadProgress >= 100) {
+        loadProgress = 100;
+        clearInterval(loadInterval);
+        setTimeout(() => loader.classList.add('done'), 300);
+      }
+      loaderFill.style.width = loadProgress + '%';
+    }, 60);
+
+    // ── DEVICE DETECTION ────────────────────────────────────────────────────
+    const isTouchDevice = window.matchMedia('(hover: none)').matches;
+    if (isTouchDevice) {
+      document.getElementById('cursor').style.display = 'none';
+      document.getElementById('cursorRing').style.display = 'none';
+    }
+
+    // ── CUSTOM CURSOR ────────────────────────────────────────────────────────
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    if (!isTouchDevice) {
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+      });
+      const expandTargets = 'a, button, .room-card, .gallery-cell, .featured-room, .exp-strip-item, .filter-tab';
+      document.querySelectorAll(expandTargets).forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
+      });
+      function animRing() {
+        rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+        requestAnimationFrame(animRing);
+      }
+      animRing();
+    }
+
+    // ── NAV SCROLL ───────────────────────────────────────────────────────────
+    const mainNav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      mainNav.classList.toggle('scrolled', window.scrollY > 80);
+    }, { passive: true });
+
+    // ── HAMBURGER ────────────────────────────────────────────────────────────
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      const isOpen = hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    function closeMobileMenu() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── SCROLL REVEAL ────────────────────────────────────────────────────────
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal-on-scroll').forEach((el, i) => {
+      const siblings = Array.from(el.parentElement.children).filter(c => c.classList.contains('reveal-on-scroll'));
+      const idx = siblings.indexOf(el);
+      el.style.transitionDelay = (idx * 0.12) + 's';
+      revealObserver.observe(el);
+    });
+
+    // ── SCROLL TO BOOKING ────────────────────────────────────────────────────
+    function scrollToBooking() {
+      document.getElementById('bookingBar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── FILTER ROOMS ─────────────────────────────────────────────────────────
+    function filterRooms(type, btn) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      const featured = document.getElementById('featuredBlackLabel');
+      const cards = document.querySelectorAll('.room-card');
+      const detailItems = document.querySelectorAll('.room-detail-item');
+      let visibleCount = 0;
+
+      // Featured room
+      if (type === 'all' || type === 'exclusive') {
+        featured.style.display = '';
+        visibleCount++;
+      } else {
+        featured.style.display = 'none';
+      }
+
+      // Room cards
+      cards.forEach(card => {
+        const cardType = card.getAttribute('data-room-type');
+        const show = (type === 'all') || (cardType === type);
+        card.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+      });
+
+      // Accordion items
+      detailItems.forEach(item => {
+        const id = item.id;
+        let show = true;
+        if (type !== 'all') {
+          if (type === 'exclusive' && id !== 'detail-black') show = false;
+          if (type === 'suite' && id !== 'detail-penthouse') show = false;
+          if (type === 'deluxe' && id !== 'detail-deluxe') show = false;
+          if (type === 'standard' && id !== 'detail-standard') show = false;
+        }
+        item.style.display = show ? '' : 'none';
+      });
+
+      document.getElementById('filterCount').textContent = `Showing ${visibleCount} of 4 rooms`;
+    }
+
+    // ── ACCORDION ────────────────────────────────────────────────────────────
+    function toggleDetail(id) {
+      const item = document.getElementById(id);
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.room-detail-item.open').forEach(el => el.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    }
+
+    // ── BOOKING DATE PICKER ──────────────────────────────────────────────────
+    const checkIn = document.getElementById('checkIn');
+    const checkOut = document.getElementById('checkOut');
+    if (checkIn && checkOut) {
+      function formatDate(d) {
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, ' / ');
+      }
+      let pickerOpen = null, selectedIn = null, selectedOut = null;
+      function createDatePicker(anchor, onSelect, minDate) {
+        const existing = document.getElementById('datePicker');
+        if (existing) { existing.remove(); pickerOpen = null; return; }
+        const today = minDate || new Date(); today.setHours(0,0,0,0);
+        let viewYear = today.getFullYear(), viewMonth = today.getMonth();
+        const picker = document.createElement('div');
+        picker.id = 'datePicker';
+        picker.style.cssText = `position:absolute;background:#161412;border:1px solid rgba(184,150,90,0.18);z-index:1000;width:280px;padding:1.2rem;font-family:'DM Sans',sans-serif;`;
+        function renderMonth() {
+          const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+          const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+          const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+          picker.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;"><button id="prevMonth" style="background:none;border:1px solid rgba(255,255,255,0.06);color:#9E9892;width:28px;height:28px;cursor:pointer;font-size:0.7rem;">‹</button><span style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#E8E2D9;">${monthNames[viewMonth]} ${viewYear}</span><button id="nextMonth" style="background:none;border:1px solid rgba(255,255,255,0.06);color:#9E9892;width:28px;height:28px;cursor:pointer;font-size:0.7rem;">›</button></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:0.4rem;">${['S','M','T','W','T','F','S'].map(d=>`<div style="text-align:center;font-size:0.58rem;color:#6E6560;padding:0.2rem;">${d}</div>`).join('')}</div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;"></div>`;
+          const grid = picker.querySelector('#calGrid');
+          for (let i=0;i<firstDay;i++) grid.appendChild(document.createElement('div'));
+          for (let d=1;d<=daysInMonth;d++) {
+            const date = new Date(viewYear, viewMonth, d);
+            const btn = document.createElement('button');
+            const isPast = date < today;
+            btn.textContent = d;
+            btn.style.cssText = `background:none;border:none;color:${isPast?'#3A3530':'#9E9892'};font-size:0.72rem;padding:0.4rem;cursor:${isPast?'default':'pointer'};text-align:center;transition:background 0.2s,color 0.2s;font-family:'DM Sans',sans-serif;`;
+            if (!isPast) {
+              btn.addEventListener('mouseenter', () => { btn.style.background='rgba(184,150,90,0.15)'; btn.style.color='#B8965A'; });
+              btn.addEventListener('mouseleave', () => { btn.style.background='none'; btn.style.color='#9E9892'; });
+              btn.addEventListener('click', () => { onSelect(date); picker.remove(); pickerOpen=null; });
+            }
+            grid.appendChild(btn);
+          }
+          picker.querySelector('#prevMonth').addEventListener('click', () => { viewMonth--; if(viewMonth<0){viewMonth=11;viewYear--;} renderMonth(); });
+          picker.querySelector('#nextMonth').addEventListener('click', () => { viewMonth++; if(viewMonth>11){viewMonth=0;viewYear++;} renderMonth(); });
+        }
+        renderMonth();
+        const bookingBar = anchor.closest('.booking-bar') || document.body;
+        bookingBar.style.position = 'relative';
+        picker.style.top = (anchor.offsetTop + anchor.offsetHeight) + 'px';
+        picker.style.left = anchor.offsetLeft + 'px';
+        bookingBar.appendChild(picker);
+        pickerOpen = picker;
+        setTimeout(() => document.addEventListener('click', outsideClick), 10);
+        function outsideClick(e) { if (!picker.contains(e.target) && e.target !== anchor) { picker.remove(); pickerOpen=null; document.removeEventListener('click', outsideClick); } }
+      }
+      checkIn.addEventListener('click', () => createDatePicker(checkIn, d => { selectedIn=d; checkIn.value=formatDate(d); if(selectedOut&&selectedOut<=d){ selectedOut=null; checkOut.value=''; } }, new Date()));
+      checkOut.addEventListener('click', () => createDatePicker(checkOut, d => { selectedOut=d; checkOut.value=formatDate(d); }, selectedIn ? new Date(selectedIn.getTime()+86400000) : new Date()));
+    }
+
+    // ── BOOKING HANDLER ──────────────────────────────────────────────────────
+    function handleBooking() {
+      showToast('Checking availability — our concierge will confirm within the hour.');
+    }
+    function handleInquiry() {
+      showToast('Inquiry received — our Private Collections team will contact you shortly.');
+    }
+    function selectRoomAndBook(roomName) {
+      const sel = document.getElementById('roomTypeSelect');
+      if (sel) {
+        for (let i=0; i<sel.options.length; i++) {
+          if (sel.options[i].text === roomName) { sel.selectedIndex = i; break; }
+        }
+      }
+      scrollToBooking();
+    }
+
+    // ── TOAST ─────────────────────────────────────────────────────────────────
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3200);
+    }
+
+    // ── ROOM MODAL ────────────────────────────────────────────────────────────
+    const roomData = {
+      penthouse: {
+        floor: 'Floors 38 — 42',
+        title: 'The Penthouse Suite',
+        desc: 'Our crown jewel. 3,200 sq ft of curated darkness, a private terrace overlooking the city grid, and a butler on call 24 hours. Floor-to-ceiling glass on three sides. A wet bar stocked from our private cellar. The kind of space that changes how you see the city — and yourself.',
+        img: 'The Penthouse Suite.png',
+        price: '$2,400 <span>/ night</span>',
+        amenities: ['3,200 sq ft', 'Private Terrace', '24h Butler', 'Wet Bar', 'Grand Piano', 'Marble Bath', 'Chef On Request', 'Panoramic Views']
+      },
+      deluxe: {
+        floor: 'Floors 20 — 37',
+        title: 'Noir Deluxe',
+        desc: 'Dark walnut panelling, burnished brass fixtures, hand-stitched leather headboard. A Noir Deluxe room performs as well as it looks — equipped for work, built for indulgence. Floor-to-ceiling windows frame a city skyline that belongs to you alone.',
+        img: 'Noir Deluxe.png',
+        price: '$680 <span>/ night</span>',
+        amenities: ['King Bed', 'City Views', 'Deep-Soak Tub', 'Espresso Bar', 'Marble Bathroom', 'Bose Sound', 'Blackout Drapes', 'Turndown Service']
+      },
+      standard: {
+        floor: 'Floors 10 — 19',
+        title: 'City View Standard',
+        desc: 'The city spread beneath you, every night. Floor-to-ceiling glass frames the Manhattan grid in all directions. A deep-soak tub, Italian linens, and a minibar that does not disappoint. The entry point to Noir Haus — and already extraordinary.',
+        img: 'City View Standard.png',
+        price: '$390 <span>/ night</span>',
+        amenities: ['Queen or King', 'City Views', 'Deep-Soak Tub', 'Italian Linens', 'Minibar', 'Rainfall Shower', 'Smart TV', 'Nespresso Machine']
+      },
+      black: {
+        floor: 'Floor 42 only',
+        title: 'The Black Label',
+        desc: 'By invitation or personal inquiry only. The most private address in New York — a private residence above a hotel, above a city. Spanning the full floor with 360° views, a private entrance, and a staff of three assigned exclusively to your stay. There is no comparable offering in Manhattan.',
+        img: 'The Black Label.png',
+        price: '$5,800 <span>/ night</span>',
+        amenities: ['Full Floor · 4,800 sq ft', 'Private Entrance', 'Dedicated Staff of 3', '360° Manhattan Views', 'Private Dining Room', 'Screening Room', 'Wine Cellar Access', 'By Inquiry Only']
+      }
+    };
+    const modal = document.getElementById('roomModal');
+    function openModal(roomKey) {
+      const r = roomData[roomKey]; if (!r) return;
+      document.getElementById('modalFloor').textContent = r.floor;
+      document.getElementById('modalTitle').textContent = r.title;
+      document.getElementById('modalDesc').textContent = r.desc;
+      document.getElementById('modalPrice').innerHTML = r.price;
+      document.getElementById('modalImg').src = r.img;
+      document.getElementById('modalImg').alt = r.title;
+      document.getElementById('modalAmenities').innerHTML = r.amenities.map(a => `<span class="modal-amenity">${a}</span>`).join('');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+    function closeModalOutside(e) { if (e.target === modal) closeModal(); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ── NEWSLETTER ────────────────────────────────────────────────────────────
+    const nlBtn = document.querySelector('.nl-btn');
+    const nlInput = document.querySelector('.nl-input');
+    if (nlBtn && nlInput) {
+      nlBtn.addEventListener('click', () => {
+        if (nlInput.value && nlInput.value.includes('@')) {
+          showToast('Thank you — your invitation to the Noir Haus circle is confirmed.');
+          nlInput.value = '';
+        } else { showToast('Please enter a valid email address.'); }
+      });
+      nlInput.addEventListener('keydown', e => { if (e.key === 'Enter') nlBtn.click(); });
+    }
+
+    // ── PARALLAX ON HERO IMG ───────────────────────────────────────────────────
+    const heroImg = document.querySelector('.rooms-hero-img');
+    if (heroImg && !isTouchDevice) {
+      window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        if (scrolled < window.innerHeight) heroImg.style.transform = `scale(1.06) translateY(${scrolled * 0.12}px)`;
+      }, { passive: true });
+    }
+  </script>
+</body>
+</html>

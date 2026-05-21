@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experiences — NOIRHAUS · Midnight Gallery · Private Jazz · City Itineraries</title>
+  <meta name="description" content="Noir Haus experiences are not amenities — they are events. Midnight gallery tours, private jazz sessions, bespoke city itineraries. Each one unrepeatable.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Syncopate:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET & ROOT ─────────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black:   #080808;
+      --void:    #0E0D0C;
+      --carbon:  #161412;
+      --ash:     #252220;
+      --smoke:   #3A3530;
+      --mid:     #6E6560;
+      --muted:   #9E9892;
+      --cream:   #E8E2D9;
+      --white:   #F5F1EC;
+      --gold:    #B8965A;
+      --gold-lt: #D4AF72;
+      --red:     #8B2E2E;
+      --border:  rgba(184,150,90,0.18);
+      --border2: rgba(255,255,255,0.06);
+      --trans:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: radial-gradient(circle at top left, rgba(184,150,90,0.05), transparent 16%),
+                  radial-gradient(circle at bottom right, rgba(255,255,255,0.02), transparent 22%),
+                  var(--black);
+      color: var(--cream);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9990; opacity: 0.5;
+    }
+
+    /* ── PAGE LOADER ─────────────────────────────────────────────── */
+    .page-loader {
+      position: fixed; inset: 0; background: var(--black);
+      z-index: 10000; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2rem;
+      transition: opacity 0.8s var(--trans), visibility 0.8s;
+    }
+    .page-loader.done { opacity: 0; visibility: hidden; }
+    .loader-logo { font-family: 'Syncopate', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.4em; color: var(--white); }
+    .loader-logo span { color: var(--gold); }
+    .loader-bar { width: 200px; height: 1px; background: var(--ash); overflow: hidden; }
+    .loader-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.05s linear; }
+
+    /* ── CURSOR ──────────────────────────────────────────────────── */
+    .cursor {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor.expanded { width: 60px; height: 60px; background: rgba(184,150,90,0.15); }
+    .cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border: 1px solid rgba(184,150,90,0.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.8rem 3rem;
+      background: rgba(8,8,8,0.08); backdrop-filter: blur(14px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.16);
+      transition: padding 0.4s var(--trans), background 0.4s;
+    }
+    nav.scrolled {
+      padding: 1.2rem 3rem; background: rgba(8,8,8,0.96);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border2);
+    }
+    nav::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0) 100%);
+      pointer-events: none; transition: opacity 0.4s;
+    }
+    nav.scrolled::before { opacity: 0; }
+    .nav-logo { font-family: 'Syncopate', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.3em; color: var(--white); text-decoration: none; position: relative; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; position: relative; }
+    .nav-links a { font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s; position: relative; }
+    .nav-links a.active { color: var(--gold); }
+    .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.3s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-actions { display: flex; align-items: center; gap: 2rem; position: relative; }
+    .nav-tel { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--mid); }
+    .btn-reserve { font-family: 'Syncopate', sans-serif; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; padding: 0.7rem 1.6rem; background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: none; transition: background 0.3s, color 0.3s; }
+    .btn-reserve:hover { background: var(--gold); color: var(--black); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; z-index: 600; }
+    .nav-hamburger span { display: block; width: 22px; height: 1px; background: var(--muted); transition: transform 0.3s, opacity 0.3s, background 0.3s; transform-origin: center; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); background: var(--gold); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); background: var(--gold); }
+    .mobile-menu { display: none; position: fixed; inset: 0; background: var(--void); z-index: 400; flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem; opacity: 0; transform: translateY(-10px); transition: opacity 0.4s, transform 0.4s; pointer-events: none; }
+    .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .mobile-menu a { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 400; color: var(--cream); text-decoration: none; letter-spacing: 0.05em; transition: color 0.3s; }
+    .mobile-menu a:hover, .mobile-menu a.active { color: var(--gold); }
+    .mobile-menu-tel { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--mid); margin-top: 1rem; }
+    .mobile-menu-reserve { font-family: 'Syncopate', sans-serif; font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; padding: 0.9rem 2.5rem; background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; margin-top: 1rem; transition: background 0.3s, color 0.3s; }
+    .mobile-menu-reserve:hover { background: var(--gold); color: var(--black); }
+
+    /* ── SHARED BUTTONS ──────────────────────────────────────────── */
+    .btn-primary { font-family: 'Syncopate', sans-serif; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; padding: 1rem 2.5rem; background: var(--gold); color: var(--black); border: none; cursor: none; transition: background 0.3s, transform 0.2s; display: inline-block; }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .btn-outline { font-family: 'Syncopate', sans-serif; font-size: 0.55rem; letter-spacing: 0.22em; text-transform: uppercase; padding: 0.85rem 2rem; background: transparent; border: 1px solid var(--border); color: var(--muted); cursor: none; transition: border-color 0.3s, color 0.3s; }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── SECTION SHARED ──────────────────────────────────────────── */
+    .section-eyebrow { font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+    .section-eyebrow::before { content: '—— '; opacity: 0.5; }
+
+    /* ── ANIMATIONS ──────────────────────────────────────────────── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .reveal-on-scroll { opacity: 0; transform: translateY(32px); transition: opacity 0.85s var(--trans), transform 0.85s var(--trans); }
+    .reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+
+    /* ── HERO ────────────────────────────────────────────────────── */
+    .exp-hero {
+      position: relative; height: 100vh; min-height: 620px;
+      display: flex; align-items: flex-end; overflow: hidden;
+    }
+    .exp-hero-img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center 25%;
+      filter: brightness(0.35) saturate(0.7);
+      transform: scale(1.06); transition: transform 8s var(--trans);
+    }
+    .exp-hero-img.loaded { transform: scale(1.0); }
+    .exp-hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        linear-gradient(to top, rgba(8,8,8,1) 0%, rgba(8,8,8,0.55) 38%, rgba(8,8,8,0.08) 65%, rgba(8,8,8,0.3) 100%),
+        linear-gradient(to right, rgba(8,8,8,0.5) 0%, transparent 55%);
+    }
+    .exp-hero-content { position: relative; z-index: 2; padding: 0 5rem 6rem; max-width: 880px; }
+    .exp-hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.5s forwards; }
+    .exp-hero-eyebrow::before { content: '—— '; opacity: 0.5; }
+    .exp-hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3.2rem, 6vw, 6.5rem); font-weight: 400; line-height: 1.02; letter-spacing: -0.025em; color: var(--white); margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.9s 0.7s forwards; }
+    .exp-hero-title em { font-style: italic; color: var(--gold-lt); }
+    .exp-hero-desc { font-size: 0.85rem; font-weight: 300; line-height: 1.9; color: var(--muted); max-width: 520px; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 0.9s forwards; }
+    .exp-hero-ctas { display: flex; align-items: center; gap: 1.5rem; opacity: 0; animation: fadeUp 0.8s 1.1s forwards; flex-wrap: wrap; }
+    /* Side scroll indicator with count */
+    .exp-hero-count {
+      position: absolute; right: 5rem; bottom: 6rem; z-index: 3;
+      text-align: right; opacity: 0; animation: fadeIn 1s 1.3s forwards;
+    }
+    .exp-hero-count-num { font-family: 'Playfair Display', serif; font-size: 5rem; line-height: 1; color: rgba(184,150,90,0.12); display: block; }
+    .exp-hero-count-label { font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--mid); }
+    .exp-hero-rule { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+    /* Scroll cue */
+    .scroll-cue { position: absolute; left: 5rem; bottom: 3.5rem; z-index: 3; display: flex; align-items: center; gap: 1rem; opacity: 0; animation: fadeIn 1s 1.5s forwards; }
+    .scroll-cue-line { width: 40px; height: 1px; background: var(--gold); opacity: 0.5; }
+    .scroll-cue-text { font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--mid); }
+
+    /* ── FILTER NAV ──────────────────────────────────────────────── */
+    .filter-nav {
+      background: var(--carbon); border-bottom: 1px solid var(--border2);
+      position: sticky; top: 0; z-index: 90;
+    }
+    .filter-nav-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; align-items: center; padding: 0 5rem; overflow-x: auto;
+    }
+    .filter-nav-label { font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--mid); margin-right: 2.5rem; white-space: nowrap; flex-shrink: 0; }
+    .filter-btn { font-family: 'Syncopate', sans-serif; font-size: 0.52rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mid); padding: 1.4rem 1.8rem; border: none; background: none; cursor: none; border-bottom: 2px solid transparent; transition: color 0.3s, border-color 0.3s; white-space: nowrap; }
+    .filter-btn:hover { color: var(--cream); }
+    .filter-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .filter-nav-enquire { margin-left: auto; font-family: 'Syncopate', sans-serif; font-size: 0.5rem; letter-spacing: 0.22em; text-transform: uppercase; padding: 0.65rem 1.8rem; background: transparent; border: 1px solid var(--border); color: var(--muted); cursor: none; transition: border-color 0.3s, color 0.3s; white-space: nowrap; flex-shrink: 0; }
+    .filter-nav-enquire:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── INTRO STATEMENT ─────────────────────────────────────────── */
+    .intro-statement {
+      padding: 7rem 5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center;
+      border-bottom: 1px solid var(--border2);
+    }
+    .intro-title { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 4vw, 4rem); font-weight: 400; line-height: 1.1; color: var(--white); }
+    .intro-title em { font-style: italic; color: var(--gold-lt); }
+    .intro-body { font-size: 0.85rem; font-weight: 300; line-height: 1.95; color: var(--muted); margin-bottom: 2rem; }
+    .intro-quote { border-left: 2px solid var(--gold); padding-left: 2rem; margin: 2.5rem 0; }
+    .intro-quote-text { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-style: italic; color: var(--cream); line-height: 1.6; margin-bottom: 0.8rem; }
+    .intro-quote-attr { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid); }
+
+    /* ── FEATURED EXPERIENCE ─────────────────────────────────────── */
+    .featured-exp {
+      position: relative; height: 88vh; min-height: 600px;
+      overflow: hidden; cursor: none;
+    }
+    .featured-exp-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.45) saturate(0.75); transition: transform 0.8s var(--trans); }
+    .featured-exp:hover .featured-exp-img { transform: scale(1.04); }
+    .featured-exp-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.65) 50%, rgba(8,8,8,0.2) 100%);
+    }
+    .featured-exp-content {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 5rem;
+    }
+    .featured-badge { display: inline-flex; align-items: center; gap: 1rem; font-size: 0.52rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+    .featured-badge::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
+    .featured-badge-pill { background: var(--gold); color: var(--black); font-size: 0.46rem; letter-spacing: 0.2em; padding: 0.2rem 0.8rem; margin-left: 0.5rem; }
+    .featured-exp-num { font-family: 'Syncopate', sans-serif; font-size: 0.52rem; letter-spacing: 0.3em; color: var(--mid); margin-bottom: 0.6rem; }
+    .featured-exp-title { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 5vw, 5.5rem); font-weight: 400; line-height: 1.02; color: var(--white); margin-bottom: 1.5rem; }
+    .featured-exp-title em { font-style: italic; color: var(--gold-lt); }
+    .featured-exp-desc { font-size: 0.82rem; font-weight: 300; color: var(--muted); line-height: 1.9; max-width: 440px; margin-bottom: 2.5rem; }
+    .featured-exp-meta { display: flex; gap: 3rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+    .featured-meta-label { font-size: 0.5rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.3rem; }
+    .featured-meta-val { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--cream); }
+    .featured-exp-actions { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+    /* Right side detail panel */
+    .featured-exp-detail {
+      position: absolute; right: 5rem; top: 50%; transform: translateY(-50%);
+      z-index: 3; display: flex; flex-direction: column; gap: 0;
+      border: 1px solid var(--border); background: rgba(8,8,8,0.75); backdrop-filter: blur(12px);
+      width: 220px;
+    }
+    .fed-row { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border2); }
+    .fed-row:last-child { border-bottom: none; }
+    .fed-row-label { font-size: 0.46rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.3rem; }
+    .fed-row-val { font-size: 0.8rem; color: var(--cream); }
+
+    /* ── EXPERIENCES GRID ────────────────────────────────────────── */
+    .exp-grid-section { padding: 7rem 5rem; background: var(--black); }
+    .exp-grid-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border2); }
+    .exp-grid-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 400; line-height: 1.1; color: var(--white); }
+    .exp-grid-title em { font-style: italic; color: var(--gold-lt); }
+    .exp-grid-count { font-size: 0.6rem; letter-spacing: 0.2em; color: var(--mid); }
+
+    .exp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); }
+    .exp-card {
+      background: var(--black); padding: 3rem 2.8rem;
+      display: flex; flex-direction: column; gap: 0;
+      position: relative; overflow: hidden; cursor: none;
+      transition: background 0.4s;
+    }
+    .exp-card:hover { background: var(--void); }
+    .exp-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 100%; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s var(--trans);
+    }
+    .exp-card:hover::before { transform: scaleX(1); }
+    /* Large background number */
+    .exp-card-bg-num {
+      position: absolute; top: -0.5rem; right: 1.5rem;
+      font-family: 'Playfair Display', serif; font-size: 7rem; line-height: 1;
+      color: rgba(184,150,90,0.06); user-select: none; pointer-events: none;
+      transition: color 0.4s;
+    }
+    .exp-card:hover .exp-card-bg-num { color: rgba(184,150,90,0.1); }
+    .exp-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+    .exp-card-icon {
+      width: 44px; height: 44px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); flex-shrink: 0;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .exp-card:hover .exp-card-icon { border-color: var(--gold); background: rgba(184,150,90,0.06); }
+    .exp-card-category { font-size: 0.48rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--mid); }
+    .exp-card-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; color: var(--white); margin-bottom: 1rem; line-height: 1.2; }
+    .exp-card-desc { font-size: 0.78rem; font-weight: 300; color: var(--muted); line-height: 1.85; flex: 1; margin-bottom: 2rem; }
+    .exp-card-details { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--border2); padding-top: 1.8rem; margin-top: auto; }
+    .exp-card-detail-row { display: flex; justify-content: space-between; padding: 0.5rem 0; }
+    .exp-card-detail-label { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); }
+    .exp-card-detail-val { font-size: 0.72rem; color: var(--cream); }
+    .exp-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.8rem; padding-top: 1.8rem; border-top: 1px solid var(--border2); }
+    .exp-card-price { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold-lt); }
+    .exp-card-price span { font-family: 'DM Sans', sans-serif; font-size: 0.55rem; color: var(--mid); font-weight: 300; }
+    .exp-card-btn { font-family: 'Syncopate', sans-serif; font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.65rem 1.2rem; background: transparent; border: 1px solid var(--border); color: var(--muted); cursor: none; transition: all 0.3s; }
+    .exp-card-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--black); }
+    /* Wide card spanning 2 cols */
+    .exp-card.wide { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; }
+    .exp-card.wide .exp-card-img-side { position: relative; overflow: hidden; min-height: 380px; }
+    .exp-card.wide .exp-card-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5) saturate(0.75); transition: transform 0.7s var(--trans); }
+    .exp-card.wide:hover .exp-card-img { transform: scale(1.05); }
+    .exp-card.wide .exp-card-img-overlay { position: absolute; inset: 0; background: linear-gradient(to right, transparent 60%, rgba(8,8,8,0.95) 100%); }
+    .exp-card.wide .exp-card-body { padding: 3rem 2.8rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .exp-card.wide .exp-card-body .exp-card-bg-num { display: none; }
+
+    /* ── BLACK LABEL ACCESS ──────────────────────────────────────── */
+    .black-label-section {
+      position: relative; overflow: hidden;
+      background: var(--void);
+    }
+    .bls-inner {
+      display: grid; grid-template-columns: 1fr 1fr; min-height: 80vh;
+    }
+    .bls-img-side { position: relative; overflow: hidden; }
+    .bls-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.45) saturate(0.7); transition: transform 0.8s var(--trans); }
+    .bls-img-side:hover .bls-img { transform: scale(1.04); }
+    .bls-img-overlay { position: absolute; inset: 0; background: linear-gradient(to right, transparent 55%, rgba(14,13,12,0.97) 100%), linear-gradient(to bottom, rgba(8,8,8,0.6), transparent 30%); }
+    .bls-content {
+      padding: 7rem 5rem; display: flex; flex-direction: column; justify-content: center;
+      border-left: 1px solid var(--border2); position: relative;
+    }
+    .bls-access-tag {
+      display: inline-flex; align-items: center; gap: 0.8rem; margin-bottom: 2.5rem;
+      font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--black); background: var(--gold); padding: 0.5rem 1.2rem;
+      width: fit-content;
+    }
+    .bls-title { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 3.8vw, 3.8rem); font-weight: 400; line-height: 1.08; color: var(--white); margin-bottom: 2rem; }
+    .bls-title em { font-style: italic; color: var(--gold-lt); }
+    .bls-desc { font-size: 0.82rem; font-weight: 300; line-height: 1.9; color: var(--muted); margin-bottom: 3rem; }
+    .bls-list { list-style: none; margin-bottom: 3.5rem; display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--border2); }
+    .bls-list li { display: flex; align-items: baseline; gap: 1.5rem; padding: 1.1rem 0; border-bottom: 1px solid var(--border2); font-size: 0.78rem; font-weight: 300; color: var(--muted); line-height: 1.5; }
+    .bls-list li::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); flex-shrink: 0; margin-top: 0.5rem; }
+    .bls-actions { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+    /* Floating label top-left corner of image */
+    .bls-corner-label {
+      position: absolute; left: 0; top: 5rem; z-index: 3;
+      writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+      font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--mid); padding: 2rem 1rem;
+      border-right: 1px solid var(--border);
+    }
+
+    /* ── MARQUEE ─────────────────────────────────────────────────── */
+    .marquee-strip {
+      overflow: hidden; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2);
+      padding: 1.4rem 0; background: var(--carbon);
+    }
+    .marquee-inner { display: flex; white-space: nowrap; animation: marquee 28s linear infinite; }
+    .marquee-text { font-family: 'Syncopate', sans-serif; font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--mid); padding: 0 2rem; }
+    .marquee-sep { color: var(--gold); padding: 0 0.5rem; }
+
+    /* ── HOW IT WORKS ────────────────────────────────────────────── */
+    .how-it-works { padding: 8rem 5rem; background: var(--black); border-top: 1px solid var(--border2); }
+    .hiw-inner { max-width: 1400px; margin: 0 auto; }
+    .hiw-header { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: end; margin-bottom: 5rem; }
+    .hiw-title { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 4vw, 4rem); font-weight: 400; line-height: 1.08; color: var(--white); }
+    .hiw-title em { font-style: italic; color: var(--gold-lt); }
+    .hiw-intro { font-size: 0.82rem; font-weight: 300; line-height: 1.9; color: var(--muted); }
+    .hiw-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--border2); }
+    .hiw-step { padding: 3.5rem 2.5rem; border-right: 1px solid var(--border2); position: relative; }
+    .hiw-step:last-child { border-right: none; }
+    .hiw-step-num { font-family: 'Playfair Display', serif; font-size: 4rem; line-height: 1; color: rgba(184,150,90,0.1); margin-bottom: 1.5rem; }
+    .hiw-step-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--white); margin-bottom: 0.8rem; }
+    .hiw-step-desc { font-size: 0.76rem; font-weight: 300; color: var(--muted); line-height: 1.8; }
+    /* Connector arrow */
+    .hiw-step:not(:last-child)::after { content: '→'; position: absolute; right: -0.8rem; top: 3.5rem; color: var(--gold); font-size: 1rem; opacity: 0.5; z-index: 2; }
+
+    /* ── TESTIMONIALS ────────────────────────────────────────────── */
+    .testimonials { padding: 8rem 5rem; background: var(--carbon); border-top: 1px solid var(--border2); }
+    .test-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .test-left { position: sticky; top: 8rem; }
+    .test-eyebrow { font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+    .test-eyebrow::before { content: '—— '; opacity: 0.5; }
+    .test-big-title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 3.5vw, 3.5rem); font-weight: 400; line-height: 1.1; color: var(--white); margin-bottom: 1.5rem; }
+    .test-big-title em { font-style: italic; color: var(--gold-lt); }
+    .test-big-body { font-size: 0.82rem; font-weight: 300; line-height: 1.9; color: var(--muted); margin-bottom: 2.5rem; }
+    .test-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border2); }
+    .test-stat { padding: 1.5rem; border-right: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
+    .test-stat:nth-child(even) { border-right: none; }
+    .test-stat:nth-child(n+3) { border-bottom: none; }
+    .test-stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold-lt); display: block; margin-bottom: 0.2rem; }
+    .test-stat-label { font-size: 0.52rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid); }
+    .test-quotes { display: flex; flex-direction: column; gap: 2px; background: var(--border2); }
+    .test-quote-card { background: var(--void); padding: 3rem; position: relative; }
+    .test-quote-mark { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold); opacity: 0.2; line-height: 1; position: absolute; top: 1.5rem; left: 2rem; }
+    .test-quote-text { font-family: 'Playfair Display', serif; font-size: 1.0rem; font-style: italic; color: var(--cream); line-height: 1.65; margin-bottom: 1.5rem; padding-top: 1.5rem; }
+    .test-quote-attr { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid); }
+    .test-quote-attr strong { color: var(--gold); font-weight: 400; }
+    .test-quote-exp { display: inline-block; font-size: 0.46rem; letter-spacing: 0.2em; text-transform: uppercase; border: 1px solid var(--border); color: var(--mid); padding: 0.2rem 0.6rem; margin-top: 0.8rem; }
+
+    /* ── BESPOKE ENQUIRY ─────────────────────────────────────────── */
+    .enquiry-section { padding: 8rem 5rem; background: var(--void); border-top: 1px solid var(--border2); }
+    .enquiry-inner { max-width: 1200px; margin: 0 auto; }
+    .enquiry-header { text-align: center; margin-bottom: 5rem; }
+    .enquiry-title { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 4vw, 4rem); font-weight: 400; color: var(--white); margin-bottom: 1rem; }
+    .enquiry-title em { font-style: italic; color: var(--gold-lt); }
+    .enquiry-subtitle { font-size: 0.82rem; font-weight: 300; color: var(--muted); line-height: 1.9; max-width: 500px; margin: 0 auto; }
+    /* Form */
+    .enquiry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border2); margin-bottom: 0; }
+    .enq-field { padding: 1.5rem 2rem; border-right: 1px solid var(--border2); border-bottom: 1px solid var(--border2); display: flex; flex-direction: column; gap: 0.4rem; }
+    .enq-field:nth-child(even) { border-right: none; }
+    .enq-field label { font-size: 0.52rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); }
+    .enq-field input, .enq-field select { background: none; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--cream); font-weight: 300; cursor: pointer; width: 100%; }
+    .enq-field select option { background: var(--carbon); color: var(--cream); }
+    .enq-full { grid-column: span 2; border-right: none !important; }
+    .enq-full textarea { background: none; border: none; outline: none; resize: none; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--cream); font-weight: 300; width: 100%; height: 110px; line-height: 1.7; }
+    .enq-submit-row { display: flex; justify-content: space-between; align-items: center; padding: 2rem; border: 1px solid var(--border2); border-top: none; }
+    .enq-note { font-size: 0.65rem; font-weight: 300; color: var(--mid); font-style: italic; }
+    .enq-submit { font-family: 'Syncopate', sans-serif; font-size: 0.56rem; letter-spacing: 0.25em; text-transform: uppercase; padding: 1rem 2.5rem; background: var(--gold); color: var(--black); border: none; cursor: none; transition: background 0.3s, transform 0.2s; }
+    .enq-submit:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+    /* ── CTA STRIP ───────────────────────────────────────────────── */
+    .cta-strip { padding: 8rem 5rem; text-align: center; border-top: 1px solid var(--border2); background: radial-gradient(ellipse at center, rgba(184,150,90,0.06) 0%, transparent 65%); }
+    .cta-eyebrow { font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+    .cta-eyebrow::before { content: '—— '; opacity: 0.5; }
+    .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 3.8vw, 3.8rem); font-weight: 400; line-height: 1.1; color: var(--white); margin-bottom: 1.5rem; }
+    .cta-title em { font-style: italic; color: var(--gold-lt); }
+    .cta-desc { font-size: 0.82rem; font-weight: 300; color: var(--muted); line-height: 1.9; max-width: 480px; margin: 0 auto 3rem; }
+    .cta-actions { display: flex; gap: 1.5rem; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .cta-email-link { font-size: 0.7rem; letter-spacing: 0.12em; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 2px; transition: color 0.3s, border-color 0.3s; }
+    .cta-email-link:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── FOOTER ──────────────────────────────────────────────────── */
+    footer { background: var(--void); border-top: 1px solid var(--border2); padding: 5rem 5rem 2rem; }
+    .foot-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 4rem; margin-bottom: 4rem; }
+    .foot-brand-logo { font-family: 'Syncopate', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.3em; color: var(--white); margin-bottom: 1rem; }
+    .foot-brand-logo span { color: var(--gold); }
+    .foot-tagline { font-size: 0.72rem; font-style: italic; color: var(--mid); margin-bottom: 1.5rem; font-weight: 300; }
+    .foot-address { font-size: 0.7rem; font-weight: 300; color: var(--mid); line-height: 2; margin-bottom: 2rem; }
+    .foot-awards { display: flex; gap: 1rem; }
+    .award-badge { border: 1px solid var(--border); padding: 0.8rem 1rem; text-align: center; font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--gold-lt); line-height: 1.2; }
+    .award-badge span { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.48rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); margin-top: 0.3rem; }
+    .foot-col-title { font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.8rem; }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .foot-col ul a { font-size: 0.72rem; color: var(--mid); text-decoration: none; font-weight: 300; transition: color 0.3s; }
+    .foot-col ul a:hover { color: var(--cream); }
+    .nl-form { display: flex; border: 1px solid var(--border2); margin-top: 1rem; }
+    .nl-input { flex: 1; background: none; border: none; outline: none; padding: 0.8rem 1.2rem; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; color: var(--cream); font-weight: 300; }
+    .nl-btn { padding: 0.8rem 1.2rem; background: none; border: none; border-left: 1px solid var(--border2); color: var(--gold); font-size: 1rem; cursor: none; transition: background 0.3s; }
+    .nl-btn:hover { background: var(--ash); }
+    .foot-bottom { border-top: 1px solid var(--border2); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .foot-copy { font-size: 0.6rem; color: var(--mid); font-weight: 300; letter-spacing: 0.06em; }
+    .foot-socials { display: flex; gap: 2rem; }
+    .foot-socials a { font-size: 0.6rem; color: var(--mid); text-decoration: none; letter-spacing: 0.12em; transition: color 0.3s; }
+    .foot-socials a:hover { color: var(--gold); }
+
+    /* ── TOAST ───────────────────────────────────────────────────── */
+    .toast { position: fixed; bottom: 3rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ash); border: 1px solid var(--border); color: var(--cream); padding: 1rem 2.5rem; font-size: 0.72rem; letter-spacing: 0.08em; font-weight: 300; z-index: 9995; opacity: 0; pointer-events: none; transition: opacity 0.4s, transform 0.4s; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      nav { padding: 1.5rem 2rem; }
+      nav.scrolled { padding: 1rem 2rem; }
+      .nav-links { display: none; } .nav-tel { display: none; }
+      .nav-hamburger { display: flex; } .mobile-menu { display: flex; }
+
+      .exp-hero-content { padding: 0 2.5rem 5rem; }
+      .exp-hero-count { display: none; }
+      .scroll-cue { left: 2.5rem; }
+
+      .filter-nav-inner { padding: 0 2rem; }
+
+      .intro-statement { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2.5rem; }
+
+      .featured-exp-content { padding: 3rem; }
+      .featured-exp-detail { display: none; }
+
+      .exp-grid-section { padding: 5rem 2.5rem; }
+      .exp-grid { grid-template-columns: 1fr; }
+      .exp-card.wide { grid-column: span 1; display: flex; flex-direction: column; }
+      .exp-card.wide .exp-card-img-side { min-height: 280px; }
+      .exp-card.wide .exp-card-body { padding: 2.5rem; }
+
+      .black-label-section .bls-inner { grid-template-columns: 1fr; }
+      .bls-img-side { height: 55vh; }
+      .bls-img-overlay { background: linear-gradient(to bottom, transparent 40%, rgba(14,13,12,0.98) 100%); }
+      .bls-content { padding: 4rem 2.5rem; border-left: none; border-top: 1px solid var(--border2); }
+      .bls-corner-label { display: none; }
+
+      .how-it-works { padding: 5rem 2.5rem; }
+      .hiw-header { grid-template-columns: 1fr; gap: 2rem; }
+      .hiw-steps { grid-template-columns: 1fr 1fr; }
+      .hiw-step:nth-child(even) { border-right: none; }
+      .hiw-step::after { display: none; }
+
+      .testimonials { padding: 5rem 2.5rem; }
+      .test-inner { grid-template-columns: 1fr; gap: 4rem; }
+      .test-left { position: static; }
+
+      .enquiry-section { padding: 5rem 2.5rem; }
+      .enquiry-grid { grid-template-columns: 1fr; }
+      .enq-field { border-right: none; }
+      .enq-full { grid-column: span 1; }
+      .enq-submit-row { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+
+      .cta-strip { padding: 5rem 2.5rem; }
+
+      footer { padding: 4rem 2rem 2rem; }
+      .foot-top { grid-template-columns: 1fr 1fr; gap: 3rem; }
+      .foot-bottom { flex-direction: column; gap: 1.5rem; text-align: center; }
+    }
+    @media (max-width: 640px) {
+      .exp-hero-title { font-size: 2.8rem; }
+      .hiw-steps { grid-template-columns: 1fr; }
+      .hiw-step { border-right: none; }
+      .foot-top { grid-template-columns: 1fr; }
+      .test-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- PAGE LOADER -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-logo">NOIR<span>.</span>HAUS</div>
+    <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <a class="nav-logo" href="index.html">NOIR<span>.</span>HAUS</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rooms.html">Rooms</a></li>
+      <li><a href="dining.html">Dining</a></li>
+      <li><a href="experiences.html" class="active">Experiences</a></li>
+      <li><a href="#story">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <span class="nav-tel">+1 (212) 000 — 0000</span>
+      <button class="btn-reserve" onclick="scrollToEnquiry()">Enquire</button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMobileMenu()">Home</a>
+    <a href="rooms.html" onclick="closeMobileMenu()">Rooms</a>
+    <a href="dining.html" onclick="closeMobileMenu()">Dining</a>
+    <a href="experiences.html" class="active" onclick="closeMobileMenu()">Experiences</a>
+    <a href="about.html" onclick="closeMobileMenu()">About</a>
+    <a href="contact.html" onclick="closeMobileMenu()">Contact</a>
+    <div class="mobile-menu-tel">+1 (212) 000 — 0000</div>
+    <button class="mobile-menu-reserve" onclick="closeMobileMenu(); scrollToEnquiry();">Build an Experience</button>
+  </div>
+
+  <!-- HERO -->
+  <section class="exp-hero" id="hero">
+    <img src="The Black Label.png" class="exp-hero-img" id="heroImg" alt="Noir Haus private experience" loading="eager">
+    <div class="exp-hero-overlay"></div>
+    <div class="exp-hero-content">
+      <div class="exp-hero-eyebrow">Bespoke Experiences · Manhattan</div>
+      <h1 class="exp-hero-title">
+        Nights you'll<br>
+        <em>never quite</em><br>
+        explain.
+      </h1>
+      <p class="exp-hero-desc">
+        Noir Haus experiences are not amenities. They are events — singular, unrepeatable, and arranged entirely around you. From midnight gallery access to private jazz sessions above the skyline, each one is written for a party of one occasion.
+      </p>
+      <div class="exp-hero-ctas">
+        <button class="btn-primary" onclick="scrollToEnquiry()">Build Your Experience</button>
+        <button class="btn-outline" onclick="document.getElementById('exp-grid').scrollIntoView({behavior:'smooth'})">Browse All</button>
+      </div>
+    </div>
+    <div class="exp-hero-count">
+      <span class="exp-hero-count-num">09</span>
+      <div class="exp-hero-count-label">Signature Experiences</div>
+    </div>
+    <div class="scroll-cue">
+      <div class="scroll-cue-line"></div>
+      <span class="scroll-cue-text">Scroll</span>
+    </div>
+    <div class="exp-hero-rule"></div>
+  </section>
+
+  <!-- FILTER NAV -->
+  <div class="filter-nav">
+    <div class="filter-nav-inner">
+      <span class="filter-nav-label">Filter by —</span>
+      <button class="filter-btn active" onclick="filterExp(this,'all')">All</button>
+      <button class="filter-btn" onclick="filterExp(this,'cultural')">Cultural</button>
+      <button class="filter-btn" onclick="filterExp(this,'culinary')">Culinary</button>
+      <button class="filter-btn" onclick="filterExp(this,'wellness')">Wellness</button>
+      <button class="filter-btn" onclick="filterExp(this,'nightlife')">Nightlife</button>
+      <button class="filter-btn" onclick="filterExp(this,'exclusive')">Black Label</button>
+      <button class="filter-nav-enquire" onclick="scrollToEnquiry()">Bespoke Enquiry →</button>
+    </div>
+  </div>
+
+  <!-- INTRO STATEMENT -->
+  <section class="intro-statement">
+    <div class="reveal-on-scroll">
+      <div class="section-eyebrow">Our Philosophy</div>
+      <h2 class="intro-title">The city is<br>the amenity.<br><em>We arrange</em><br><em>your access.</em></h2>
+    </div>
+    <div class="reveal-on-scroll reveal-d1">
+      <p class="intro-body">Most hotels offer experiences the way they offer toiletries — in bulk, for everyone, designed to offend nobody. Noir Haus operates differently. Every experience we offer is shaped by a conversation with your concierge, refined to your tastes, and executed by people who have spent years building the access that money alone cannot buy.</p>
+      <div class="intro-quote">
+        <p class="intro-quote-text">"We don't have a list. We have a network. Tell us what you've never done, and we'll build the evening around that."</p>
+        <div class="intro-quote-attr">— Isabelle Voss, Director of Guest Experience</div>
+      </div>
+      <p class="intro-body">The nine experiences below are our signatures — the ones guests ask for by name. But the most memorable evenings at Noir Haus are often the ones that didn't exist until someone asked.</p>
+    </div>
+  </section>
+
+  <!-- FEATURED: MIDNIGHT GALLERY TOUR -->
+  <section class="featured-exp" id="midnight-gallery">
+    <img src="The Black Label.png" class="featured-exp-img" alt="Midnight Gallery Tour" loading="lazy">
+    <div class="featured-exp-overlay"></div>
+    <div class="featured-exp-content">
+      <div class="reveal-on-scroll">
+        <div class="featured-badge">
+          <span>Signature Experience</span>
+          <span class="featured-badge-pill">Cultural</span>
+        </div>
+        <div class="featured-exp-num">Experience 01 — Flagship</div>
+        <h2 class="featured-exp-title">Midnight<br><em>Gallery Tour</em></h2>
+        <p class="featured-exp-desc">After the public is gone and the city dims, our curator Elena Marsh leads a private tour through Manhattan's most extraordinary galleries and museums — doors opened exclusively for Noir Haus guests. MoMA's storage vaults. The Met's conservation studio. A private dealer's collection above 57th Street that has never been photographed.</p>
+        <div class="featured-exp-meta">
+          <div class="featured-meta-item">
+            <div class="featured-meta-label">Duration</div>
+            <div class="featured-meta-val">3 – 4 hours</div>
+          </div>
+          <div class="featured-meta-item">
+            <div class="featured-meta-label">Departure</div>
+            <div class="featured-meta-val">11PM nightly</div>
+          </div>
+          <div class="featured-meta-item">
+            <div class="featured-meta-label">Group Size</div>
+            <div class="featured-meta-val">Up to 6 guests</div>
+          </div>
+          <div class="featured-meta-item">
+            <div class="featured-meta-label">From</div>
+            <div class="featured-meta-val">$280 per person</div>
+          </div>
+        </div>
+        <div class="featured-exp-actions">
+          <button class="btn-primary" onclick="openEnquiry('Midnight Gallery Tour')">Book This Experience</button>
+          <button class="btn-outline" onclick="showToast('Your concierge will call within the hour.')">Speak to Concierge</button>
+        </div>
+      </div>
+    </div>
+    <div class="featured-exp-detail">
+      <div class="fed-row">
+        <div class="fed-row-label">Includes</div>
+        <div class="fed-row-val">Private curator, car service</div>
+      </div>
+      <div class="fed-row">
+        <div class="fed-row-label">Access Level</div>
+        <div class="fed-row-val">After-hours · Restricted</div>
+      </div>
+      <div class="fed-row">
+        <div class="fed-row-label">Notice Required</div>
+        <div class="fed-row-val">48 hours minimum</div>
+      </div>
+      <div class="fed-row">
+        <div class="fed-row-label">Season</div>
+        <div class="fed-row-val">Year-round</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCES GRID -->
+  <section class="exp-grid-section" id="exp-grid">
+    <div class="exp-grid-header reveal-on-scroll">
+      <div>
+        <div class="section-eyebrow">All Experiences</div>
+        <h2 class="exp-grid-title">Every evening<br><em>a different city.</em></h2>
+      </div>
+      <div class="exp-grid-count">09 Curated Experiences</div>
+    </div>
+
+    <div class="exp-grid" id="expGridContainer">
+
+      <!-- 01: Private Jazz Session -->
+      <div class="exp-card reveal-on-scroll" data-cat="nightlife">
+        <div class="exp-card-bg-num">01</div>
+        <div class="exp-card-header">
+          <div class="exp-card-icon">
+            <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M10 20 L10 8 L22 6 L22 16" stroke="currentColor" stroke-width="1" fill="none" opacity="0.8"/><circle cx="8" cy="20" r="3" stroke="currentColor" stroke-width="1" opacity="0.7"/><circle cx="20" cy="16" r="3" stroke="currentColor" stroke-width="1" opacity="0.7"/></svg>
+          </div>
+          <div class="exp-card-category">Nightlife</div>
+        </div>
+        <h3 class="exp-card-title">Private Jazz Session</h3>
+        <p class="exp-card-desc">A world-class trio. Your suite, your hour. We book the musicians — a rotating cast from the city's most celebrated jazz scene. You set the mood with a curated bar cart of rare spirits assembled by our sommelier. The night belongs to no one else.</p>
+        <div class="exp-card-details">
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Duration</span>
+            <span class="exp-card-detail-val">2 hours</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Location</span>
+            <span class="exp-card-detail-val">Your suite</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Notice</span>
+            <span class="exp-card-detail-val">24 hours</span>
+          </div>
+        </div>
+        <div class="exp-card-footer">
+          <div class="exp-card-price">$1,200 <span>per session</span></div>
+          <button class="exp-card-btn" onclick="openEnquiry('Private Jazz Session')">Enquire</button>
+        </div>
+      </div>
+
+      <!-- 02: Bespoke City Itinerary (wide) -->
+      <div class="exp-card wide reveal-on-scroll reveal-d1" data-cat="cultural">
+        <div class="exp-card-img-side">
+          <img src="Umbra.png" class="exp-card-img" alt="Bespoke City Itinerary" loading="lazy">
+          <div class="exp-card-img-overlay"></div>
+        </div>
+        <div class="exp-card-body">
+          <div>
+            <div class="exp-card-header" style="margin-bottom:1.5rem;">
+              <div class="exp-card-icon">
+                <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><rect x="6" y="8" width="16" height="12" rx="1" stroke="currentColor" stroke-width="1" opacity="0.8"/><path d="M10 8 L10 6 M18 8 L18 6" stroke="currentColor" stroke-width="1.2" opacity="0.6"/><line x1="6" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="0.9" opacity="0.5"/><line x1="10" y1="15.5" x2="18" y2="15.5" stroke="currentColor" stroke-width="0.8" opacity="0.4"/></svg>
+              </div>
+              <div class="exp-card-category">Cultural · Full Day</div>
+            </div>
+            <h3 class="exp-card-title">Bespoke City Itinerary</h3>
+            <p class="exp-card-desc">Twenty-four hours in New York, planned down to the minute by a local insider who has spent fifteen years navigating the city's hidden layers. Restaurant reservations no one else can get. Back-room gallery access. A chauffeur on-call from dawn. A handwritten record of your visit, bound and delivered to your room the following morning.</p>
+          </div>
+          <div>
+            <div class="exp-card-details">
+              <div class="exp-card-detail-row">
+                <span class="exp-card-detail-label">Duration</span>
+                <span class="exp-card-detail-val">Full day · 24hrs</span>
+              </div>
+              <div class="exp-card-detail-row">
+                <span class="exp-card-detail-label">Includes</span>
+                <span class="exp-card-detail-val">Chauffeur · All bookings</span>
+              </div>
+            </div>
+            <div class="exp-card-footer">
+              <div class="exp-card-price">$600 <span>per day</span></div>
+              <button class="exp-card-btn" onclick="openEnquiry('Bespoke City Itinerary')">Enquire</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03: Rooftop Sunrise Ritual -->
+      <div class="exp-card reveal-on-scroll" data-cat="wellness">
+        <div class="exp-card-bg-num">03</div>
+        <div class="exp-card-header">
+          <div class="exp-card-icon">
+            <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="12" r="5" stroke="currentColor" stroke-width="1" opacity="0.7"/><path d="M14 4 L14 6 M14 18 L14 20 M6 12 L8 12 M20 12 L22 12 M8.3 6.3 L9.7 7.7 M18.3 16.3 L19.7 17.7 M8.3 17.7 L9.7 16.3 M18.3 7.7 L19.7 6.3" stroke="currentColor" stroke-width="1" opacity="0.5"/><line x1="4" y1="22" x2="24" y2="22" stroke="currentColor" stroke-width="1" opacity="0.4"/></svg>
+          </div>
+          <div class="exp-card-category">Wellness</div>
+        </div>
+        <h3 class="exp-card-title">Rooftop Sunrise Ritual</h3>
+        <p class="exp-card-desc">Exclusive rooftop access from 5AM — just you and forty-two floors of city silence. A certified yoga instructor awaits, or simply solitude. Matcha, ceremonial grade. Viennoiseries from our pastry kitchen delivered exactly as the sun crests the East River skyline.</p>
+        <div class="exp-card-details">
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Begins</span>
+            <span class="exp-card-detail-val">5:00 AM</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Duration</span>
+            <span class="exp-card-detail-val">90 minutes</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Season</span>
+            <span class="exp-card-detail-val">April – October</span>
+          </div>
+        </div>
+        <div class="exp-card-footer">
+          <div class="exp-card-price">$180 <span>per person</span></div>
+          <button class="exp-card-btn" onclick="openEnquiry('Rooftop Sunrise Ritual')">Enquire</button>
+        </div>
+      </div>
+
+      <!-- 04: Personal Stylist Session -->
+      <div class="exp-card reveal-on-scroll reveal-d1" data-cat="cultural">
+        <div class="exp-card-bg-num">04</div>
+        <div class="exp-card-header">
+          <div class="exp-card-icon">
+            <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="10" r="4" stroke="currentColor" stroke-width="1" opacity="0.7"/><path d="M6 24 Q6 18 14 18 Q22 18 22 24" stroke="currentColor" stroke-width="1" fill="none" opacity="0.6"/><path d="M18 11 L22 9 M18 12 L22 14" stroke="currentColor" stroke-width="0.8" opacity="0.4"/></svg>
+          </div>
+          <div class="exp-card-category">Cultural · Style</div>
+        </div>
+        <h3 class="exp-card-title">Personal Stylist Session</h3>
+        <p class="exp-card-desc">Before your gala, board dinner, or simply an occasion you feel deserves your finest version — a private stylist from our concierge network arrives at your suite with a curated wardrobe pull sourced that morning from New York's most discreet boutiques. Alterations available same-day.</p>
+        <div class="exp-card-details">
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Duration</span>
+            <span class="exp-card-detail-val">2-hour session</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Notice</span>
+            <span class="exp-card-detail-val">24 hours</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Location</span>
+            <span class="exp-card-detail-val">Your suite</span>
+          </div>
+        </div>
+        <div class="exp-card-footer">
+          <div class="exp-card-price">$400 <span>per session</span></div>
+          <button class="exp-card-btn" onclick="openEnquiry('Personal Stylist Session')">Enquire</button>
+        </div>
+      </div>
+
+      <!-- 05: Sommelier's Cellar Tour (wide) -->
+      <div class="exp-card wide reveal-on-scroll" data-cat="culinary">
+        <div class="exp-card-img-side">
+          <img src="Vault.png" class="exp-card-img" alt="Sommelier Cellar Tour" loading="lazy">
+          <div class="exp-card-img-overlay"></div>
+        </div>
+        <div class="exp-card-body">
+          <div>
+            <div class="exp-card-header" style="margin-bottom:1.5rem;">
+              <div class="exp-card-icon">
+                <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M11 4 L11 12 Q11 18 14 18 Q17 18 17 12 L17 4" stroke="currentColor" stroke-width="1" opacity="0.8"/><line x1="10" y1="8" x2="18" y2="8" stroke="currentColor" stroke-width="0.8" opacity="0.5"/><path d="M12 18 Q14 22 16 18" stroke="currentColor" stroke-width="0.8" opacity="0.5" fill="none"/><line x1="8" y1="24" x2="20" y2="24" stroke="currentColor" stroke-width="1" opacity="0.4"/></svg>
+              </div>
+              <div class="exp-card-category">Culinary · Private</div>
+            </div>
+            <h3 class="exp-card-title">Sommelier's Private Cellar Tour</h3>
+            <p class="exp-card-desc">Access to VAULT's subterranean wine cellar — 4,200 labels, some never opened — in the company of head sommelier Élise Renard. A guided tasting of six bottles chosen around your palate and the conversation that shaped them. Ends with a bottle selected for you, labelled and packed for travel.</p>
+          </div>
+          <div>
+            <div class="exp-card-details">
+              <div class="exp-card-detail-row">
+                <span class="exp-card-detail-label">Duration</span>
+                <span class="exp-card-detail-val">2 hours</span>
+              </div>
+              <div class="exp-card-detail-row">
+                <span class="exp-card-detail-label">Includes</span>
+                <span class="exp-card-detail-val">6 tastings · 1 take-home bottle</span>
+              </div>
+            </div>
+            <div class="exp-card-footer">
+              <div class="exp-card-price">$520 <span>per couple</span></div>
+              <button class="exp-card-btn" onclick="openEnquiry('Sommelier\'s Cellar Tour')">Enquire</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 06: Penthouse Arrival -->
+      <div class="exp-card reveal-on-scroll" data-cat="exclusive">
+        <div class="exp-card-bg-num">06</div>
+        <div class="exp-card-header">
+          <div class="exp-card-icon">
+            <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 5 L15.8 10.7 L22 10.7 L17 14.3 L18.8 20 L14 16.4 L9.2 20 L11 14.3 L6 10.7 L12.2 10.7 Z" stroke="currentColor" stroke-width="1" fill="none" opacity="0.7"/></svg>
+          </div>
+          <div class="exp-card-category">Exclusive · Penthouse</div>
+        </div>
+        <h3 class="exp-card-title">Penthouse Arrival</h3>
+        <p class="exp-card-desc">A welcome beyond arrival. Chilled Krug Clos du Mesnil on ice, a handwritten note from our General Manager, fresh flowers sourced that morning from the 28th Street flower market. Your name on the door before you land. A car meets you at JFK. You arrive already inside the story.</p>
+        <div class="exp-card-details">
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Includes</span>
+            <span class="exp-card-detail-val">Car service · Krug · Flowers</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Available</span>
+            <span class="exp-card-detail-val">Penthouse guests</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Cost</span>
+            <span class="exp-card-detail-val">Complimentary</span>
+          </div>
+        </div>
+        <div class="exp-card-footer">
+          <div class="exp-card-price" style="font-size:1rem;color:var(--gold);">Complimentary</div>
+          <button class="exp-card-btn" onclick="window.location='rooms.html'">Book Penthouse</button>
+        </div>
+      </div>
+
+      <!-- 07: Private VAULT Chef's Table -->
+      <div class="exp-card reveal-on-scroll reveal-d1" data-cat="culinary">
+        <div class="exp-card-bg-num">07</div>
+        <div class="exp-card-header">
+          <div class="exp-card-icon">
+            <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M8 20 L8 10 Q8 6 14 6 Q20 6 20 10 L20 20" stroke="currentColor" stroke-width="1" fill="none" opacity="0.7"/><rect x="5" y="20" width="18" height="3" rx="0.5" stroke="currentColor" stroke-width="0.9" opacity="0.5"/><line x1="14" y1="6" x2="14" y2="4" stroke="currentColor" stroke-width="1.2" opacity="0.6"/></svg>
+          </div>
+          <div class="exp-card-category">Culinary · Private</div>
+        </div>
+        <h3 class="exp-card-title">VAULT Chef's Table</h3>
+        <p class="exp-card-desc">Six seats. The kitchen pass. Chef Marcus Ohl's counter — where the full menu is prepared in front of you and every dish arrives with the story of its origin. The rarest table in the restaurant; available one evening per week by application. Wine pairing by Élise Renard, tuned to your palate in advance.</p>
+        <div class="exp-card-details">
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Seats</span>
+            <span class="exp-card-detail-val">Up to 6 guests</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Availability</span>
+            <span class="exp-card-detail-val">Once weekly</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Notice</span>
+            <span class="exp-card-detail-val">7 days minimum</span>
+          </div>
+        </div>
+        <div class="exp-card-footer">
+          <div class="exp-card-price">$480 <span>per person</span></div>
+          <button class="exp-card-btn" onclick="openEnquiry('VAULT Chef\'s Table')">Enquire</button>
+        </div>
+      </div>
+
+      <!-- 08: Helicopter Transfer -->
+      <div class="exp-card reveal-on-scroll" data-cat="exclusive">
+        <div class="exp-card-bg-num">08</div>
+        <div class="exp-card-header">
+          <div class="exp-card-icon">
+            <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 14 L4 12 L14 10 L24 12 Z" stroke="currentColor" stroke-width="0.9" fill="none" opacity="0.6"/><line x1="14" y1="6" x2="14" y2="12" stroke="currentColor" stroke-width="1" opacity="0.7"/><line x1="14" y1="14" x2="14" y2="22" stroke="currentColor" stroke-width="0.8" opacity="0.5"/><path d="M11 20 L14 22 L17 20" stroke="currentColor" stroke-width="0.8" opacity="0.4" fill="none"/><line x1="12" y1="6" x2="16" y2="6" stroke="currentColor" stroke-width="1.5" opacity="0.5"/></svg>
+          </div>
+          <div class="exp-card-category">Exclusive · Transport</div>
+        </div>
+        <h3 class="exp-card-title">Manhattan Helicopter Transfer</h3>
+        <p class="exp-card-desc">Arrival and departure by private helicopter — from JFK or Newark, over the Manhattan grid at dusk, landing on the rooftop helipad. The city in its entirety, framed through glass before you've even checked in. Available for airport transfers or as a standalone twilight flight over the island.</p>
+        <div class="exp-card-details">
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Route</span>
+            <span class="exp-card-detail-val">JFK / EWR → Noir Haus</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Capacity</span>
+            <span class="exp-card-detail-val">Up to 5 guests</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Notice</span>
+            <span class="exp-card-detail-val">48 hours</span>
+          </div>
+        </div>
+        <div class="exp-card-footer">
+          <div class="exp-card-price">$2,800 <span>per flight</span></div>
+          <button class="exp-card-btn" onclick="openEnquiry('Helicopter Transfer')">Enquire</button>
+        </div>
+      </div>
+
+      <!-- 09: In-Suite Spa -->
+      <div class="exp-card reveal-on-scroll reveal-d1" data-cat="wellness">
+        <div class="exp-card-bg-num">09</div>
+        <div class="exp-card-header">
+          <div class="exp-card-icon">
+            <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M9 22 Q9 14 14 14 Q19 14 19 22" stroke="currentColor" stroke-width="1" fill="none" opacity="0.6"/><path d="M14 14 Q14 8 10 6 Q14 8 18 6 Q14 8 14 14" stroke="currentColor" stroke-width="0.9" fill="none" opacity="0.5"/><line x1="6" y1="22" x2="22" y2="22" stroke="currentColor" stroke-width="1" opacity="0.4"/></svg>
+          </div>
+          <div class="exp-card-category">Wellness · In-Suite</div>
+        </div>
+        <h3 class="exp-card-title">In-Suite Noir Ritual</h3>
+        <p class="exp-card-desc">A two-therapist treatment delivered entirely in your suite. A 90-minute sequence of deep tissue, hot stone, and aromatherapy — using a bespoke Noir Haus scent formulated with bergamot, black oud, and cold river stone. Your suite is prepared in advance: candlelit, scented, temperature-set. You do nothing but arrive.</p>
+        <div class="exp-card-details">
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Duration</span>
+            <span class="exp-card-detail-val">90 minutes</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Therapists</span>
+            <span class="exp-card-detail-val">Two · Simultaneous</span>
+          </div>
+          <div class="exp-card-detail-row">
+            <span class="exp-card-detail-label">Notice</span>
+            <span class="exp-card-detail-val">6 hours</span>
+          </div>
+        </div>
+        <div class="exp-card-footer">
+          <div class="exp-card-price">$680 <span>per person</span></div>
+          <button class="exp-card-btn" onclick="openEnquiry('In-Suite Noir Ritual')">Enquire</button>
+        </div>
+      </div>
+
+    </div><!-- /exp-grid -->
+  </section>
+
+  <!-- BLACK LABEL EXCLUSIVE ACCESS -->
+  <section class="black-label-section" id="black-label">
+    <div class="bls-inner">
+      <div class="bls-img-side">
+        <img src="The Black Label.png" class="bls-img" alt="The Black Label exclusive access" loading="lazy">
+        <div class="bls-img-overlay"></div>
+        <div class="bls-corner-label">Black Label Exclusive</div>
+      </div>
+      <div class="bls-content reveal-on-scroll">
+        <div class="bls-access-tag">
+          <span>By Invitation</span>
+        </div>
+        <div class="section-eyebrow">The Black Label Programme</div>
+        <h2 class="bls-title">Some experiences<br><em>have no price.</em><br>They have a name.</h2>
+        <p class="bls-desc">The Black Label Programme is the hotel's most private tier. Available to guests in The Black Label suite and to a limited number of annual members, it offers access to experiences that are never listed, never repeated, and never discussed in advance.</p>
+        <p class="bls-desc" style="margin-top:-1.5rem">Each experience is built entirely around a conversation between you and our Director of Guest Experience. The structure, timing, and people involved are disclosed only to you. What we can say is that no two Black Label evenings have ever been the same.</p>
+        <ul class="bls-list">
+          <li>Private access to events and openings before public announcement</li>
+          <li>Dedicated concierge number — answered by a named individual, 24 hours</li>
+          <li>Priority access to all nine signature experiences, confirmed same-day</li>
+          <li>Quarterly curated delivery to your home address — wherever in the world</li>
+          <li>Annual Black Label dinner with the hotel's founding collective</li>
+        </ul>
+        <div class="bls-actions">
+          <button class="btn-primary" onclick="showToast('Our Director of Guest Experience will contact you personally.')">Request an Introduction</button>
+          <button class="btn-outline" onclick="window.location='rooms.html'">View The Suite</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee-inner" aria-hidden="true">
+      <span class="marquee-text">Midnight Gallery Tours</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Private Jazz Sessions</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Sommelier Cellar Access</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Bespoke City Itineraries</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Helicopter Transfers</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Rooftop Sunrise Rituals</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Chef's Table · VAULT</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">In-Suite Noir Ritual</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Black Label Programme</span><span class="marquee-sep">✦</span>&nbsp;
+      <span class="marquee-text">Midnight Gallery Tours</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Private Jazz Sessions</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Sommelier Cellar Access</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Bespoke City Itineraries</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Helicopter Transfers</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Rooftop Sunrise Rituals</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Chef's Table · VAULT</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">In-Suite Noir Ritual</span><span class="marquee-sep">✦</span>
+      <span class="marquee-text">Black Label Programme</span><span class="marquee-sep">✦</span>&nbsp;
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works">
+    <div class="hiw-inner">
+      <div class="hiw-header reveal-on-scroll">
+        <div>
+          <div class="section-eyebrow">The Process</div>
+          <h2 class="hiw-title">How every<br><em>evening begins.</em></h2>
+        </div>
+        <p class="hiw-intro">Nothing at Noir Haus is off the shelf. Every experience begins with a conversation and is shaped around the specific nature of your stay, your party, and the kind of evening you're unwilling to leave to chance.</p>
+      </div>
+      <div class="hiw-steps">
+        <div class="hiw-step reveal-on-scroll">
+          <div class="hiw-step-num">01</div>
+          <h3 class="hiw-step-title">The Conversation</h3>
+          <p class="hiw-step-desc">You reach your concierge by phone, message, or in person. You describe what you want — however vague — or simply name the feeling you're after. We take it from there.</p>
+        </div>
+        <div class="hiw-step reveal-on-scroll reveal-d1">
+          <div class="hiw-step-num">02</div>
+          <h3 class="hiw-step-title">The Design</h3>
+          <p class="hiw-step-desc">Within two hours, your concierge returns with a proposal — structured around your dates, party size, and preferences. Timing, people, transport, and every detail accounted for.</p>
+        </div>
+        <div class="hiw-step reveal-on-scroll reveal-d2">
+          <div class="hiw-step-num">03</div>
+          <h3 class="hiw-step-title">The Arrangement</h3>
+          <p class="hiw-step-desc">We make every booking, arrange every car, brief every participant. You receive a single confirmation. You bring nothing. You carry nothing. You simply arrive.</p>
+        </div>
+        <div class="hiw-step reveal-on-scroll reveal-d3">
+          <div class="hiw-step-num">04</div>
+          <h3 class="hiw-step-title">The Evening</h3>
+          <p class="hiw-step-desc">Your concierge is reachable throughout. Any adjustment, any addition — handled without interruption to the experience itself. The night is yours to inhabit entirely.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="test-inner">
+      <div class="test-left reveal-on-scroll">
+        <div class="test-eyebrow">Guest Stories</div>
+        <h2 class="test-big-title">What guests<br><em>remember most.</em></h2>
+        <p class="test-big-body">Every story below describes a night that wasn't planned until someone made a single call. The concierge did the rest. The guest kept the memory.</p>
+        <div class="test-stats">
+          <div class="test-stat">
+            <span class="test-stat-num">4.97</span>
+            <div class="test-stat-label">Average Experience Rating</div>
+          </div>
+          <div class="test-stat">
+            <span class="test-stat-num">94%</span>
+            <div class="test-stat-label">Guests Book a Second</div>
+          </div>
+          <div class="test-stat">
+            <span class="test-stat-num">∞</span>
+            <div class="test-stat-label">Bespoke Variations</div>
+          </div>
+          <div class="test-stat">
+            <span class="test-stat-num">24h</span>
+            <div class="test-stat-label">Concierge Availability</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-quotes reveal-on-scroll reveal-d1">
+        <div class="test-quote-card">
+          <div class="test-quote-mark">"</div>
+          <p class="test-quote-text">The midnight gallery tour was unlike anything I had experienced in thirty years of visiting New York. Elena spoke about each work as if she had watched it being made. By the time we reached the fourth venue, I had stopped keeping track of the time.</p>
+          <div class="test-quote-attr"><strong>Margaux D.</strong> — Suite 3901, November 2025</div>
+          <div class="test-quote-exp">Midnight Gallery Tour</div>
+        </div>
+        <div class="test-quote-card">
+          <div class="test-quote-mark">"</div>
+          <p class="test-quote-text">I asked for a single morning that felt like mine. The concierge — I still don't know how — arranged for the rooftop to be cleared, a yoga teacher I had once mentioned in passing, and a breakfast that arrived as the sun cleared the buildings. I didn't speak to anyone for three hours. I didn't need to.</p>
+          <div class="test-quote-attr"><strong>Oliver K.</strong> — Noir Deluxe, Floor 28, March 2026</div>
+          <div class="test-quote-exp">Rooftop Sunrise Ritual</div>
+        </div>
+        <div class="test-quote-card">
+          <div class="test-quote-mark">"</div>
+          <p class="test-quote-text">We brought the musicians into the suite at ten. The city was lit up through the floor-to-ceiling glass. My wife didn't know they were coming. The look on her face when they started to play — I've been trying to find the words for it since. I can't.</p>
+          <div class="test-quote-attr"><strong>Ren T.</strong> — The Penthouse Suite, January 2026</div>
+          <div class="test-quote-exp">Private Jazz Session</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BESPOKE ENQUIRY FORM -->
+  <section class="enquiry-section" id="enquiry">
+    <div class="enquiry-inner">
+      <div class="enquiry-header reveal-on-scroll">
+        <div class="section-eyebrow">Build Your Experience</div>
+        <h2 class="enquiry-title">Tell us what<br><em>you're imagining.</em></h2>
+        <p class="enquiry-subtitle">Use this form to begin the conversation, or call +1 (212) 000 — 0000 and ask for the experiences desk. There is no wrong answer and no ceiling.</p>
+      </div>
+
+      <div class="enquiry-grid reveal-on-scroll">
+        <div class="enq-field">
+          <label>Full Name</label>
+          <input type="text" placeholder="Your name" id="enqName">
+        </div>
+        <div class="enq-field">
+          <label>Email Address</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+        <div class="enq-field">
+          <label>Preferred Experience</label>
+          <select id="enqExp">
+            <option>Midnight Gallery Tour</option>
+            <option>Private Jazz Session</option>
+            <option>Bespoke City Itinerary</option>
+            <option>Rooftop Sunrise Ritual</option>
+            <option>Personal Stylist Session</option>
+            <option>Sommelier's Cellar Tour</option>
+            <option>VAULT Chef's Table</option>
+            <option>Helicopter Transfer</option>
+            <option>In-Suite Noir Ritual</option>
+            <option>Something Else Entirely</option>
+            <option>Black Label Programme Enquiry</option>
+          </select>
+        </div>
+        <div class="enq-field">
+          <label>Date of Stay</label>
+          <input type="text" id="enqDate" placeholder="DD / MM / YYYY" readonly>
+        </div>
+        <div class="enq-field enq-full" style="border-right:none;">
+          <label>Tell Us More</label>
+          <textarea placeholder="Describe what you have in mind — the occasion, the feeling, the people, the time of day. The more you give us, the more precisely we can build around it."></textarea>
+        </div>
+      </div>
+      <div class="enq-submit-row reveal-on-scroll">
+        <p class="enq-note">Our experiences team responds within 2 hours between 8AM–10PM. For urgent or same-day requests, please call directly.</p>
+        <button class="enq-submit" onclick="handleEnquiry()">Send Enquiry →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <div class="cta-strip">
+    <div class="reveal-on-scroll">
+      <div class="cta-eyebrow">Complete the Stay</div>
+      <h2 class="cta-title">The room sets<br><em>the scene.</em></h2>
+      <p class="cta-desc">Every experience is more extraordinary from the right starting point. Reserve a room above the city and let the entire evening — from check-in to last call — be arranged before you land.</p>
+      <div class="cta-actions">
+        <a href="rooms.html"><button class="btn-primary">View Rooms & Suites</button></a>
+        <a href="mailto:experiences@noirhaus.com" class="cta-email-link">experiences@noirhaus.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand-logo">NOIR<span>.</span>HAUS</div>
+        <div class="foot-tagline">"A sanctuary for those who find beauty in the dark."</div>
+        <div class="foot-address">1 Noir Plaza, 42nd Floor<br>Midtown Manhattan, New York<br>NY 10036, United States</div>
+        <div class="foot-awards">
+          <div class="award-badge">#1 NYC<br><span>Condé Nast 2025</span></div>
+          <div class="award-badge">★★<br><span>Michelin VAULT</span></div>
+          <div class="award-badge">Forbes<br><span>5 Stars</span></div>
+        </div>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Experiences</div>
+        <ul>
+          <li><a href="#midnight-gallery">Midnight Gallery Tour</a></li>
+          <li><a href="#exp-grid">Private Jazz Session</a></li>
+          <li><a href="#exp-grid">City Itinerary</a></li>
+          <li><a href="#exp-grid">Rooftop Sunrise</a></li>
+          <li><a href="#black-label">Black Label Programme</a></li>
+          <li><a href="#enquiry">Bespoke Enquiry</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Hotel</div>
+        <ul>
+          <li><a href="rooms.html">Rooms & Suites</a></li>
+          <li><a href="dining.html">Dining</a></li>
+          <li><a href="#">Spa & Wellness</a></li>
+          <li><a href="#">Rooftop Bar</a></li>
+          <li><a href="#">Private Events</a></li>
+          <li><a href="#">Gallery Access</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Contact</div>
+        <ul>
+          <li><a href="tel:+12120000000">+1 (212) 000 — 0000</a></li>
+          <li><a href="mailto:experiences@noirhaus.com">experiences@noirhaus.com</a></li>
+          <li><a href="mailto:stay@noirhaus.com">stay@noirhaus.com</a></li>
+          <li><a href="#">Press Enquiries</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+        <div style="margin-top:2rem;">
+          <div class="foot-col-title">Newsletter</div>
+          <div class="nl-form">
+            <input type="email" placeholder="your@email.com" class="nl-input" id="nlInput">
+            <button class="nl-btn" onclick="handleNewsletter()">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div class="foot-copy">© 2026 Noir Haus. All rights reserved. A concept portfolio project.</div>
+      <div class="foot-socials">
+        <a href="#">Instagram</a>
+        <a href="#">Pinterest</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Tripadvisor</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── CURSOR ─────────────────────────────────────────────────────────────────
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
+    (function animRing(){ rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
+    document.querySelectorAll('a,button,input,select,textarea,[onclick]').forEach(el => {
+      el.addEventListener('mouseenter', ()=>cursor.classList.add('expanded'));
+      el.addEventListener('mouseleave', ()=>cursor.classList.remove('expanded'));
+    });
+
+    // ── PAGE LOADER ────────────────────────────────────────────────────────────
+    const loader=document.getElementById('pageLoader'), fill=document.getElementById('loaderFill');
+    let pct=0;
+    const iv=setInterval(()=>{ pct+=Math.random()*18; if(pct>=100){pct=100;clearInterval(iv);setTimeout(()=>loader.classList.add('done'),300);} fill.style.width=pct+'%'; },80);
+
+    // ── HERO PARALLAX ──────────────────────────────────────────────────────────
+    const heroImg=document.getElementById('heroImg');
+    heroImg.addEventListener('load',()=>heroImg.classList.add('loaded'));
+    if(heroImg.complete) heroImg.classList.add('loaded');
+    window.addEventListener('scroll',()=>{ const s=window.scrollY; if(s<window.innerHeight&&heroImg) heroImg.style.transform=`scale(1.0) translateY(${s*0.1}px)`; },{passive:true});
+
+    // ── NAV SCROLL ─────────────────────────────────────────────────────────────
+    const mainNav=document.getElementById('mainNav');
+    window.addEventListener('scroll',()=>mainNav.classList.toggle('scrolled',window.scrollY>80),{passive:true});
+
+    // ── MOBILE MENU ────────────────────────────────────────────────────────────
+    const hamburger=document.getElementById('hamburger'), mobileMenu=document.getElementById('mobileMenu');
+    hamburger.addEventListener('click',()=>{ hamburger.classList.toggle('open'); mobileMenu.classList.toggle('open'); document.body.style.overflow=mobileMenu.classList.contains('open')?'hidden':''; });
+    function closeMobileMenu(){ hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); document.body.style.overflow=''; }
+
+    // ── REVEAL ON SCROLL ───────────────────────────────────────────────────────
+    const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');obs.unobserve(e.target);}}),{threshold:0.08,rootMargin:'0px 0px -50px 0px'});
+    document.querySelectorAll('.reveal-on-scroll').forEach(el=>obs.observe(el));
+
+    // ── FILTER ────────────────────────────────────────────────────────────────
+    function filterExp(btn, cat) {
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const cards = document.querySelectorAll('.exp-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+          card.style.display = ''; card.style.opacity='1';
+        } else {
+          card.style.opacity='0.25'; card.style.pointerEvents='none';
+        }
+      });
+      if (cat !== 'all') {
+        setTimeout(()=>{ cards.forEach(c=>{ if(c.dataset.cat!==cat){c.style.display='none';} }); },350);
+      } else {
+        cards.forEach(c=>{ c.style.display=''; c.style.pointerEvents=''; });
+      }
+    }
+
+    // ── ENQUIRY HELPERS ───────────────────────────────────────────────────────
+    function scrollToEnquiry() { document.getElementById('enquiry').scrollIntoView({behavior:'smooth'}); }
+    function openEnquiry(expName) {
+      const sel = document.getElementById('enqExp');
+      if (sel) {
+        for (let i=0;i<sel.options.length;i++) {
+          if (sel.options[i].text.toLowerCase().includes(expName.toLowerCase().split(' ')[0].toLowerCase())) {
+            sel.selectedIndex = i; break;
+          }
+        }
+      }
+      scrollToEnquiry();
+    }
+
+    // ── DATE PICKER ───────────────────────────────────────────────────────────
+    (function(){
+      const inp=document.getElementById('enqDate'); if(!inp) return;
+      let selected=null, open=false;
+      const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+      function fmt(d){ return String(d.getDate()).padStart(2,'0')+' / '+String(d.getMonth()+1).padStart(2,'0')+' / '+d.getFullYear(); }
+      inp.addEventListener('click',()=>{
+        if(open) return; open=true;
+        const today=new Date(); let vy=today.getFullYear(),vm=today.getMonth();
+        const p=document.createElement('div');
+        p.style.cssText='position:fixed;z-index:9000;background:#161412;border:1px solid rgba(184,150,90,0.18);padding:1.5rem;min-width:280px;box-shadow:0 20px 60px rgba(0,0,0,0.8);';
+        function render(){
+          const fd=new Date(vy,vm,1).getDay(), dim=new Date(vy,vm+1,0).getDate();
+          let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;"><button id="pm" style="background:none;border:none;color:#B8965A;cursor:pointer;font-size:1rem;padding:4px 8px;">‹</button><span style="font-family:'Syncopate',sans-serif;font-size:0.52rem;letter-spacing:0.2em;color:#E8E2D9;">${months[vm].toUpperCase()} ${vy}</span><button id="nm" style="background:none;border:none;color:#B8965A;cursor:pointer;font-size:1rem;padding:4px 8px;">›</button></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;">`;
+          ['S','M','T','W','T','F','S'].forEach(d=>h+=`<div style="text-align:center;font-size:0.45rem;letter-spacing:0.15em;color:#6E6560;padding:3px 0;">${d}</div>`);
+          h+=`</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">`;
+          for(let i=0;i<fd;i++) h+=`<div></div>`;
+          for(let d=1;d<=dim;d++){
+            const date=new Date(vy,vm,d), past=date<new Date(today.getFullYear(),today.getMonth(),today.getDate()), sel=selected&&date.toDateString()===selected.toDateString();
+            h+=`<button data-day="${d}" style="padding:5px 0;text-align:center;background:${sel?'#B8965A':'none'};border:none;color:${past?'#3A3530':sel?'#080808':'#E8E2D9'};font-size:0.72rem;cursor:${past?'default':'pointer'};transition:background 0.2s;" ${past?'disabled':''}>${d}</button>`;
+          }
+          h+=`</div>`;
+          p.innerHTML=h;
+          p.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{ selected=new Date(vy,vm,+b.dataset.day); inp.value=fmt(selected); p.remove(); open=false; document.removeEventListener('click',out); }));
+          p.querySelector('#pm').addEventListener('click',e=>{e.stopPropagation();vm--;if(vm<0){vm=11;vy--;}render();});
+          p.querySelector('#nm').addEventListener('click',e=>{e.stopPropagation();vm++;if(vm>11){vm=0;vy++;}render();});
+        }
+        render();
+        const r=inp.getBoundingClientRect(); p.style.left=r.left+'px'; p.style.top=(r.bottom+8)+'px';
+        document.body.appendChild(p);
+        setTimeout(()=>document.addEventListener('click',out),10);
+        function out(e){ if(!p.contains(e.target)&&e.target!==inp){ p.remove(); open=false; document.removeEventListener('click',out); } }
+      });
+    })();
+
+    // ── TOAST ──────────────────────────────────────────────────────────────────
+    function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3400); }
+    function handleEnquiry(){ showToast('Enquiry received — our experiences team will respond within 2 hours.'); }
+    function handleNewsletter(){ const i=document.getElementById('nlInput'); if(i&&i.value&&i.value.includes('@')){showToast('Welcome to the Noir Haus circle.'); i.value='';} else showToast('Please enter a valid email address.'); }
+  </script>
+</body>
+</html>

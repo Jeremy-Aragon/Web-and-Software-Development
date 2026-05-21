@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dining — NOIRHAUS · VAULT & UMBRA · Midtown Manhattan</title>
+  <meta name="description" content="Two Michelin stars. One legendary jazz bar. The complete dining world of Noir Haus — VAULT and UMBRA.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Syncopate:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET & ROOT ─────────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black:   #080808;
+      --void:    #0E0D0C;
+      --carbon:  #161412;
+      --ash:     #252220;
+      --smoke:   #3A3530;
+      --mid:     #6E6560;
+      --muted:   #9E9892;
+      --cream:   #E8E2D9;
+      --white:   #F5F1EC;
+      --gold:    #B8965A;
+      --gold-lt: #D4AF72;
+      --red:     #8B2E2E;
+      --border:  rgba(184,150,90,0.18);
+      --border2: rgba(255,255,255,0.06);
+      --trans:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: radial-gradient(circle at top left, rgba(184,150,90,0.05), transparent 16%),
+                  radial-gradient(circle at bottom right, rgba(255,255,255,0.02), transparent 22%),
+                  var(--black);
+      color: var(--cream);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9990; opacity: 0.5;
+    }
+
+    /* ── PAGE LOADER ─────────────────────────────────────────────── */
+    .page-loader {
+      position: fixed; inset: 0; background: var(--black);
+      z-index: 10000; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2rem;
+      transition: opacity 0.8s var(--trans), visibility 0.8s;
+    }
+    .page-loader.done { opacity: 0; visibility: hidden; }
+    .loader-logo { font-family: 'Syncopate', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.4em; color: var(--white); }
+    .loader-logo span { color: var(--gold); }
+    .loader-bar { width: 200px; height: 1px; background: var(--ash); overflow: hidden; }
+    .loader-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.05s linear; }
+
+    /* ── CURSOR ──────────────────────────────────────────────────── */
+    .cursor {
+      position: fixed; width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor.expanded { width: 60px; height: 60px; background: rgba(184,150,90,0.15); }
+    .cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border: 1px solid rgba(184,150,90,0.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.8rem 3rem;
+      background: rgba(8,8,8,0.08); backdrop-filter: blur(14px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.16);
+      transition: padding 0.4s var(--trans), background 0.4s, transform 0.4s;
+    }
+    nav.scrolled {
+      padding: 1.2rem 3rem; background: rgba(8,8,8,0.96);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border2);
+    }
+    nav::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0) 100%);
+      pointer-events: none; transition: opacity 0.4s;
+    }
+    nav.scrolled::before { opacity: 0; }
+    .nav-logo {
+      font-family: 'Syncopate', sans-serif; font-size: 1rem; font-weight: 700;
+      letter-spacing: 0.3em; color: var(--white); text-decoration: none; position: relative;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; position: relative; }
+    .nav-links a {
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color 0.3s; position: relative;
+    }
+    .nav-links a.active { color: var(--gold); }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px; background: var(--gold); transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-actions { display: flex; align-items: center; gap: 2rem; position: relative; }
+    .nav-tel { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--mid); }
+    .btn-reserve {
+      font-family: 'Syncopate', sans-serif; font-size: 0.55rem; letter-spacing: 0.25em;
+      text-transform: uppercase; padding: 0.7rem 1.6rem;
+      background: transparent; border: 1px solid var(--gold);
+      color: var(--gold); cursor: none; transition: background 0.3s, color 0.3s;
+    }
+    .btn-reserve:hover { background: var(--gold); color: var(--black); }
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none; z-index: 600;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 1px; background: var(--muted);
+      transition: transform 0.3s, opacity 0.3s, background 0.3s; transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); background: var(--gold); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); background: var(--gold); }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; background: var(--void); z-index: 400;
+      flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem;
+      opacity: 0; transform: translateY(-10px);
+      transition: opacity 0.4s, transform 0.4s; pointer-events: none;
+    }
+    .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 400;
+      color: var(--cream); text-decoration: none; letter-spacing: 0.05em; transition: color 0.3s;
+    }
+    .mobile-menu a:hover, .mobile-menu a.active { color: var(--gold); }
+    .mobile-menu-tel { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--mid); margin-top: 1rem; }
+    .mobile-menu-reserve {
+      font-family: 'Syncopate', sans-serif; font-size: 0.58rem; letter-spacing: 0.25em;
+      text-transform: uppercase; padding: 0.9rem 2.5rem; background: transparent;
+      border: 1px solid var(--gold); color: var(--gold); cursor: pointer; margin-top: 1rem;
+      transition: background 0.3s, color 0.3s;
+    }
+    .mobile-menu-reserve:hover { background: var(--gold); color: var(--black); }
+
+    /* ── SHARED BUTTONS ──────────────────────────────────────────── */
+    .btn-primary {
+      font-family: 'Syncopate', sans-serif; font-size: 0.6rem; letter-spacing: 0.25em;
+      text-transform: uppercase; padding: 1rem 2.5rem;
+      background: var(--gold); color: var(--black); border: none; cursor: none;
+      transition: background 0.3s, transform 0.2s; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .btn-outline {
+      font-family: 'Syncopate', sans-serif; font-size: 0.55rem; letter-spacing: 0.22em;
+      text-transform: uppercase; padding: 0.85rem 2rem;
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted); cursor: none; transition: border-color 0.3s, color 0.3s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── ANIMATIONS ──────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    .reveal-on-scroll {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.85s var(--trans), transform 0.85s var(--trans);
+    }
+    .reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.12s; }
+    .reveal-delay-2 { transition-delay: 0.24s; }
+    .reveal-delay-3 { transition-delay: 0.36s; }
+
+    /* ── DINING HERO ─────────────────────────────────────────────── */
+    .dining-hero {
+      position: relative; height: 100vh; min-height: 600px;
+      display: flex; align-items: flex-end; overflow: hidden;
+    }
+    .dining-hero-img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center 20%;
+      filter: brightness(0.38) saturate(0.75);
+      transform: scale(1.06);
+      transition: transform 8s var(--trans);
+    }
+    .dining-hero-img.loaded { transform: scale(1.0); }
+    .dining-hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(
+        to top,
+        rgba(8,8,8,0.98) 0%,
+        rgba(8,8,8,0.5) 40%,
+        rgba(8,8,8,0.1) 70%,
+        rgba(8,8,8,0.35) 100%
+      );
+    }
+    .dining-hero-content {
+      position: relative; z-index: 2;
+      padding: 0 5rem 6rem; max-width: 900px;
+    }
+    .dining-hero-eyebrow {
+      font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+    }
+    .dining-hero-eyebrow::before { content: '—— '; opacity: 0.5; }
+    .dining-hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 6vw, 6.5rem);
+      font-weight: 400; line-height: 1.02; letter-spacing: -0.025em;
+      color: var(--white); margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 0.9s 0.7s forwards;
+    }
+    .dining-hero-title em { font-style: italic; color: var(--gold-lt); }
+    .dining-hero-desc {
+      font-size: 0.85rem; font-weight: 300; line-height: 1.9;
+      color: var(--muted); max-width: 500px; margin-bottom: 3rem;
+      opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+    }
+    .dining-hero-ctas {
+      display: flex; align-items: center; gap: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s 1.1s forwards;
+    }
+    .dining-hero-rule {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+      height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    /* Award badges top right */
+    .dining-hero-awards {
+      position: absolute; top: 50%; right: 5rem; transform: translateY(-50%);
+      z-index: 3; display: flex; flex-direction: column; gap: 1.2rem;
+      opacity: 0; animation: fadeIn 1s 1.4s forwards;
+    }
+    .dh-award {
+      border: 1px solid var(--border); padding: 1.2rem 1.5rem;
+      text-align: center; background: rgba(8,8,8,0.65); backdrop-filter: blur(12px);
+      min-width: 120px;
+    }
+    .dh-award-val {
+      font-family: 'Playfair Display', serif; font-size: 1.6rem;
+      color: var(--gold-lt); display: block; margin-bottom: 0.3rem;
+    }
+    .dh-award-label {
+      font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--mid); line-height: 1.5;
+    }
+
+    /* ── DINING NAV TABS ─────────────────────────────────────────── */
+    .dining-nav {
+      background: var(--carbon); border-bottom: 1px solid var(--border2);
+      position: sticky; top: 0; z-index: 90;
+    }
+    .dining-nav-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; align-items: center;
+      padding: 0 5rem;
+    }
+    .dining-tab {
+      font-family: 'Syncopate', sans-serif;
+      font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--mid); padding: 1.5rem 2.5rem;
+      border: none; background: none; cursor: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.3s, border-color 0.3s;
+      position: relative; white-space: nowrap;
+    }
+    .dining-tab:hover { color: var(--cream); }
+    .dining-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .dining-tab-num {
+      font-size: 0.45rem; color: var(--mid); margin-right: 0.6rem;
+      vertical-align: super;
+    }
+    .dining-nav-res {
+      margin-left: auto;
+      font-family: 'Syncopate', sans-serif; font-size: 0.5rem; letter-spacing: 0.22em;
+      text-transform: uppercase; padding: 0.65rem 1.8rem;
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted); cursor: none; transition: border-color 0.3s, color 0.3s;
+      white-space: nowrap;
+    }
+    .dining-nav-res:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── SECTION SHARED ──────────────────────────────────────────── */
+    .section-eyebrow {
+      font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.2rem;
+    }
+    .section-eyebrow::before { content: '—— '; opacity: 0.5; }
+
+    /* ── VAULT FEATURED ──────────────────────────────────────────── */
+    .vault-featured {
+      position: relative; min-height: 90vh;
+      display: flex; align-items: stretch; overflow: hidden;
+      background: var(--void);
+    }
+    .vault-featured-img-side {
+      flex: 0 0 55%; position: relative; overflow: hidden;
+    }
+    .vault-featured-img {
+      width: 100%; height: 100%; object-fit: cover;
+      object-position: center;
+      filter: brightness(0.55) saturate(0.75);
+      transition: transform 0.8s var(--trans);
+    }
+    .vault-featured:hover .vault-featured-img { transform: scale(1.04); }
+    .vault-featured-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(14,13,12,0) 60%, rgba(14,13,12,0.95) 100%),
+                  linear-gradient(to bottom, rgba(8,8,8,0.5) 0%, transparent 30%);
+    }
+    .vault-featured-content {
+      flex: 1; display: flex; flex-direction: column; justify-content: center;
+      padding: 6rem 5rem 6rem 5rem; position: relative;
+    }
+    .vault-featured-content::before {
+      content: ''; position: absolute; left: 0; top: 10%; bottom: 10%;
+      width: 1px; background: linear-gradient(to bottom, transparent, var(--border), transparent);
+    }
+    .vault-michelin {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem;
+    }
+    .vault-michelin-stars {
+      font-size: 1.1rem; color: var(--gold); letter-spacing: 0.2em;
+    }
+    .vault-michelin-label {
+      font-size: 0.52rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--mid); border-left: 1px solid var(--border); padding-left: 1rem;
+      line-height: 1.6;
+    }
+    .vault-name {
+      font-family: 'Syncopate', sans-serif; font-size: 4rem; font-weight: 700;
+      letter-spacing: 0.12em; color: var(--white); line-height: 0.9;
+      margin-bottom: 0.5rem;
+    }
+    .vault-tagline {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem; font-style: italic;
+      color: var(--gold-lt); margin-bottom: 2rem; letter-spacing: 0.02em;
+    }
+    .vault-desc {
+      font-size: 0.82rem; font-weight: 300; line-height: 1.9; color: var(--muted);
+      max-width: 400px; margin-bottom: 3rem;
+    }
+    .vault-meta-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border: 1px solid var(--border2); margin-bottom: 3rem; max-width: 360px;
+    }
+    .vault-meta-item {
+      padding: 1rem 1.4rem;
+      border-right: 1px solid var(--border2); border-bottom: 1px solid var(--border2);
+    }
+    .vault-meta-item:nth-child(even) { border-right: none; }
+    .vault-meta-item:nth-child(n+3) { border-bottom: none; }
+    .vault-meta-label {
+      font-size: 0.48rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--mid); margin-bottom: 0.3rem;
+    }
+    .vault-meta-val {
+      font-size: 0.8rem; font-weight: 400; color: var(--cream);
+    }
+    .vault-actions { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+
+    /* ── MENU SECTION ────────────────────────────────────────────── */
+    .menu-section {
+      padding: 8rem 5rem;
+      background: var(--black);
+    }
+    .menu-inner { max-width: 1400px; margin: 0 auto; }
+    .menu-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 5rem;
+    }
+    .menu-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      font-weight: 400; line-height: 1.1; letter-spacing: -0.02em;
+      color: var(--white);
+    }
+    .menu-title em { font-style: italic; color: var(--gold-lt); }
+    .menu-seasons {
+      display: flex; gap: 0;
+    }
+    .menu-season-tab {
+      font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); padding: 0.5rem 1.2rem;
+      border: 1px solid var(--border2); border-left: none;
+      background: none; cursor: none; transition: all 0.3s;
+    }
+    .menu-season-tab:first-child { border-left: 1px solid var(--border2); }
+    .menu-season-tab.active { background: var(--ash); color: var(--gold); border-color: var(--border); }
+    .menu-season-tab:hover:not(.active) { color: var(--cream); }
+
+    /* Course grid */
+    .menu-courses {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 0; border-top: 1px solid var(--border2);
+    }
+    .menu-course {
+      padding: 3rem 0; border-right: 1px solid var(--border2);
+      padding-right: 4rem; padding-left: 4rem;
+    }
+    .menu-course:first-child { padding-left: 0; }
+    .menu-course:last-child { border-right: none; padding-right: 0; }
+    .course-label {
+      font-size: 0.52rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 2.5rem;
+    }
+    .course-item {
+      padding: 1.6rem 0; border-bottom: 1px solid var(--border2);
+      cursor: none;
+      transition: padding-left 0.3s var(--trans);
+    }
+    .course-item:last-child { border-bottom: none; }
+    .course-item:hover { padding-left: 0.8rem; }
+    .course-item-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+    .course-item-name {
+      font-family: 'Playfair Display', serif; font-size: 0.95rem;
+      color: var(--cream); letter-spacing: 0.01em;
+    }
+    .course-item-price {
+      font-size: 0.7rem; color: var(--gold); letter-spacing: 0.1em; flex-shrink: 0;
+    }
+    .course-item-desc {
+      font-size: 0.72rem; font-weight: 300; color: var(--mid);
+      line-height: 1.6; font-style: italic;
+    }
+    .menu-note {
+      margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border2);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: gap;
+    }
+    .menu-note-text {
+      font-size: 0.7rem; font-weight: 300; color: var(--mid);
+      font-style: italic; max-width: 560px; line-height: 1.7;
+    }
+    .tasting-price-block { text-align: right; }
+    .tasting-price-label {
+      font-size: 0.5rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--mid); margin-bottom: 0.4rem;
+    }
+    .tasting-price-val {
+      font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold-lt);
+    }
+    .tasting-price-val span { font-family: 'DM Sans', sans-serif; font-size: 0.65rem; color: var(--mid); }
+
+    /* ── UMBRA SECTION ───────────────────────────────────────────── */
+    .umbra-section {
+      position: relative; min-height: 88vh;
+      display: flex; align-items: stretch; overflow: hidden;
+      background: var(--void);
+    }
+    .umbra-content {
+      flex: 0 0 45%; display: flex; flex-direction: column;
+      justify-content: center; padding: 7rem 5rem; z-index: 2; position: relative;
+    }
+    .umbra-name {
+      font-family: 'Syncopate', sans-serif; font-size: 4rem; font-weight: 700;
+      letter-spacing: 0.12em; color: var(--white); line-height: 0.9;
+      margin-bottom: 0.5rem;
+    }
+    .umbra-tagline {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem; font-style: italic;
+      color: var(--gold-lt); margin-bottom: 2rem; letter-spacing: 0.02em;
+    }
+    .umbra-desc {
+      font-size: 0.82rem; font-weight: 300; line-height: 1.9; color: var(--muted);
+      margin-bottom: 3rem;
+    }
+    .umbra-features {
+      display: flex; flex-direction: column; gap: 0; 
+      border: 1px solid var(--border2); margin-bottom: 3rem;
+    }
+    .umbra-feature {
+      display: flex; align-items: center; gap: 1.5rem;
+      padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border2);
+    }
+    .umbra-feature:last-child { border-bottom: none; }
+    .umbra-feature-icon {
+      width: 32px; height: 32px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--gold); font-size: 0.8rem;
+    }
+    .umbra-feature-text { font-size: 0.75rem; color: var(--muted); font-weight: 300; line-height: 1.5; }
+    .umbra-feature-text strong { color: var(--cream); font-weight: 400; display: block; font-size: 0.78rem; }
+    .umbra-actions { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+    .umbra-img-side {
+      flex: 1; position: relative; overflow: hidden;
+    }
+    .umbra-img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.5) saturate(0.7);
+      transition: transform 0.8s var(--trans);
+    }
+    .umbra-section:hover .umbra-img { transform: scale(1.03); }
+    .umbra-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to left, rgba(14,13,12,0) 60%, rgba(14,13,12,0.98) 100%),
+                  linear-gradient(to bottom, rgba(8,8,8,0.6) 0%, transparent 30%);
+    }
+    /* Live music badge */
+    .umbra-live-badge {
+      position: absolute; right: 3rem; bottom: 3rem; z-index: 3;
+      border: 1px solid var(--border); background: rgba(8,8,8,0.8); backdrop-filter: blur(12px);
+      padding: 1.5rem 2rem; text-align: center; min-width: 150px;
+    }
+    .umbra-live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--red); margin: 0 auto 0.8rem;
+      box-shadow: 0 0 12px var(--red);
+      animation: pulse-red 2s infinite;
+    }
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 12px var(--red); }
+      50% { box-shadow: 0 0 24px var(--red), 0 0 48px rgba(139,46,46,0.3); }
+    }
+    .umbra-live-label {
+      font-family: 'Syncopate', sans-serif; font-size: 0.48rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--cream); margin-bottom: 0.3rem;
+    }
+    .umbra-live-sub {
+      font-size: 0.6rem; color: var(--mid); font-weight: 300;
+    }
+
+    /* ── COCKTAIL / BAR MENU ─────────────────────────────────────── */
+    .bar-menu-section {
+      padding: 8rem 5rem;
+      background: var(--carbon);
+    }
+    .bar-menu-inner { max-width: 1400px; margin: 0 auto; }
+    .bar-menu-header {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+      align-items: end; margin-bottom: 5rem;
+    }
+    .bar-menu-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      font-weight: 400; line-height: 1.1; color: var(--white);
+    }
+    .bar-menu-title em { font-style: italic; color: var(--gold-lt); }
+    .bar-menu-intro {
+      font-size: 0.82rem; font-weight: 300; line-height: 1.9; color: var(--muted);
+    }
+    .cocktails-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0; border-top: 1px solid var(--border2); border-left: 1px solid var(--border2);
+    }
+    .cocktail-card {
+      padding: 2.8rem 2.5rem;
+      border-right: 1px solid var(--border2); border-bottom: 1px solid var(--border2);
+      cursor: none; position: relative; overflow: hidden;
+      transition: background 0.4s;
+    }
+    .cocktail-card:hover { background: var(--ash); }
+    .cocktail-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 2px; height: 0; background: var(--gold);
+      transition: height 0.4s var(--trans);
+    }
+    .cocktail-card:hover::before { height: 100%; }
+    .cocktail-num {
+      font-family: 'Syncopate', sans-serif; font-size: 0.45rem; letter-spacing: 0.3em;
+      color: var(--mid); margin-bottom: 1.5rem;
+    }
+    .cocktail-name {
+      font-family: 'Playfair Display', serif; font-size: 1.2rem;
+      color: var(--cream); margin-bottom: 0.5rem; letter-spacing: 0.01em;
+    }
+    .cocktail-spirit {
+      font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+    .cocktail-desc {
+      font-size: 0.73rem; font-weight: 300; line-height: 1.7; color: var(--mid); margin-bottom: 1.5rem;
+    }
+    .cocktail-price {
+      font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold-lt);
+    }
+
+    /* ── PRIVATE DINING ──────────────────────────────────────────── */
+    .private-dining {
+      padding: 8rem 5rem;
+      background: var(--void);
+    }
+    .private-dining-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    }
+    .pd-img-wrap {
+      position: relative; aspect-ratio: 4/3; overflow: hidden;
+    }
+    .pd-img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.55) saturate(0.7);
+      transition: transform 0.8s var(--trans);
+    }
+    .pd-img-wrap:hover .pd-img { transform: scale(1.04); }
+    .pd-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(8,8,8,0.4), rgba(184,150,90,0.06));
+    }
+    .pd-num-badge {
+      position: absolute; bottom: -1px; right: -1px;
+      background: var(--gold); color: var(--black);
+      font-family: 'Syncopate', sans-serif; font-size: 0.5rem; letter-spacing: 0.3em;
+      text-transform: uppercase; padding: 0.8rem 1.5rem;
+    }
+    .pd-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+      font-weight: 400; line-height: 1.1; color: var(--white); margin-bottom: 2rem;
+    }
+    .pd-title em { font-style: italic; color: var(--gold-lt); }
+    .pd-desc {
+      font-size: 0.82rem; font-weight: 300; line-height: 1.9; color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+    .pd-list {
+      list-style: none; margin-bottom: 3rem;
+      display: flex; flex-direction: column; gap: 0;
+      border-top: 1px solid var(--border2);
+    }
+    .pd-list li {
+      display: flex; align-items: center; gap: 1.2rem;
+      padding: 1rem 0; border-bottom: 1px solid var(--border2);
+      font-size: 0.78rem; color: var(--muted); font-weight: 300;
+    }
+    .pd-list li::before {
+      content: ''; width: 20px; height: 1px; background: var(--gold); flex-shrink: 0;
+    }
+    .pd-actions { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+
+    /* ── RESERVATIONS ────────────────────────────────────────────── */
+    .reservations {
+      padding: 8rem 5rem;
+      background: var(--black);
+    }
+    .reservations-inner {
+      max-width: 1200px; margin: 0 auto;
+    }
+    .res-header { text-align: center; margin-bottom: 5rem; }
+    .res-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      font-weight: 400; color: var(--white); margin-bottom: 1rem;
+    }
+    .res-title em { font-style: italic; color: var(--gold-lt); }
+    .res-subtitle {
+      font-size: 0.82rem; font-weight: 300; color: var(--muted);
+      line-height: 1.8; max-width: 480px; margin: 0 auto;
+    }
+    .res-venue-select {
+      display: flex; gap: 0; justify-content: center; margin-bottom: 4rem;
+    }
+    .res-venue-btn {
+      font-family: 'Syncopate', sans-serif; font-size: 0.56rem; letter-spacing: 0.25em;
+      text-transform: uppercase; padding: 0.9rem 2.5rem;
+      border: 1px solid var(--border2); border-left: none;
+      background: none; color: var(--muted); cursor: none;
+      transition: all 0.3s;
+    }
+    .res-venue-btn:first-child { border-left: 1px solid var(--border2); }
+    .res-venue-btn.active { background: var(--ash); color: var(--gold); border-color: var(--border); }
+    .res-venue-btn:hover:not(.active) { color: var(--cream); border-color: var(--border2); }
+    .res-form {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 0; border: 1px solid var(--border2); margin-bottom: 1.5rem;
+    }
+    .res-field {
+      padding: 1.6rem 2rem; border-right: 1px solid var(--border2);
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .res-field:last-of-type { border-right: none; }
+    .res-field label {
+      font-size: 0.52rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    .res-field input, .res-field select {
+      background: none; border: none; outline: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+      color: var(--cream); font-weight: 300; cursor: pointer; width: 100%;
+    }
+    .res-field select option { background: var(--carbon); color: var(--cream); }
+    .res-row2 {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 0; border: 1px solid var(--border2); border-top: none;
+    }
+    .res-message-field {
+      padding: 1.6rem 2rem; border-right: 1px solid var(--border2);
+    }
+    .res-message-field label {
+      font-size: 0.52rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); display: block; margin-bottom: 0.5rem;
+    }
+    .res-message-field textarea {
+      background: none; border: none; outline: none; resize: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+      color: var(--cream); font-weight: 300; width: 100%; height: 80px;
+      line-height: 1.6;
+    }
+    .res-submit-block {
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 3rem;
+    }
+    .res-submit {
+      font-family: 'Syncopate', sans-serif; font-size: 0.56rem; letter-spacing: 0.25em;
+      text-transform: uppercase; padding: 1.2rem 2.5rem;
+      background: var(--gold); color: var(--black); border: none; cursor: none;
+      transition: background 0.3s, transform 0.2s; white-space: nowrap;
+    }
+    .res-submit:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .res-note {
+      text-align: center; font-size: 0.68rem; font-weight: 300;
+      color: var(--mid); font-style: italic; margin-top: 1.5rem;
+    }
+
+    /* ── STATS STRIP ─────────────────────────────────────────────── */
+    .dining-stats {
+      padding: 4rem 5rem;
+      background: var(--carbon);
+      border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2);
+    }
+    .dining-stats-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .ds-item {
+      padding: 0 3rem; border-right: 1px solid var(--border2); text-align: center;
+    }
+    .ds-item:first-child { padding-left: 0; text-align: left; }
+    .ds-item:last-child { border-right: none; }
+    .ds-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; color: var(--gold-lt); line-height: 1;
+      margin-bottom: 0.5rem; display: block;
+    }
+    .ds-label {
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid);
+    }
+
+    /* ── CTA STRIP ───────────────────────────────────────────────── */
+    .cta-strip {
+      padding: 8rem 5rem; background: var(--void);
+      text-align: center;
+    }
+    .cta-eyebrow {
+      font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.2rem;
+    }
+    .cta-eyebrow::before { content: '—— '; opacity: 0.5; }
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      font-weight: 400; line-height: 1.1; color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .cta-title em { font-style: italic; color: var(--gold-lt); }
+    .cta-desc {
+      font-size: 0.82rem; font-weight: 300; color: var(--muted);
+      line-height: 1.9; max-width: 480px; margin: 0 auto 3rem;
+    }
+    .cta-actions { display: flex; gap: 1.5rem; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .cta-email-link {
+      font-size: 0.7rem; letter-spacing: 0.12em; color: var(--muted);
+      text-decoration: none; border-bottom: 1px solid var(--border);
+      padding-bottom: 2px; transition: color 0.3s, border-color 0.3s;
+    }
+    .cta-email-link:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── FOOTER ──────────────────────────────────────────────────── */
+    footer { background: var(--void); border-top: 1px solid var(--border2); padding: 5rem 5rem 2rem; }
+    .foot-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 4rem; margin-bottom: 4rem; }
+    .foot-brand-logo {
+      font-family: 'Syncopate', sans-serif; font-size: 1.1rem; font-weight: 700;
+      letter-spacing: 0.3em; color: var(--white); margin-bottom: 1rem;
+    }
+    .foot-brand-logo span { color: var(--gold); }
+    .foot-tagline { font-size: 0.72rem; font-style: italic; color: var(--mid); margin-bottom: 1.5rem; font-weight: 300; }
+    .foot-address { font-size: 0.7rem; font-weight: 300; color: var(--mid); line-height: 2; margin-bottom: 2rem; }
+    .foot-awards { display: flex; gap: 1rem; }
+    .award-badge {
+      border: 1px solid var(--border); padding: 0.8rem 1rem; text-align: center;
+      font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--gold-lt); line-height: 1.2;
+    }
+    .award-badge span { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.48rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); margin-top: 0.3rem; }
+    .foot-col-title { font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.8rem; }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .foot-col ul a { font-size: 0.72rem; color: var(--mid); text-decoration: none; font-weight: 300; transition: color 0.3s; }
+    .foot-col ul a:hover { color: var(--cream); }
+    .nl-form { display: flex; border: 1px solid var(--border2); margin-top: 1rem; }
+    .nl-input {
+      flex: 1; background: none; border: none; outline: none;
+      padding: 0.8rem 1.2rem; font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem; color: var(--cream); font-weight: 300;
+    }
+    .nl-btn {
+      padding: 0.8rem 1.2rem; background: none; border: none; border-left: 1px solid var(--border2);
+      color: var(--gold); font-size: 1rem; cursor: none; transition: background 0.3s;
+    }
+    .nl-btn:hover { background: var(--ash); }
+    .foot-bottom {
+      border-top: 1px solid var(--border2); padding-top: 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .foot-copy { font-size: 0.6rem; color: var(--mid); font-weight: 300; letter-spacing: 0.06em; }
+    .foot-socials { display: flex; gap: 2rem; }
+    .foot-socials a { font-size: 0.6rem; color: var(--mid); text-decoration: none; letter-spacing: 0.12em; transition: color 0.3s; }
+    .foot-socials a:hover { color: var(--gold); }
+
+    /* ── TOAST ───────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 3rem; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--ash); border: 1px solid var(--border);
+      color: var(--cream); padding: 1rem 2.5rem;
+      font-size: 0.72rem; letter-spacing: 0.08em; font-weight: 300;
+      z-index: 9995; opacity: 0; pointer-events: none;
+      transition: opacity 0.4s, transform 0.4s;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      nav { padding: 1.5rem 2rem; }
+      nav.scrolled { padding: 1rem 2rem; }
+      .nav-links { display: none; }
+      .nav-tel { display: none; }
+      .nav-hamburger { display: flex; }
+      .mobile-menu { display: flex; }
+
+      .dining-hero-content { padding: 0 2.5rem 5rem; }
+      .dining-hero-awards { display: none; }
+
+      .dining-nav-inner { padding: 0 2rem; overflow-x: auto; }
+      .dining-tab { padding: 1.5rem 1.5rem; font-size: 0.52rem; }
+
+      .vault-featured { flex-direction: column; min-height: auto; }
+      .vault-featured-img-side { flex: none; height: 55vh; }
+      .vault-featured-img-overlay { background: linear-gradient(to bottom, transparent 50%, rgba(14,13,12,0.98) 100%); }
+      .vault-featured-content { padding: 4rem 2.5rem; }
+      .vault-featured-content::before { display: none; }
+
+      .menu-section { padding: 5rem 2.5rem; }
+      .menu-courses { grid-template-columns: 1fr; }
+      .menu-course { padding: 3rem 0; border-right: none; border-bottom: 1px solid var(--border2); }
+      .menu-course:first-child { padding-left: 0; }
+      .menu-header { flex-direction: column; gap: 2rem; align-items: flex-start; }
+
+      .umbra-section { flex-direction: column-reverse; }
+      .umbra-content { flex: none; padding: 4rem 2.5rem; }
+      .umbra-img-side { flex: none; height: 55vh; }
+      .umbra-img-overlay { background: linear-gradient(to top, rgba(14,13,12,0.98) 0%, transparent 50%); }
+      .umbra-live-badge { display: none; }
+
+      .bar-menu-section { padding: 5rem 2.5rem; }
+      .bar-menu-header { grid-template-columns: 1fr; gap: 2rem; }
+      .cocktails-grid { grid-template-columns: 1fr 1fr; }
+
+      .private-dining { padding: 5rem 2.5rem; }
+      .private-dining-inner { grid-template-columns: 1fr; gap: 4rem; }
+
+      .reservations { padding: 5rem 2.5rem; }
+      .res-form { grid-template-columns: 1fr; }
+      .res-field { border-right: none; border-bottom: 1px solid var(--border2); }
+      .res-row2 { grid-template-columns: 1fr; }
+      .res-message-field { border-right: none; border-bottom: 1px solid var(--border2); }
+      .res-submit-block { padding: 2rem; }
+
+      .dining-stats { padding: 3rem 2rem; }
+      .dining-stats-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .ds-item { padding: 1.5rem; border-right: none; text-align: center; }
+      .ds-item:first-child { text-align: center; padding-left: 1.5rem; }
+
+      .cta-strip { padding: 5rem 2.5rem; }
+
+      footer { padding: 4rem 2rem 2rem; }
+      .foot-top { grid-template-columns: 1fr 1fr; gap: 3rem; }
+      .foot-bottom { flex-direction: column; gap: 1.5rem; text-align: center; }
+    }
+
+    @media (max-width: 640px) {
+      .dining-hero-title { font-size: 2.8rem; }
+      .cocktails-grid { grid-template-columns: 1fr; }
+      .foot-top { grid-template-columns: 1fr; }
+      .dining-stats-inner { grid-template-columns: 1fr 1fr; }
+      .vault-name, .umbra-name { font-size: 2.8rem; }
+      .res-venue-select { flex-direction: column; align-items: stretch; }
+      .res-venue-btn { border-left: 1px solid var(--border2); border-top: none; }
+      .res-venue-btn:first-child { border-top: 1px solid var(--border2); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- PAGE LOADER -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-logo">NOIR<span>.</span>HAUS</div>
+    <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <a class="nav-logo" href="index.html">NOIR<span>.</span>HAUS</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rooms.html">Rooms</a></li>
+      <li><a href="dining.html" class="active">Dining</a></li>
+      <li><a href="experiences.html">Experiences</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <span class="nav-tel">+1 (212) 000 — 0000</span>
+      <button class="btn-reserve" onclick="scrollToRes()">Reserve</button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMobileMenu()">Home</a>
+    <a href="rooms.html" onclick="closeMobileMenu()">Rooms</a>
+    <a href="dining.html" class="active" onclick="closeMobileMenu()">Dining</a>
+    <a href="#experiences" onclick="closeMobileMenu()">Experiences</a>
+    <a href="#story" onclick="closeMobileMenu()">About</a>
+    <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+    <div class="mobile-menu-tel">+1 (212) 000 — 0000</div>
+    <button class="mobile-menu-reserve" onclick="closeMobileMenu(); scrollToRes();">Reserve a Table</button>
+  </div>
+
+  <!-- HERO -->
+  <section class="dining-hero" id="hero">
+    <img src="Umbra.png" class="dining-hero-img" id="heroImg" alt="UMBRA jazz bar at Noir Haus" loading="eager">
+    <div class="dining-hero-overlay"></div>
+    <div class="dining-hero-content">
+      <div class="dining-hero-eyebrow">Dining & Nightlife · Floors B1 — 2</div>
+      <h1 class="dining-hero-title">
+        Where the meal<br>
+        <em>becomes the</em><br>
+        memory.
+      </h1>
+      <p class="dining-hero-desc">
+        Two venues. Two Michelin stars. One legendary jazz bar. The complete culinary world of Noir Haus — each space a distinct provocation, each night unrepeatable.
+      </p>
+      <div class="dining-hero-ctas">
+        <button class="btn-primary" onclick="scrollToRes()">Reserve a Table</button>
+        <button class="btn-outline" onclick="document.getElementById('vault').scrollIntoView({behavior:'smooth'})">Explore Venues</button>
+      </div>
+    </div>
+    <!-- Award badges -->
+    <div class="dining-hero-awards">
+      <div class="dh-award">
+        <span class="dh-award-val">★★</span>
+        <div class="dh-award-label">Michelin Stars<br>VAULT 2025</div>
+      </div>
+      <div class="dh-award">
+        <span class="dh-award-val">#1</span>
+        <div class="dh-award-label">NYC Bar<br>Condé Nast 2025</div>
+      </div>
+      <div class="dh-award">
+        <span class="dh-award-val">98</span>
+        <div class="dh-award-label">Wine Spectator<br>Score 2024</div>
+      </div>
+    </div>
+    <div class="dining-hero-rule"></div>
+  </section>
+
+  <!-- DINING NAV -->
+  <nav class="dining-nav" id="diningNav">
+    <div class="dining-nav-inner">
+      <button class="dining-tab active" onclick="scrollToSection('vault')">
+        <span class="dining-tab-num">01</span>VAULT
+      </button>
+      <button class="dining-tab" onclick="scrollToSection('umbra')">
+        <span class="dining-tab-num">02</span>UMBRA
+      </button>
+      <button class="dining-tab" onclick="scrollToSection('menu')">
+        <span class="dining-tab-num">03</span>Menu
+      </button>
+      <button class="dining-tab" onclick="scrollToSection('bar')">
+        <span class="dining-tab-num">04</span>Bar Programme
+      </button>
+      <button class="dining-tab" onclick="scrollToSection('private')">
+        <span class="dining-tab-num">05</span>Private Dining
+      </button>
+      <button class="dining-nav-res" onclick="scrollToRes()">Reserve a Table →</button>
+    </div>
+  </nav>
+
+  <!-- VAULT FEATURED -->
+  <section class="vault-featured" id="vault">
+    <div class="vault-featured-img-side">
+      <img src="Vault.png" class="vault-featured-img" alt="VAULT — The Noir Haus Restaurant" loading="lazy">
+      <div class="vault-featured-img-overlay"></div>
+    </div>
+    <div class="vault-featured-content reveal-on-scroll">
+      <div class="section-eyebrow">The Restaurant</div>
+      <div class="vault-michelin">
+        <span class="vault-michelin-stars">★★</span>
+        <span class="vault-michelin-label">Two Michelin Stars<br>Guide Michelin New York 2025</span>
+      </div>
+      <div class="vault-name">VAULT</div>
+      <div class="vault-tagline">Modern American. Obsessively Sourced.</div>
+      <p class="vault-desc">
+        Housed in a converted bank vault two floors below street level, VAULT is the most awarded restaurant in Manhattan's hotel dining scene. Chef de cuisine Marcus Ohl leads a team of twelve, producing a nightly tasting menu that begins in the Hudson Valley and ends somewhere entirely unfamiliar.
+      </p>
+      <p class="vault-desc" style="margin-top:-1.5rem;">
+        The space — all burnished bronze and original vault architecture — seats forty-two. Reservations are released thirty days in advance and fill within hours. Walk-ins are not accepted.
+      </p>
+      <div class="vault-meta-row">
+        <div class="vault-meta-item">
+          <div class="vault-meta-label">Cuisine</div>
+          <div class="vault-meta-val">Modern American</div>
+        </div>
+        <div class="vault-meta-item">
+          <div class="vault-meta-label">Covers</div>
+          <div class="vault-meta-val">42 seats</div>
+        </div>
+        <div class="vault-meta-item">
+          <div class="vault-meta-label">Dress Code</div>
+          <div class="vault-meta-val">Smart Formal</div>
+        </div>
+        <div class="vault-meta-item">
+          <div class="vault-meta-label">Hours</div>
+          <div class="vault-meta-val">Tue — Sat · 6PM</div>
+        </div>
+      </div>
+      <div class="vault-actions">
+        <button class="btn-primary" onclick="setVenueAndScroll('vault')">Reserve at VAULT</button>
+        <button class="btn-outline" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">View Menu</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU SECTION -->
+  <section class="menu-section" id="menu">
+    <div class="menu-inner">
+      <div class="menu-header reveal-on-scroll">
+        <div>
+          <div class="section-eyebrow">VAULT Tasting Menu</div>
+          <h2 class="menu-title">Twelve courses.<br><em>One evening.</em></h2>
+        </div>
+        <div>
+          <div class="menu-seasons">
+            <button class="menu-season-tab active">Spring 2026</button>
+            <button class="menu-season-tab">Winter 2025</button>
+            <button class="menu-season-tab">Archive</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-courses">
+        <!-- Column 1: Opening -->
+        <div class="menu-course reveal-on-scroll">
+          <div class="course-label">Opening · Courses 01–04</div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Oyster, Green Apple, Caviar</div>
+            </div>
+            <div class="course-item-desc">Kumamoto · Calvisius Osetra · Granny Smith mignonette</div>
+          </div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Hudson Valley Foie Gras</div>
+            </div>
+            <div class="course-item-desc">Torchon · Black cherry · Brioche · Aged balsamic</div>
+          </div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Lobster Bisque en Croûte</div>
+            </div>
+            <div class="course-item-desc">Maine lobster · Cognac · Saffron · Puff pastry dome</div>
+          </div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Spring Pea Velouté</div>
+            </div>
+            <div class="course-item-desc">Garden pea · Mint · Crème fraîche · Oscietra</div>
+          </div>
+        </div>
+
+        <!-- Column 2: Main -->
+        <div class="menu-course reveal-on-scroll reveal-delay-1">
+          <div class="course-label">Main · Courses 05–08</div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Dry-Aged Duck Breast</div>
+            </div>
+            <div class="course-item-desc">21-day aged · Cherry gastrique · Salsify · Watercress</div>
+          </div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">A5 Wagyu Tenderloin</div>
+            </div>
+            <div class="course-item-desc">Miyazaki · Black truffle jus · Bone marrow · Pomme soufflé</div>
+          </div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Pacific Halibut</div>
+            </div>
+            <div class="course-item-desc">Brown butter · Fennel confit · Meyer lemon · Micro herbs</div>
+          </div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Spring Lamb Rack</div>
+            </div>
+            <div class="course-item-desc">Colorado lamb · Rosemary · Flageolet bean cassoulet</div>
+          </div>
+        </div>
+
+        <!-- Column 3: Desserts -->
+        <div class="menu-course reveal-on-scroll reveal-delay-2">
+          <div class="course-label">Closing · Courses 09–12</div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Artisanal Cheese Cart</div>
+            </div>
+            <div class="course-item-desc">Selection of twelve · House-made accompaniements</div>
+          </div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Valrhona Chocolate Tart</div>
+            </div>
+            <div class="course-item-desc">Manjari 64% · Salted caramel · Praline · Gold leaf</div>
+          </div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">Noir Haus Mignardises</div>
+            </div>
+            <div class="course-item-desc">Twelve petit fours · Seasonal · Chef's selection nightly</div>
+          </div>
+          <div class="course-item">
+            <div class="course-item-header">
+              <div class="course-item-name">The Final Glass</div>
+            </div>
+            <div class="course-item-desc">Sauternes or vintage Port · Accompanied by house truffles</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-note reveal-on-scroll">
+        <p class="menu-note-text">Menu changes seasonally and reflects our chef's relationships with Hudson Valley and Northeast farms. Dietary requirements accommodated with 72 hours notice. Wine pairing available — curated by sommelier Élise Renard from a cellar of 4,200 labels.</p>
+        <div class="tasting-price-block">
+          <div class="tasting-price-label">12-Course Tasting Menu</div>
+          <div class="tasting-price-val">$325 <span>per person</span></div>
+          <div style="font-size:0.6rem;color:var(--mid);margin-top:0.3rem">Wine pairing +$195</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UMBRA SECTION -->
+  <section class="umbra-section" id="umbra">
+    <div class="umbra-content reveal-on-scroll">
+      <div class="section-eyebrow">The Jazz Bar</div>
+      <div class="umbra-name">UMBRA</div>
+      <div class="umbra-tagline">Shadows, Smoke & Single Malts.</div>
+      <p class="umbra-desc">
+        Named for the darkest part of a shadow, UMBRA is the late-night soul of Noir Haus. A velvet-and-leather lounge on the hotel's second floor, open nightly from 9PM to 4AM. No dress code but a standard — arrive looking like you meant it.
+      </p>
+      <p class="umbra-desc" style="margin-top:-1.5rem">
+        Resident musicians perform Wednesday through Sunday. The stage is intimate — six feet from the nearest banquette. The bar carries 280 single malts, an archive of vintage Armagnac, and a cocktail programme that has been called, by more than one critic, the best in the city.
+      </p>
+      <div class="umbra-features">
+        <div class="umbra-feature">
+          <div class="umbra-feature-icon">♩</div>
+          <div class="umbra-feature-text">
+            <strong>Live Jazz · Wed — Sun</strong>
+            First set 10PM · Second set 12AM · No cover charge for hotel guests
+          </div>
+        </div>
+        <div class="umbra-feature">
+          <div class="umbra-feature-icon">◈</div>
+          <div class="umbra-feature-text">
+            <strong>280 Single Malts · Vintage Armagnac</strong>
+            Curated over six years by head bartender Jonah Welles
+          </div>
+        </div>
+        <div class="umbra-feature">
+          <div class="umbra-feature-icon">◉</div>
+          <div class="umbra-feature-text">
+            <strong>Late Night Kitchen · Until 3AM</strong>
+            Oysters, charcuterie, small plates — VAULT quality, bar hour pricing
+          </div>
+        </div>
+      </div>
+      <div class="umbra-actions">
+        <button class="btn-primary" onclick="setVenueAndScroll('umbra')">Reserve a Banquette</button>
+        <button class="btn-outline" onclick="document.getElementById('bar').scrollIntoView({behavior:'smooth'})">View Bar Menu</button>
+      </div>
+    </div>
+    <div class="umbra-img-side">
+      <img src="Umbra.png" class="umbra-img" alt="UMBRA Jazz Bar" loading="lazy">
+      <div class="umbra-img-overlay"></div>
+      <div class="umbra-live-badge">
+        <div class="umbra-live-dot"></div>
+        <div class="umbra-live-label">Live Nightly</div>
+        <div class="umbra-live-sub">Wed — Sun · 10PM</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BAR PROGRAMME -->
+  <section class="bar-menu-section" id="bar">
+    <div class="bar-menu-inner">
+      <div class="bar-menu-header reveal-on-scroll">
+        <div>
+          <div class="section-eyebrow">UMBRA Cocktails</div>
+          <h2 class="bar-menu-title">The bar<br><em>as biography.</em></h2>
+        </div>
+        <p class="bar-menu-intro">
+          Each cocktail in the UMBRA programme is named for a moment in the building's history — the speakeasy that operated here in the 1920s, the jazz musicians who played this block in the 1950s, the gallery that occupied the space before Noir Haus. Jonah Welles leads the programme with a team of six.
+        </p>
+      </div>
+
+      <div class="cocktails-grid">
+        <div class="cocktail-card reveal-on-scroll">
+          <div class="cocktail-num">01</div>
+          <div class="cocktail-name">The Prohibition</div>
+          <div class="cocktail-spirit">Rye Whiskey</div>
+          <p class="cocktail-desc">High-rye mash · House-made grenadine · Orange bitters · Smoke-rinsed glass. Our oldest recipe — unchanged since 1924.</p>
+          <div class="cocktail-price">$28</div>
+        </div>
+        <div class="cocktail-card reveal-on-scroll reveal-delay-1">
+          <div class="cocktail-num">02</div>
+          <div class="cocktail-name">Noir Negroni</div>
+          <div class="cocktail-spirit">Black Cardamom Gin</div>
+          <p class="cocktail-desc">House-infused gin · Carpano Antica · Campari · Black cardamom tincture · Burnt orange.</p>
+          <div class="cocktail-price">$26</div>
+        </div>
+        <div class="cocktail-card reveal-on-scroll reveal-delay-2">
+          <div class="cocktail-num">03</div>
+          <div class="cocktail-name">The Saxophonist</div>
+          <div class="cocktail-spirit">Mezcal · Cognac Split</div>
+          <p class="cocktail-desc">Del Maguey Vida · Pierre Ferrand 1840 · Honey · Grapefruit · Wormwood bitters. Named for the first musician to play UMBRA's stage.</p>
+          <div class="cocktail-price">$32</div>
+        </div>
+        <div class="cocktail-card reveal-on-scroll">
+          <div class="cocktail-num">04</div>
+          <div class="cocktail-name">Vault Key</div>
+          <div class="cocktail-spirit">Aged Rum</div>
+          <p class="cocktail-desc">10-year Barbancourt · Cold brew coffee · Demerara · Salted chocolate bitters · Nitrogen foam.</p>
+          <div class="cocktail-price">$29</div>
+        </div>
+        <div class="cocktail-card reveal-on-scroll reveal-delay-1">
+          <div class="cocktail-num">05</div>
+          <div class="cocktail-name">Midnight Gallery</div>
+          <div class="cocktail-spirit">Dry Gin · Elderflower</div>
+          <p class="cocktail-desc">Hendricks · St. Germain · Cucumber · Basil · White balsamic · Tonic. Light enough for the opening, complex enough for the closing set.</p>
+          <div class="cocktail-price">$24</div>
+        </div>
+        <div class="cocktail-card reveal-on-scroll reveal-delay-2">
+          <div class="cocktail-num">06</div>
+          <div class="cocktail-name">The Collector</div>
+          <div class="cocktail-spirit">Highland Scotch</div>
+          <p class="cocktail-desc">Dalmore 18yr · Laphroaig rinse · Maple · Peychaud's. For those who came for the music and stayed for something darker.</p>
+          <div class="cocktail-price">$48</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DINING STATS -->
+  <div class="dining-stats">
+    <div class="dining-stats-inner">
+      <div class="ds-item reveal-on-scroll">
+        <span class="ds-num">★★</span>
+        <div class="ds-label">Michelin Stars — VAULT</div>
+      </div>
+      <div class="ds-item reveal-on-scroll reveal-delay-1">
+        <span class="ds-num">280</span>
+        <div class="ds-label">Single Malts — UMBRA</div>
+      </div>
+      <div class="ds-item reveal-on-scroll reveal-delay-2">
+        <span class="ds-num">4,200</span>
+        <div class="ds-label">Wine Labels — VAULT Cellar</div>
+      </div>
+      <div class="ds-item reveal-on-scroll reveal-delay-3">
+        <span class="ds-num">4AM</span>
+        <div class="ds-label">UMBRA Last Orders</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIVATE DINING -->
+  <section class="private-dining" id="private">
+    <div class="private-dining-inner">
+      <div class="pd-img-wrap reveal-on-scroll">
+        <img src="The Black Label.png" class="pd-img" alt="Private Dining at Noir Haus" loading="lazy">
+        <div class="pd-img-overlay"></div>
+        <div class="pd-num-badge">Private Collection</div>
+      </div>
+      <div class="pd-content reveal-on-scroll reveal-delay-1">
+        <div class="section-eyebrow">Private Events</div>
+        <h2 class="pd-title">The room<br><em>that remembers</em><br>every secret.</h2>
+        <p class="pd-desc">
+          The Black Label Private Dining Room adjoins VAULT and seats up to eighteen guests. Accessible only through a separate entrance from the hotel lobby, it is used for business dinners, intimate celebrations, and occasions that require — and deserve — complete discretion.
+        </p>
+        <ul class="pd-list">
+          <li>Dedicated sommelier for the evening</li>
+          <li>Full VAULT tasting menu or bespoke menu by request</li>
+          <li>Private bar stocked to specification</li>
+          <li>Flowers and décor arranged by our creative director</li>
+          <li>Minimum spend applies · By reservation only</li>
+        </ul>
+        <div class="pd-actions">
+          <button class="btn-primary" onclick="showToast('Our events team will contact you within 24 hours.')">Enquire Now</button>
+          <button class="btn-outline" onclick="showToast('Brochure sent to your concierge.')">Download Brochure</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVATIONS -->
+  <section class="reservations" id="reservations">
+    <div class="reservations-inner">
+      <div class="res-header reveal-on-scroll">
+        <div class="section-eyebrow">Reservations</div>
+        <h2 class="res-title">Secure your<br><em>table tonight.</em></h2>
+        <p class="res-subtitle">VAULT releases reservations 30 days in advance. UMBRA banquettes can be reserved same-day. For same-day VAULT, contact our concierge directly — cancellations do occur.</p>
+      </div>
+
+      <div class="res-venue-select reveal-on-scroll" id="resVenueSelect">
+        <button class="res-venue-btn active" onclick="selectVenue(this, 'VAULT')">VAULT — Restaurant</button>
+        <button class="res-venue-btn" onclick="selectVenue(this, 'UMBRA')">UMBRA — Jazz Bar</button>
+        <button class="res-venue-btn" onclick="selectVenue(this, 'Private')">Private Dining Room</button>
+      </div>
+
+      <div class="res-form reveal-on-scroll">
+        <div class="res-field">
+          <label>Date</label>
+          <input type="text" id="resDate" placeholder="DD / MM / YYYY" readonly>
+        </div>
+        <div class="res-field">
+          <label>Time</label>
+          <select id="resTime">
+            <option>6:00 PM — First Seating</option>
+            <option>8:30 PM — Second Seating</option>
+            <option>10:00 PM — Late (UMBRA)</option>
+          </select>
+        </div>
+        <div class="res-field">
+          <label>Party Size</label>
+          <select>
+            <option>2 Guests</option>
+            <option>3 Guests</option>
+            <option>4 Guests</option>
+            <option>5 – 6 Guests</option>
+            <option>Private Room (up to 18)</option>
+          </select>
+        </div>
+      </div>
+      <div class="res-row2 reveal-on-scroll">
+        <div class="res-message-field">
+          <label>Special Requests</label>
+          <textarea placeholder="Dietary requirements, occasions, seating preferences, wine preferences…"></textarea>
+        </div>
+        <div class="res-submit-block">
+          <button class="res-submit" onclick="handleResSubmit()">Request Table →</button>
+        </div>
+      </div>
+      <p class="res-note reveal-on-scroll">Reservations are confirmed within 2 hours by our dining team. For same-day enquiries call +1 (212) 000 — 0000 and ask for the dining concierge.</p>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <div class="cta-strip">
+    <div class="reveal-on-scroll">
+      <div class="cta-eyebrow">Complete the Evening</div>
+      <h2 class="cta-title">Dine at VAULT.<br><em>Stay the night.</em></h2>
+      <p class="cta-desc">Book a room above the restaurant and never leave the building. Our dining-and-stay packages include priority table access, late checkout, and a glass of Krug on arrival.</p>
+      <div class="cta-actions">
+        <a href="rooms.html"><button class="btn-primary">View Rooms</button></a>
+        <a href="mailto:dining@noirhaus.com" class="cta-email-link">dining@noirhaus.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand-logo">NOIR<span>.</span>HAUS</div>
+        <div class="foot-tagline">"A sanctuary for those who find beauty in the dark."</div>
+        <div class="foot-address">
+          1 Noir Plaza, 42nd Floor<br>
+          Midtown Manhattan, New York<br>
+          NY 10036, United States
+        </div>
+        <div class="foot-awards">
+          <div class="award-badge">#1 NYC<br><span>Condé Nast 2025</span></div>
+          <div class="award-badge">★★<br><span>Michelin VAULT</span></div>
+          <div class="award-badge">Forbes<br><span>5 Stars</span></div>
+        </div>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Dining</div>
+        <ul>
+          <li><a href="#vault">VAULT Restaurant</a></li>
+          <li><a href="#umbra">UMBRA Jazz Bar</a></li>
+          <li><a href="#menu">Tasting Menu</a></li>
+          <li><a href="#bar">Bar Programme</a></li>
+          <li><a href="#private">Private Dining</a></li>
+          <li><a href="#reservations">Reservations</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Hotel</div>
+        <ul>
+          <li><a href="rooms.html">Rooms & Suites</a></li>
+          <li><a href="rooms.html">The Penthouse</a></li>
+          <li><a href="rooms.html">The Black Label</a></li>
+          <li><a href="#">Spa & Wellness</a></li>
+          <li><a href="#">Rooftop Bar</a></li>
+          <li><a href="#">Gallery</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">Contact</div>
+        <ul>
+          <li><a href="tel:+12120000000">+1 (212) 000 — 0000</a></li>
+          <li><a href="mailto:dining@noirhaus.com">dining@noirhaus.com</a></li>
+          <li><a href="mailto:stay@noirhaus.com">stay@noirhaus.com</a></li>
+          <li><a href="#">Press Enquiries</a></li>
+          <li><a href="#">Gift Cards</a></li>
+        </ul>
+        <div class="foot-newsletter">
+          <div class="foot-col-title" style="margin-top:2rem">Newsletter</div>
+          <div class="nl-form">
+            <input type="email" placeholder="your@email.com" class="nl-input" id="nlInput">
+            <button class="nl-btn" onclick="handleNewsletter()">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div class="foot-copy">© 2026 Noir Haus. All rights reserved. A concept portfolio project.</div>
+      <div class="foot-socials">
+        <a href="#">Instagram</a>
+        <a href="#">Pinterest</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Tripadvisor</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── CURSOR ────────────────────────────────────────────────────────────────
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
+    (function animRing() {
+      rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
+      ring.style.left = rx+'px'; ring.style.top = ry+'px';
+      requestAnimationFrame(animRing);
+    })();
+    document.querySelectorAll('a, button, input, select, textarea, [onclick]').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
+    });
+
+    // ── PAGE LOADER ───────────────────────────────────────────────────────────
+    const loader = document.getElementById('pageLoader');
+    const fill   = document.getElementById('loaderFill');
+    let pct = 0;
+    const iv = setInterval(() => {
+      pct += Math.random() * 18;
+      if (pct >= 100) { pct = 100; clearInterval(iv); setTimeout(() => loader.classList.add('done'), 300); }
+      fill.style.width = pct + '%';
+    }, 80);
+
+    // ── HERO IMG PARALLAX ─────────────────────────────────────────────────────
+    const heroImg = document.getElementById('heroImg');
+    heroImg.addEventListener('load', () => heroImg.classList.add('loaded'));
+    if (heroImg.complete) heroImg.classList.add('loaded');
+    window.addEventListener('scroll', () => {
+      const s = window.scrollY;
+      if (s < window.innerHeight && heroImg) heroImg.style.transform = `scale(1.0) translateY(${s * 0.1}px)`;
+    }, { passive: true });
+
+    // ── NAV SCROLL ────────────────────────────────────────────────────────────
+    const mainNav = document.getElementById('mainNav');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      mainNav.classList.toggle('scrolled', y > 80);
+      lastScroll = y;
+
+      // Update dining tab active state
+      const sections = ['vault','menu','umbra','bar','private'];
+      let active = 'vault';
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top < 200) active = id;
+      });
+      document.querySelectorAll('.dining-tab').forEach((tab, i) => {
+        const ids = ['vault','umbra','menu','bar','private'];
+        tab.classList.toggle('active', ids[i] === active);
+      });
+    }, { passive: true });
+
+    // ── MOBILE MENU ───────────────────────────────────────────────────────────
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    function closeMobileMenu() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── SCROLL HELPERS ────────────────────────────────────────────────────────
+    function scrollToRes() {
+      document.getElementById('reservations').scrollIntoView({ behavior: 'smooth' });
+    }
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+    function setVenueAndScroll(venue) {
+      const btns = document.querySelectorAll('.res-venue-btn');
+      btns.forEach((b, i) => {
+        const names = ['VAULT','UMBRA','Private'];
+        b.classList.toggle('active', names[i].toLowerCase().includes(venue.toLowerCase()));
+      });
+      scrollToRes();
+    }
+
+    // ── RESERVATION VENUE SELECT ──────────────────────────────────────────────
+    function selectVenue(btn, venue) {
+      document.querySelectorAll('.res-venue-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Update time options based on venue
+      const timeSelect = document.getElementById('resTime');
+      if (venue === 'UMBRA') {
+        timeSelect.innerHTML = `
+          <option>9:00 PM — Doors Open</option>
+          <option>10:00 PM — First Set</option>
+          <option>12:00 AM — Second Set</option>`;
+      } else if (venue === 'Private') {
+        timeSelect.innerHTML = `
+          <option>7:00 PM — Exclusive Evening</option>
+          <option>8:00 PM — Late Dinner</option>`;
+      } else {
+        timeSelect.innerHTML = `
+          <option>6:00 PM — First Seating</option>
+          <option>8:30 PM — Second Seating</option>
+          <option>10:00 PM — Late (UMBRA)</option>`;
+      }
+    }
+
+    // ── DATE PICKER ───────────────────────────────────────────────────────────
+    (function() {
+      const inp = document.getElementById('resDate');
+      if (!inp) return;
+      let selected = null, pickerOpen = false;
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      function formatDate(d) { return String(d.getDate()).padStart(2,'0') + ' / ' + String(d.getMonth()+1).padStart(2,'0') + ' / ' + d.getFullYear(); }
+      inp.addEventListener('click', () => {
+        if (pickerOpen) return;
+        pickerOpen = true;
+        const today = new Date();
+        let viewYear = today.getFullYear(), viewMonth = today.getMonth();
+        const picker = document.createElement('div');
+        picker.style.cssText = `position:fixed;z-index:9000;background:#161412;border:1px solid rgba(184,150,90,0.18);padding:1.5rem;min-width:280px;box-shadow:0 20px 60px rgba(0,0,0,0.8);`;
+        function render() {
+          const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+          const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+          let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
+            <button id="prev-mon" style="background:none;border:none;color:#B8965A;cursor:pointer;font-size:1rem;padding:4px 8px;">‹</button>
+            <span style="font-family:'Syncopate',sans-serif;font-size:0.55rem;letter-spacing:0.2em;color:#E8E2D9;">${months[viewMonth].toUpperCase()} ${viewYear}</span>
+            <button id="next-mon" style="background:none;border:none;color:#B8965A;cursor:pointer;font-size:1rem;padding:4px 8px;">›</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px;">`;
+          ['S','M','T','W','T','F','S'].forEach(d => { html += `<div style="text-align:center;font-size:0.48rem;letter-spacing:0.15em;color:#6E6560;padding:4px 0;">${d}</div>`; });
+          html += `</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">`;
+          for (let i=0;i<firstDay;i++) html += `<div></div>`;
+          for (let d=1;d<=daysInMonth;d++) {
+            const date = new Date(viewYear, viewMonth, d);
+            const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const isSel = selected && date.toDateString() === selected.toDateString();
+            html += `<button data-day="${d}" style="padding:6px 0;text-align:center;background:${isSel?'#B8965A':'none'};border:none;color:${isPast?'#3A3530':isSel?'#080808':'#E8E2D9'};font-size:0.72rem;cursor:${isPast?'default':'pointer'};transition:background 0.2s;" ${isPast?'disabled':''}>${d}</button>`;
+          }
+          html += `</div>`;
+          picker.innerHTML = html;
+          picker.querySelectorAll('[data-day]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              selected = new Date(viewYear, viewMonth, +btn.dataset.day);
+              inp.value = formatDate(selected);
+              picker.remove(); pickerOpen = false;
+              document.removeEventListener('click', outsideClick);
+            });
+          });
+          picker.querySelector('#prev-mon').addEventListener('click', e => { e.stopPropagation(); viewMonth--; if(viewMonth<0){viewMonth=11;viewYear--;} render(); });
+          picker.querySelector('#next-mon').addEventListener('click', e => { e.stopPropagation(); viewMonth++; if(viewMonth>11){viewMonth=0;viewYear++;} render(); });
+        }
+        render();
+        const rect = inp.getBoundingClientRect();
+        picker.style.left = rect.left + 'px';
+        picker.style.top = (rect.bottom + 8) + 'px';
+        document.body.appendChild(picker);
+        setTimeout(() => document.addEventListener('click', outsideClick), 10);
+        function outsideClick(e) { if (!picker.contains(e.target) && e.target !== inp) { picker.remove(); pickerOpen = false; document.removeEventListener('click', outsideClick); } }
+      });
+    })();
+
+    // ── REVEAL ON SCROLL ──────────────────────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+    // ── MENU SEASON TABS ──────────────────────────────────────────────────────
+    document.querySelectorAll('.menu-season-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.menu-season-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        if (tab.textContent.includes('Winter')) showToast('Winter 2025 archive menu — available on request.');
+        else if (tab.textContent.includes('Archive')) showToast('Full archive available from our dining team.');
+      });
+    });
+
+    // ── HANDLERS ─────────────────────────────────────────────────────────────
+    function handleResSubmit() {
+      showToast('Table request received — our dining team will confirm within 2 hours.');
+    }
+    function handleNewsletter() {
+      const inp = document.getElementById('nlInput');
+      if (inp && inp.value && inp.value.includes('@')) {
+        showToast('Welcome to the Noir Haus dining circle.');
+        inp.value = '';
+      } else { showToast('Please enter a valid email address.'); }
+    }
+
+    // ── TOAST ─────────────────────────────────────────────────────────────────
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3400);
+    }
+  </script>
+</body>
+</html>
