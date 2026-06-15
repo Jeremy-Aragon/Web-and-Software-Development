@@ -140,7 +140,7 @@ Open Command Prompt, navigate to your project folder, and run:
   --input dist ^
   --main-jar HealthTracker.jar ^
   --main-class HealthTracker.HealthTracker ^
-  --icon HealthTracker.ico ^
+  --icon HealthTracker.ico^
   --win-shortcut ^
   --win-menu ^
   --win-dir-chooser ^
